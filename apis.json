@@ -1,0 +1,53 @@
+{
+    "name": "Eagle Eye Networks",
+    "description": "<p>Eagle Eye Networks was created to make video security easier for all of us. Camera systems have traditionally been pretty complex, challenging for most people to manage, and costly. We are bringing the latest modern web and cloud technologies to make cameras easier to use, more accessible, and more robust. We believe that by doing this we will expand the applications. We eliminate a tremendous amount of headache by putting everything in the cloud where we can take care of it and you don&rsquo;t have to.<\/p>",
+    "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/api-evangelist-site\/company\/logos\/eagle-blue-side-small2.png",
+    "tags": [
+        "api not found",
+        "cameras",
+        "have api"
+    ],
+    "created": "2019-12-19",
+    "modified": "2019-12-19",
+    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/eagle-eye-networks\/master\/apis.json",
+    "specificationVersion": "0.14",
+    "apis": [
+        {
+            "name": "Eagle Eye Networks",
+            "description": null,
+            "image": "http:\/\/kinlane-productions.s3.amazonaws.com\/api-evangelist-site\/company\/logos\/eagle-blue-side-small2.png",
+            "humanURL": "http:\/\/www.eagleeyenetworks.com\/",
+            "baseURL": "",
+            "tags": [],
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "https:\/\/raw.githubusercontent.com\/api-evangelist\/1forge\/master\/eagle-eye-networks-openapi.json"
+                }
+            ]
+        }
+    ],
+    "include": [],
+    "x-common": [
+        {
+            "type": "Blog",
+            "url": "http:\/\/www.eagleeyenetworks.com\/eagle-eye-blog\/"
+        },
+        {
+            "type": "Blog RSS",
+            "url": "http:\/\/www.eagleeyenetworks.com\/feed\/"
+        },
+        {
+            "type": "Developers",
+            "url": "https:\/\/apidocs.eagleeyenetworks.com\/apidocs\/#introduction"
+        },
+        {
+            "type": "Twitter",
+            "url": "https:\/\/twitter.com\/EagleEyeCloud"
+        },
+        {
+            "type": "Website",
+            "url": "http:\/\/www.eagleeyenetworks.com\/"
+        }
+    ]
+}
