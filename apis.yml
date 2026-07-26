@@ -1,8 +1,16 @@
 aid: eagle-eye-networks
 name: Eagle Eye Networks
-description: 'Eagle Eye Networks is a company surfaced as a portfolio company of accel and added to the
-  API Evangelist network as a stub for enrichment. Sector: security. This profile is a lead awaiting the
-  enrichment pipeline.'
+description: 'Eagle Eye Networks is a cloud video surveillance and video management
+  system (VMS) provider whose Video API Platform (v3) exposes REST APIs for managing
+  bridges, cameras, speakers, switches and multi-cameras; streaming live and recorded
+  video (HLS, RTSP, MP4, WebRTC two-way audio); archiving, exporting and downloading
+  media; locations, floors, floor plans and layouts; events, alerts, notifications
+  and automations; video analytics deep search, license plate recognition (LPR) and
+  vehicle surveillance; and account, user, role, application and OAuth client
+  management. Authentication is OAuth 2.0 (authorization code, client credentials,
+  refresh token, device code) issued from auth.eagleeyenetworks.com, and the platform
+  ships first-party SDKs (Android/iOS/Web video, two-way audio), an een CLI, webhook
+  event subscriptions and an llms.txt for agent consumption.'
 url: https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -10,18 +18,135 @@ x-backed-by:
 - accel
 x-tier: stub
 x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://www.een.com/wp-content/uploads/2017/08/Eagle-Eye-Devices-4.png
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
 tags:
 - Company
 - Security
-apis: []
+- Video Surveillance
+- Video Management
+- Cloud Video
+- Cameras
+- Physical Security
+- Video Analytics
+- License Plate Recognition
+- Streaming
+- Webhooks
+- OAuth
+apis:
+- name: Eagle Eye Video API Platform (v3)
+  description: 'REST API v3 for the Eagle Eye Networks cloud VMS: devices (bridges,
+    cameras, speakers, switches, multi-cameras), live and recorded media streaming,
+    archiving/exports/downloads, locations/floors/layouts, events/alerts/notifications/automations,
+    video analytics deep search, LPR and vehicle surveillance, and account/user/role/application
+    management. OAuth 2.0 secured; per-account dynamic API host returned at login.'
+  humanURL: https://developer.eagleeyenetworks.com/reference
+  baseURL: https://api.eagleeyenetworks.com
+  tags:
+  - Video Surveillance
+  - Cameras
+  - Streaming
+  - Events
+  - LPR
+  properties:
+  - type: APIReference
+    url: https://developer.eagleeyenetworks.com/reference
+  - type: Authentication
+    url: authentication/eagle-eye-networks-authentication.yml
+  - type: OAuthScopes
+    url: scopes/eagle-eye-networks-scopes.yml
+  - type: Conventions
+    url: conventions/eagle-eye-networks-conventions.yml
+  - type: MCPServer
+    url: mcp/eagle-eye-networks-mcp.yml
+  - type: Webhooks
+    url: asyncapi/eagle-eye-networks-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/eagle-eye-networks-problem-types.yml
+  - type: DataModel
+    url: data-model/eagle-eye-networks-data-model.yml
+  - type: Conformance
+    url: conformance/eagle-eye-networks-conformance.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: DomainSecurity
+  url: security/eagle-eye-networks-domain-security.yml
 - type: Website
-  url: http://www.een.com/
+  url: https://www.een.com/
+- type: DeveloperPortal
+  url: https://developer.eagleeyenetworks.com/
+- type: Documentation
+  url: https://developer.eagleeyenetworks.com/docs/getting-started
+- type: APIReference
+  url: https://developer.eagleeyenetworks.com/reference
+- type: GettingStarted
+  url: https://developer.eagleeyenetworks.com/docs/getting-started
+- type: Blog
+  url: https://www.een.com/blog/
+- type: GitHubOrganization
+  url: https://github.com/EENCloud
+- type: StatusPage
+  url: https://status.eagleeyenetworks.com/
+- type: Deprecation
+  url: https://developer.eagleeyenetworks.com/docs/legacy-apis
+- type: PrivacyPolicy
+  url: https://www.een.com/privacy-policy/
+- type: ChangeLog
+  url: https://developer.eagleeyenetworks.com/changelog
+- type: ChangeLog
+  url: changelog/eagle-eye-networks-changelog.yml
+- type: LLMsTxt
+  url: llms/eagle-eye-networks-llms.txt
+- type: WellKnown
+  url: well-known/eagle-eye-networks-well-known.yml
+- type: Authentication
+  url: authentication/eagle-eye-networks-authentication.yml
+- type: OAuthScopes
+  url: scopes/eagle-eye-networks-scopes.yml
+- type: Conventions
+  url: conventions/eagle-eye-networks-conventions.yml
+- type: Lifecycle
+  url: lifecycle/eagle-eye-networks-lifecycle.yml
+- type: Packages
+  url: packages/eagle-eye-networks-packages.yml
+- type: SDKs
+  url: packages/eagle-eye-networks-packages.yml
+- type: CLI
+  url: cli/eagle-eye-networks-cli.yml
+- type: Components
+  url: components/eagle-eye-networks-components.yml
+- type: MCPServer
+  url: mcp/eagle-eye-networks-mcp.yml
+- type: Webhooks
+  url: asyncapi/eagle-eye-networks-events-webhooks.yml
+- type: ErrorCatalog
+  url: errors/eagle-eye-networks-problem-types.yml
+- type: DataModel
+  url: data-model/eagle-eye-networks-data-model.yml
+- type: Conformance
+  url: conformance/eagle-eye-networks-conformance.yml
+- type: AgentSkill
+  url: skills/_index.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

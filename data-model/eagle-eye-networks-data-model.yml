@@ -1,0 +1,134 @@
+generated: '2026-07-18'
+method: derived
+source: https://developer.eagleeyenetworks.com/reference
+api: Eagle Eye Video API Platform (v3)
+notes: >-
+  Entity graph derived from the documented resource paths and path parameters in
+  the public API reference (no OpenAPI $ref graph was available). Relationships are
+  inferred from nested collection routes (e.g. /locations/{locationId}/floors) and
+  id-reference filters (bridgeId, locationId, multiCameraId, actorId).
+entities:
+- name: account
+  path: /accounts
+  description: Top-level tenant; users belong to accounts and resellers span multiple.
+- name: bridge
+  path: /bridges
+  description: On-prem/cloud recorder that cameras connect through.
+- name: camera
+  path: /cameras
+  description: Camera device associated with an account and a bridge.
+- name: multiCamera
+  path: /multiCameras
+  description: Multi-channel device (e.g. DVR) exposing channels.
+- name: speaker
+  path: /speakers
+- name: switch
+  path: /switches
+- name: location
+  path: /locations
+  description: Location grouping (professional/enterprise editions); nests floors.
+- name: floor
+  path: /locations/{locationId}/floors
+- name: layout
+  path: /layouts
+- name: tag
+  path: /tags
+- name: media
+  path: /media
+  description: Recorded/live media intervals and images.
+- name: feed
+  path: /feeds
+- name: exportJob
+  path: /exports
+- name: job
+  path: /jobs
+- name: file
+  path: /files
+  description: Archive files/folders.
+- name: event
+  path: /events
+- name: eventType
+  path: /eventTypes
+- name: eventSubscription
+  path: /eventSubscriptions
+- name: alert
+  path: /alerts
+- name: notification
+  path: /notifications
+- name: eventAlertConditionRule
+  path: /eventAlertConditionRules
+- name: alertActionRule
+  path: /alertActionRules
+- name: alertAction
+  path: /alertActions
+- name: lprEvent
+  path: /lprEvents
+- name: lprVehicleList
+  path: /lprVehicleLists
+- name: vehicle
+  path: /lprVehicleLists/{id}/vehicles
+- name: user
+  path: /users
+- name: role
+  path: /roles
+- name: roleAssignment
+  path: /roleAssignments
+- name: resourceGrant
+  path: /resourceGrants
+- name: application
+  path: /applications
+- name: oauthClient
+  path: /applications/{applicationId}/oauthClients
+relationships:
+- from: camera
+  to: bridge
+  type: belongs_to
+  via: bridgeId
+- from: camera
+  to: location
+  type: belongs_to
+  via: locationId
+- from: camera
+  to: multiCamera
+  type: belongs_to
+  via: multiCameraId
+- from: floor
+  to: location
+  type: belongs_to
+  via: locationId
+- from: location
+  to: location
+  type: has_many
+  via: parent (descendants)
+- from: user
+  to: account
+  type: belongs_to
+  via: accountId
+- from: roleAssignment
+  to: role
+  type: belongs_to
+  via: roleId
+- from: roleAssignment
+  to: user
+  type: belongs_to
+  via: userId
+- from: oauthClient
+  to: application
+  type: belongs_to
+  via: applicationId
+- from: vehicle
+  to: lprVehicleList
+  type: belongs_to
+  via: listId
+- from: eventSubscriptionFilter
+  to: eventSubscription
+  type: belongs_to
+  via: eventSubscriptionId
+- from: event
+  to: eventType
+  type: belongs_to
+  via: type
+- from: alert
+  to: eventAlertConditionRule
+  type: belongs_to
+  via: ruleId

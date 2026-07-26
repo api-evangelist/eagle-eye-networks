@@ -1,0 +1,44 @@
+generated: '2026-07-18'
+method: searched
+source: https://developer.eagleeyenetworks.com/docs/event-subscriptions
+spec_type: Webhooks
+api: Eagle Eye Video API Platform (v3)
+delivery:
+  mechanisms:
+  - webhook
+  - server-sent-events
+  description: >-
+    Event subscriptions can be persistent (webhooks) or temporary (server-sent
+    events). Persistent webhook subscriptions remain active as long as the endpoint
+    responds to delivered messages with 200 OK; if events cannot be delivered
+    continuously for 90 days the subscription is disabled. Temporary SSE
+    subscriptions are deleted after timeToLiveSeconds with no subscribers.
+management_operations:
+- listEventSubscriptions
+- createEventSubscription
+- getEventSubscription
+- deleteEventSubscription
+- listEventSubscriptionFilters
+- createEventSubscriptionFilter
+- getEventSubscriptionFilter
+- deleteEventSubscriptionFilter
+- listEventTypes
+event_surface:
+  event_types_discovery: GET /eventTypes (listEventTypes) enumerates supported
+    event types; GET /events supports data filters of the form data.{schema}.{field}
+  categories:
+  - device status / connection events
+  - motion events
+  - license plate recognition (LPR) events
+  - vehicle surveillance (VSP) events
+  - video analytics deep-search events
+  - point-of-sale events
+  - alerts and notifications
+docs:
+- https://developer.eagleeyenetworks.com/docs/events-alerts-notifications-introduction
+- https://developer.eagleeyenetworks.com/docs/event-subscriptions
+- https://developer.eagleeyenetworks.com/docs/event-type
+notes: >-
+  Eagle Eye documents a webhook + SSE event subscription surface but does not
+  publish a machine-readable AsyncAPI document; this artifact captures the webhook
+  catalog. No AsyncAPI spec was found at capture time, so none is fabricated.

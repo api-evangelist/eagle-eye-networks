@@ -1,0 +1,36 @@
+generated: '2026-07-18'
+method: searched
+source: https://auth.eagleeyenetworks.com/.well-known/
+hosts:
+- host: https://auth.eagleeyenetworks.com
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: eagle-eye-networks-openid-configuration.json
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: eagle-eye-networks-oauth-authorization-server.json
+- host: https://api.eagleeyenetworks.com
+  documents:
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+- host: https://www.een.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+- host: https://developer.eagleeyenetworks.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+notes: >-
+  Eagle Eye Networks exposes a full OpenID Connect / OAuth 2.0 authorization-server
+  discovery surface at auth.eagleeyenetworks.com (issuer, authorize, token, jwks,
+  userinfo, introspect, revoke, device_authorization, end_session). No security.txt
+  or api-catalog was published on the API, developer-portal, or corporate hosts at
+  probe time.

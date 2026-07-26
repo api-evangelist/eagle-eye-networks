@@ -1,0 +1,28 @@
+generated: '2026-07-18'
+method: searched
+source: https://developer.eagleeyenetworks.com/docs/deep-linking-and-iframes
+api: Eagle Eye Video API Platform (v3)
+families:
+- family: Embedded live/recorded video
+  description: Client-side surfaces for embedding Eagle Eye live and recorded video
+    into web and mobile apps.
+  components:
+  - name: Live Video SDK for Web
+    kind: web-sdk
+    docs: https://developer.eagleeyenetworks.com/docs/live-video-web-sdk
+    description: JavaScript SDK to embed live video via HLS in the browser.
+  - name: iFrame / Deep Linking embeds
+    kind: iframe
+    docs: https://developer.eagleeyenetworks.com/docs/iframes
+    description: Deep-linkable iframes to embed camera views and player UI.
+- family: Two-way audio
+  description: Browser talk-down surfaces.
+  components:
+  - name: 2-Way Audio SDK for Web
+    kind: web-sdk
+    docs: https://developer.eagleeyenetworks.com/docs/two-way-audio-web-sdk
+    description: WebRTC-based two-way audio component for the browser.
+notes: >-
+  Client-side embeddable/UI surfaces distinct from the server-side/mobile SDKs in
+  packages/. Loader libraries and versioned CDN URLs are documented per SDK on the
+  developer portal.

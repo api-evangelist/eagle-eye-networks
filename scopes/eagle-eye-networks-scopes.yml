@@ -1,0 +1,46 @@
+generated: '2026-07-18'
+method: searched
+source: https://auth.eagleeyenetworks.com/.well-known/openid-configuration
+docs: https://developer.eagleeyenetworks.com/recipes/oauth-authentication
+schemes:
+- name: OAuth2
+  source: well-known/eagle-eye-networks-openid-configuration.json
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://auth.eagleeyenetworks.com/oauth2/authorize
+    tokenUrl: https://auth.eagleeyenetworks.com/oauth2/token
+  - flow: clientCredentials
+    tokenUrl: https://auth.eagleeyenetworks.com/oauth2/token
+scopes:
+- scope: vms.all
+  description: Full access to the Eagle Eye Video API Platform (v3); the scope used
+    across the documented OAuth authorization-code and client-credentials examples.
+  flows:
+  - authorizationCode
+  - clientCredentials
+  sources:
+  - https://developer.eagleeyenetworks.com/recipes/oauth-authentication
+- scope: openid
+  description: OpenID Connect authentication; returns an ID token.
+  flows:
+  - authorizationCode
+  sources:
+  - well-known/eagle-eye-networks-openid-configuration.json
+- scope: profile
+  description: Access to the end user's basic profile claims.
+  flows:
+  - authorizationCode
+  sources:
+  - well-known/eagle-eye-networks-openid-configuration.json
+- scope: email
+  description: Access to the end user's email claim.
+  flows:
+  - authorizationCode
+  sources:
+  - well-known/eagle-eye-networks-openid-configuration.json
+notes: >-
+  Eagle Eye's public documentation presents a single coarse API scope, vms.all,
+  granting full Video API Platform access; the OIDC scopes openid/profile/email
+  come from the authorization-server discovery document. Fine-grained authorization
+  is enforced by account type, user roles, permissions, and resource grants rather
+  than by additional OAuth scopes.

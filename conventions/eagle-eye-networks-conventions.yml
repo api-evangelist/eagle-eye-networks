@@ -1,0 +1,68 @@
+generated: '2026-07-18'
+method: searched
+source: https://developer.eagleeyenetworks.com/reference/using-the-api
+docs: https://developer.eagleeyenetworks.com/docs/getting-started
+api: Eagle Eye Video API Platform (v3)
+style: >-
+  Resource-oriented REST following Google AIP-style conventions: collection nouns,
+  standard GET/POST/PATCH/DELETE, and custom methods expressed with a colon verb
+  suffix (e.g. /cameras:bulkUpdate, /cameras/{id}:swap, /events:listFieldValues,
+  /videoAnalyticEvents:deepSearch, /roleAssignments:bulkcreate).
+authentication:
+  style: OAuth 2.0 Bearer token (see authentication/eagle-eye-networks-authentication.yml)
+  base_url: per-account dynamic host returned as httpsBaseUrl at login (api.cNNN.eagleeyenetworks.com);
+    https://api.eagleeyenetworks.com fronts the platform
+versioning:
+  scheme: major-version API line (v3 current; v1/v2 legacy)
+  current: v3
+  legacy_docs: https://developer.eagleeyenetworks.com/docs/legacy-apis
+pagination:
+  style: cursor
+  request_params:
+  - pageSize
+  - pageToken
+  response_fields:
+  - results
+  - nextPageToken
+  - prevPageToken
+  - totalSize
+  notes: >-
+    When pageSize is used, totalSize reflects the total number of available items
+    for the resource, not the number matching the current query string. Follow
+    nextPageToken to page forward.
+filtering:
+  operators:
+  - __contains
+  - __in
+  - __lte
+  - __gte
+  sort_param: sort
+  field_values_discovery: The ':listFieldValues' custom method returns valid filter
+    values per field.
+  include_param: include (expands additional data schemas / related objects into
+    the response)
+idempotency:
+  supported: false
+  notes: >-
+    No documented Idempotency-Key request header was found in the public reference
+    at capture time; bulk mutations are modeled with explicit :bulkUpdate /
+    :bulkCreate / :bulkDelete custom methods rather than client-supplied idempotency
+    keys.
+timestamps:
+  format: ISO 8601 (YYYY-MM-DDTHH:MM:SS.sss±hh:mm)
+error_envelope:
+  reference: errors/eagle-eye-networks-problem-types.yml
+  notes: Documented status codes include 400 (invalid format/unsupported setting),
+    404 (not found / not visible to bridge), and 409 (resource already attached).
+rate_limiting:
+  notes: >-
+    Certain media endpoints are explicitly rate-limited (e.g. GET
+    /media/recordedImage.jpeg with image type main "should not be used in quick
+    succession"); a documented staggering recipe exists for media requests.
+  docs: https://developer.eagleeyenetworks.com/recipes/media-request-staggering
+cross_references:
+  authentication: authentication/eagle-eye-networks-authentication.yml
+  scopes: scopes/eagle-eye-networks-scopes.yml
+  lifecycle: lifecycle/eagle-eye-networks-lifecycle.yml
+  errors: errors/eagle-eye-networks-problem-types.yml
+  webhooks: asyncapi/eagle-eye-networks-events-webhooks.yml

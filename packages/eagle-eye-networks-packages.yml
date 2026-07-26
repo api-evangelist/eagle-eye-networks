@@ -1,0 +1,68 @@
+generated: '2026-07-18'
+method: searched
+source: https://github.com/EENCloud
+docs: https://developer.eagleeyenetworks.com/docs/getting-started
+packages:
+- name: EEN-CLI-Public
+  kind: cli
+  language: shell
+  registry: github
+  url: https://github.com/EENCloud/EEN-CLI-Public
+  install: git clone https://github.com/EENCloud/EEN-CLI-Public
+  official: true
+  description: Official Eagle Eye Networks command-line interface (een) for auth,
+    account switching, and platform operations.
+- name: EEN-Video-iOS-SDK-Public
+  kind: sdk
+  language: objective-c
+  registry: github
+  url: https://github.com/EENCloud/EEN-Video-iOS-SDK-Public
+  official: true
+  description: iOS video streaming SDK.
+- name: EENSDK-iOS-Public
+  kind: sdk
+  language: objective-c
+  registry: github
+  url: https://github.com/EENCloud/EENSDK-iOS-Public
+  official: true
+  description: iOS SDK for the Eagle Eye platform.
+- name: EEN-Two-Way-Audio-iOS-SDK
+  kind: sdk
+  language: objective-c
+  registry: github
+  url: https://github.com/EENCloud/EEN-Two-Way-Audio-iOS-SDK
+  official: true
+  description: iOS two-way audio (talk-down) SDK.
+- name: Video SDK for Android
+  kind: sdk
+  language: kotlin
+  registry: docs
+  url: https://developer.eagleeyenetworks.com/docs/een-video-android-sdk
+  official: true
+  description: Android video SDK for live and recorded playback.
+- name: 2-Way Audio SDK for Android
+  kind: sdk
+  language: kotlin
+  registry: docs
+  url: https://developer.eagleeyenetworks.com/docs/talkdown-sdk-for-android
+  official: true
+  description: Android two-way audio (talk-down) SDK.
+- name: Live Video SDK for Web
+  kind: sdk
+  language: javascript
+  registry: docs
+  url: https://developer.eagleeyenetworks.com/docs/live-video-web-sdk
+  official: true
+  description: Web SDK for embedding live video (HLS).
+- name: 2-Way Audio SDK for Web
+  kind: sdk
+  language: javascript
+  registry: docs
+  url: https://developer.eagleeyenetworks.com/docs/two-way-audio-web-sdk
+  official: true
+  description: Web SDK for two-way audio over WebRTC.
+notes: >-
+  All packages are first-party Eagle Eye Networks distributions. iOS SDKs and the
+  CLI are published as public repositories under the EENCloud GitHub org; the
+  Android and Web SDKs are documented on the developer portal. No first-party npm,
+  PyPI, Maven Central, or NuGet coordinates were confirmed at capture time.

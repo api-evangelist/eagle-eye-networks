@@ -1,0 +1,46 @@
+generated: '2026-07-18'
+method: derived
+source: https://developer.eagleeyenetworks.com/reference
+format: http-status
+api: Eagle Eye Video API Platform (v3)
+notes: >-
+  Derived from documented status-code behavior in the public API reference. Eagle
+  Eye returns standard HTTP status codes; no application/problem+json (RFC 9457)
+  envelope was confirmed at capture time. Titles/causes below are transcribed from
+  endpoint descriptions (e.g. camera :swap 400/404/409 semantics).
+problems:
+- status: 400
+  title: Bad Request
+  cause: Malformed request, invalid GUID format, or an unsupported/invalid setting
+    in the payload; on settings updates no changes are applied.
+  source_operations:
+  - reference#swapcamera
+  - reference#updatecamerasettings
+- status: 404
+  title: Not Found
+  cause: Resource does not exist, or a device is not visible to the account's
+    bridge (e.g. camera swap target not seen by the bridge); recorded image not
+    available at the requested timestamp.
+  source_operations:
+  - reference#swapcamera
+  - reference#getrecordedimage
+- status: 409
+  title: Conflict
+  cause: Resource already attached to an account (e.g. GUID already associated) or
+    state conflict blocking the operation.
+  source_operations:
+  - reference#swapcamera
+  - reference#swapbridge
+- status: 401
+  title: Unauthorized
+  cause: Missing, expired, or invalid OAuth 2.0 Bearer access token.
+- status: 403
+  title: Forbidden
+  cause: Authenticated user lacks the role/permission or account type required for
+    the operation (e.g. adding a camera requires an end-user account).
+- status: 429
+  title: Too Many Requests
+  cause: Rate-limited endpoint (e.g. main recorded/live image requests) called too
+    frequently.
+  source_operations:
+  - reference#getrecordedimage

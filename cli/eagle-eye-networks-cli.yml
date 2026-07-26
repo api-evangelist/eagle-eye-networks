@@ -1,0 +1,28 @@
+generated: '2026-07-18'
+method: searched
+source: https://github.com/EENCloud/EEN-CLI-Public
+docs: https://developer.eagleeyenetworks.com/docs/auth
+name: een
+description: Official Eagle Eye Networks command-line interface for authenticating
+  to and operating the Video API Platform.
+repository: https://github.com/EENCloud/EEN-CLI-Public
+install:
+- method: git
+  command: git clone https://github.com/EENCloud/EEN-CLI-Public
+command_groups:
+- group: auth
+  description: OAuth login/logout against auth.eagleeyenetworks.com.
+  commands:
+  - een auth login --username <user>
+  - een auth logout
+- group: account
+  description: Switch the active account context (reseller / end-user accounts).
+  commands:
+  - een account switch
+key_flows:
+- Log in with a confidential client and obtain OAuth tokens.
+- Switch account context for resellers managing end-user accounts.
+notes: >-
+  Command surface transcribed from the documented een CLI usage in the developer
+  portal auth guide and the public EEN-CLI-Public repository. See
+  packages/eagle-eye-networks-packages.yml for the distributed binary.

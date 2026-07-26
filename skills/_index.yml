@@ -1,0 +1,35 @@
+generated: '2026-07-18'
+method: generated
+api: Eagle Eye Video API Platform (v3)
+source: https://developer.eagleeyenetworks.com/reference
+skills:
+- file: eagle-eye-networks-view-live-and-recorded-video.md
+  name: View live and recorded camera video
+  api: Eagle Eye Video API Platform (v3)
+  operations:
+  - listcameras
+  - getcamera
+  - getliveimage
+  - listmedia
+  - getrecordedimage
+- file: eagle-eye-networks-subscribe-to-events.md
+  name: Subscribe to events via webhook
+  api: Eagle Eye Video API Platform (v3)
+  operations:
+  - listeventtypes
+  - createeventsubscription
+  - createeventsubscriptionfilter
+  - listevents
+- file: eagle-eye-networks-export-recorded-video.md
+  name: Export and download recorded video
+  api: Eagle Eye Video API Platform (v3)
+  operations:
+  - listmedia
+  - createexportjob
+  - getjob
+  - getfiles
+  - downloadfile
+notes: >-
+  Skills are generated operating instructions grounded in operationIds transcribed
+  verbatim from the public API reference. No provider-published AGENTS.md/skill
+  files were found at capture time.

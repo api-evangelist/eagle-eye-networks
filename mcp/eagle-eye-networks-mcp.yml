@@ -1,0 +1,67 @@
+generated: '2026-07-18'
+method: derived
+status: candidate
+source: https://developer.eagleeyenetworks.com/reference
+server:
+  name: eagle-eye-networks
+  transport: http
+  description: Candidate MCP server surfacing the Eagle Eye Video API Platform (v3)
+    operations as tools. No official hosted Eagle Eye MCP server was found at capture
+    time; this tool list is derived from documented API operationIds and is a
+    starting point, not a provider claim.
+tools:
+- name: list_cameras
+  description: Retrieve a list of cameras associated with the account.
+  source_operation: reference#listcameras
+- name: get_camera
+  description: Retrieve a specific camera.
+  source_operation: reference#getcamera
+- name: get_camera_settings
+  description: Retrieve the current settings for a camera.
+  source_operation: reference#getcamerasettings
+- name: get_live_image
+  description: Get a new live image (JPEG) from a device.
+  source_operation: reference#getliveimage
+- name: get_recorded_image
+  description: Retrieve a recorded image at a given ISO 8601 timestamp.
+  source_operation: reference#getrecordedimage
+- name: list_media
+  description: List intervals for which recordings exist for a device/media type.
+  source_operation: reference#listmedia
+- name: create_export_job
+  description: Create and start a new video export job.
+  source_operation: reference#createexportjob
+- name: get_job
+  description: Get the status of a single job.
+  source_operation: reference#getjob
+- name: list_bridges
+  description: Retrieve a list of bridges.
+  source_operation: reference#listbridges
+- name: list_events
+  description: Return events recorded within a time range for given actors.
+  source_operation: reference#listevents
+- name: create_event_subscription
+  description: Create a webhook or server-sent-events subscription for events.
+  source_operation: reference#createeventsubscription
+- name: list_alerts
+  description: Search and sort alerts.
+  source_operation: reference#listalerts
+- name: list_lpr_events
+  description: Fetch license plate recognition events.
+  source_operation: reference#listlprevents
+- name: parse_video_analytics
+  description: Map a natural-language query to object filters for deep search.
+  source_operation: reference#parsevideoanalytics
+- name: deep_search_video_analytics
+  description: Fetch video analytic events matching deep-search filters.
+  source_operation: reference#listvideoanalyticsevents
+- name: list_locations
+  description: Retrieve a list of locations.
+  source_operation: reference#getlocations
+- name: get_current_user
+  description: Retrieve info about the current user.
+  source_operation: reference#getcurrentuser
+notes: >-
+  Candidate only. operationIds are transcribed from the public API reference; a
+  real MCP server would ground each tool in the corresponding OpenAPI operation
+  once the spec is captured.

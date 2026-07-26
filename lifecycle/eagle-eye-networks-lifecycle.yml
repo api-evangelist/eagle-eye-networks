@@ -1,0 +1,25 @@
+generated: '2026-07-18'
+method: searched
+source: https://developer.eagleeyenetworks.com/changelog
+api: Eagle Eye Video API Platform (v3)
+versioning:
+  scheme: major-version API line
+  current: v3
+  docs: https://developer.eagleeyenetworks.com/reference/using-the-api
+deprecation:
+  policy_url: https://developer.eagleeyenetworks.com/docs/legacy-apis
+  legacy_lines:
+  - v1
+  - v2
+  notes: >-
+    The v1/v2 APIs are documented as Legacy APIs superseded by the v3 Video API
+    Platform; new integrations are directed to v3. A password-grant migration path
+    is documented for moving legacy integrations onto OAuth 2.0.
+  migration_docs: https://developer.eagleeyenetworks.com/migration-via-password-grant-type
+status_page: https://status.eagleeyenetworks.com/
+changelog: https://developer.eagleeyenetworks.com/changelog
+changelog_artifact: changelog/eagle-eye-networks-changelog.yml
+notes: >-
+  Eagle Eye maintains a dated public changelog and a live status page. Deprecation
+  is expressed at the API-line level (v1/v2 legacy vs v3 current) rather than via
+  per-operation Sunset/Deprecation response headers in the public reference.

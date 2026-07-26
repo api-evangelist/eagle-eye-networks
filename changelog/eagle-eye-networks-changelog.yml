@@ -1,0 +1,29 @@
+generated: '2026-07-18'
+method: searched
+source: https://developer.eagleeyenetworks.com/changelog
+api: Eagle Eye Video API Platform (v3)
+scheme: dated
+entries:
+- date: '2026-06-04'
+  title: API Updates
+  url: https://developer.eagleeyenetworks.com/changelog/20260604-api-updates
+- date: '2026-02-05'
+  title: API Updates
+  url: https://developer.eagleeyenetworks.com/changelog/20260205-api-updates
+- date: '2025-12-18'
+  title: HLS Streaming Support
+  highlights:
+  - Added HLS live streaming support to the Video API Platform.
+  url: https://developer.eagleeyenetworks.com/changelog/20251218-hls-streaming
+- date: '2025-10-09'
+  title: Event Types Update
+  highlights:
+  - Updated supported event type definitions.
+  url: https://developer.eagleeyenetworks.com/changelog/20251009-events-update
+- date: '2025-09-18'
+  title: API Updates
+  url: https://developer.eagleeyenetworks.com/changelog/20250918-api-updates
+notes: >-
+  Recent-window capture from the developer-portal changelog index (llms.txt). The
+  live changelog at the source URL is authoritative; titles/dates are transcribed
+  verbatim, highlights summarized only where the entry title states the change.
