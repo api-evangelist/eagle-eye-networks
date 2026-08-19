@@ -5,10 +5,9 @@ source: https://developer.eagleeyenetworks.com/reference
 server:
   name: eagle-eye-networks
   transport: http
-  description: Candidate MCP server surfacing the Eagle Eye Video API Platform (v3)
-    operations as tools. No official hosted Eagle Eye MCP server was found at capture
-    time; this tool list is derived from documented API operationIds and is a
-    starting point, not a provider claim.
+  description: Candidate MCP server surfacing the Eagle Eye Video API Platform (v3) operations as tools.
+    No official hosted Eagle Eye MCP server was found at capture time; this tool list is derived from
+    documented API operationIds and is a starting point, not a provider claim.
 tools:
 - name: list_cameras
   description: Retrieve a list of cameras associated with the account.
@@ -61,7 +60,11 @@ tools:
 - name: get_current_user
   description: Retrieve info about the current user.
   source_operation: reference#getcurrentuser
-notes: >-
-  Candidate only. operationIds are transcribed from the public API reference; a
-  real MCP server would ground each tool in the corresponding OpenAPI operation
-  once the spec is captured.
+notes: Candidate only. operationIds are transcribed from the public API reference; a real MCP server would
+  ground each tool in the corresponding OpenAPI operation once the spec is captured.
+deployment:
+  mode: none
+  verified: derived
+  tools: 17
+  checked: '2026-08-12'
+  source: catalog MCP census
