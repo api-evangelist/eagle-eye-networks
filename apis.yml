@@ -40,6 +40,19 @@ tags:
 - Video Surveillance
 - Video Management
 - Cloud Video
+- Camera
+- Physical Security
+- Video Analytics
+- License Plate Recognition
+- Streaming
+- Webhook
+- Authentication
+tags_raw:
+- Company
+- Security
+- Video Surveillance
+- Video Management
+- Cloud Video
 - Cameras
 - Physical Security
 - Video Analytics
@@ -57,6 +70,12 @@ apis:
   humanURL: https://developer.eagleeyenetworks.com/reference
   baseURL: https://api.eagleeyenetworks.com
   tags:
+  - Video Surveillance
+  - Camera
+  - Streaming
+  - Event
+  - LPR
+  tags_raw:
   - Video Surveillance
   - Cameras
   - Streaming
