@@ -44,7 +44,7 @@ accessModel:
 image: https://www.een.com/wp-content/uploads/2017/08/Eagle-Eye-Devices-4.png
 specificationVersion: '0.23'
 created: '2026-07-17'
-modified: '2026-07-18'
+modified: '2026-10-06'
 x-docs-platform: readme
 x-docs-platform-confidence: high
 x-docs-platform-checked: 2026-10-03
@@ -121,6 +121,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- url: https://www.een.com/feed/
+  type: BlogRSS
 - type: DomainSecurity
   url: security/eagle-eye-networks-domain-security.yml
 - type: Website
