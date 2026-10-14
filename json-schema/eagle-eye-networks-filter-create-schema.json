@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-filter-create-schema.json",
+  "title": "FilterCreate",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-events-openapi.yml#/components/schemas/FilterCreate",
+  "type": "object",
+  "properties": {
+    "actors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "description": "List of actors for which events should be delivered to this event subscription. Actors must be specified in the format `actorType:actorId`.\nWildcard Support: Use `<actorType>:*` to match all actors of a specific type (e.g., `camera:*` matches all cameras). Only full wildcards (`<actorType>:*`) are supported. Partial wildcards like `camera:123*` are not allowed. Only admin users can use wildcard actors.\n"
+    },
+    "types": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/EventTypeFilter"
+      },
+      "description": "List of event types of which events should be delivered to this event subscription."
+    },
+    "data": {
+      "$ref": "#/$defs/DslFilter"
+    }
+  },
+  "required": [
+    "actors",
+    "types"
+  ],
+  "$defs": {
+    "DslCondition": {
+      "type": "object",
+      "description": "A leaf filter condition that compares a single event data field against a value.\n",
+      "required": [
+        "field",
+        "op",
+        "value"
+      ],
+      "properties": {
+        "field": {
+          "type": "string",
+          "description": "Event data field path in the format `schema.vN.fieldName` (e.g. `een.lprDetection.v1.plate`). The special virtual field `eventType` can be used to filter by event type.\n"
+        },
+        "op": {
+          "type": "string",
+          "description": "Comparison operator. Range operators (`gt`, `gte`, `lt`, `lte`) require numeric or date fields. `in` and `notIn` expect the value to be an array.\n",
+          "enum": [
+            "exact",
+            "ne",
+            "in",
+            "notIn",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "value": {
+          "description": "The value to compare against. Must match the field type (string, number, boolean). For `in` and `notIn`, provide an array of values.\n",
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "array",
+              "items": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "boolean"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    "DslFilter": {
+      "type": "object",
+      "description": "Optional DSL filter for data-level event filtering. When provided, only events whose payload matches all specified conditions are delivered to the subscription. An empty object `{}` matches all events (no filtering applied). Boolean combination keys determine how conditions are evaluated: `and` requires ALL to match, `or` requires ANY to match, `not` requires NONE to match. Arrays may contain leaf conditions or nested DslFilter objects for recursive composition.\n",
+      "properties": {
+        "and": {
+          "type": "array",
+          "description": "All conditions must match. Each element is a condition or nested filter.",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/DslCondition"
+              },
+              {
+                "$ref": "#/$defs/DslFilter"
+              }
+            ]
+          }
+        },
+        "or": {
+          "type": "array",
+          "description": "At least one condition must match. Each element is a condition or nested filter.",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/DslCondition"
+              },
+              {
+                "$ref": "#/$defs/DslFilter"
+              }
+            ]
+          }
+        },
+        "not": {
+          "type": "array",
+          "description": "None of the conditions must match. Each element is a condition or nested filter.",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/DslCondition"
+              },
+              {
+                "$ref": "#/$defs/DslFilter"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "EventTypeFilter": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Only events with this specific event type should be delivered to the event subscription. `GET /eventTypes`\ncan be used to get a list of all supported event types.\n"
+        }
+      },
+      "required": [
+        "type"
+      ]
+    }
+  }
+}

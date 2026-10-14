@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-lpr-vehicle-list-meta-schema.json",
+  "title": "LprVehicleListMeta",
+  "description": "User supplied and System generated attributes of the list. However it excludes the vehicle records",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-vehicle-surveillance-package-openapi.yml#/components/schemas/LprVehicleListMeta",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "#/$defs/LprVehicleListMetaUntagged"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique system generated id for list"
+        },
+        "createTimestamp": {
+          "type": "string",
+          "description": "Timestamp when this list created",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "updateTimestamp": {
+          "type": "string",
+          "description": "Timestamp when this list last updated",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "createdByUserId": {
+          "type": "string",
+          "description": "User id of the creator of the vehicle list",
+          "readOnly": true
+        },
+        "vehicleCount": {
+          "type": "integer",
+          "description": "Number of vehicles in the list",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "id",
+        "createTimestamp",
+        "updateTimestamp",
+        "createdByUserId",
+        "vehicleCount",
+        "name"
+      ]
+    }
+  ],
+  "$defs": {
+    "ActorFilter": {
+      "type": "object",
+      "description": "Specifies the attributes of an actor, useful for passing as a filter",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The id of the thing that caused the event This can be camera or location ID. If not supplied for any entry in the array, it is taken to mean as the entire account."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "camera",
+            "location"
+          ],
+          "default": "camera",
+          "description": "Type of actor that caused the event."
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "LprVehicleListMetaUntagged": {
+      "type": "object",
+      "description": "User supplied attributes of the list, that does not return the individual vehicle records, to be used during creation of list or patching of list",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "User supplied name for the list"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether list is enabled"
+        },
+        "notes": {
+          "type": "string",
+          "description": "A verbose explanation of the vehicle list"
+        },
+        "resourceFilter": {
+          "$ref": "#/$defs/ResourceFilter"
+        }
+      }
+    },
+    "ResourceFilter": {
+      "type": "object",
+      "description": "List of actors against which filtering to happen (camera/location/account)",
+      "properties": {
+        "actors": {
+          "type": "array",
+          "description": "List of the actors for which events are checked.",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/ActorFilter"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

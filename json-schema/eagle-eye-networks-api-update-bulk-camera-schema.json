@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-api-update-bulk-camera-schema.json",
+  "title": "ApiUpdateBulkCamera",
+  "description": "This object identifies the list of cameras to be updated, and the fields and their values to be updated.\n",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-devices-openapi.yml#/components/schemas/ApiUpdateBulkCamera",
+  "properties": {
+    "ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minItems": 1,
+        "maxItems": 500
+      }
+    },
+    "updateFields": {
+      "type": "object",
+      "description": "This defines the parameter that will be updated for list of cameras. Currently, we allow only one parameter to be updated at a time.\n",
+      "properties": {
+        "speakerId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "locationId": {
+          "$ref": "#/$defs/LocationId"
+        },
+        "on": {
+          "type": "boolean",
+          "description": "Start/stop recording images and video."
+        }
+      }
+    }
+  },
+  "required": [
+    "ids",
+    "updateFields"
+  ],
+  "$defs": {
+    "LocationId": {
+      "description": "ID Of the location.",
+      "minLength": 1,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

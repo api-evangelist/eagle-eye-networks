@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-ptz-settings-schema.json",
+  "title": "PtzSettings",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-devices-openapi.yml#/components/schemas/PtzSettings",
+  "type": "object",
+  "properties": {
+    "presets": {
+      "type": "array",
+      "maxItems": 30,
+      "description": "Saved positions. Order of this array will be used by the tour mode.",
+      "items": {
+        "$ref": "#/$defs/PtzPreset"
+      }
+    },
+    "homePreset": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Name of the default preset to which the camera will return if set to homeReturn after the specified auto start delay."
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "homeReturn",
+        "tour",
+        "manualOnly"
+      ],
+      "description": "The following modes are available:\n  * `manualOnly`: The PTZ camera will only move when issued a direct command by the user.\n  * `homeReturn`: After a specified amount of time without receiving a command,\nthe PTZ camera will navigate back to the home preset position.  If none is set, this will be the factory default position.\n  * `tour`: After the specified auto start delay, the PTZ camera will tour through all\npresets in the order specified by the user. It will continue doing so until interrupted and will resume after the aforementioned auto start delay.\n"
+    },
+    "autoStartDelay": {
+      "type": "integer",
+      "minimum": 5,
+      "description": "The time in seconds after which the PTZ camera should resume Touring or return to Home when idling."
+    }
+  },
+  "$defs": {
+    "ApiPtzPosition": {
+      "description": "The ptz coordinates of the camera in a space defined as pan:(-1,1), tilt:(-1,1), zoom:(0,1).",
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "number",
+          "format": "double",
+          "description": "Pan coordinate given as value between -1(max left) and 1(max right).",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "y": {
+          "type": "number",
+          "format": "double",
+          "description": "Tilt coordinate given as value between -1(max down) and 1(max up).",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "z": {
+          "type": "number",
+          "format": "double",
+          "description": "Zoom coordinate given as value between 0(fully zoomed out) and 1(fully zoomed in).",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "minProperties": 1
+    },
+    "PtzPreset": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "position": {
+          "$ref": "#/$defs/ApiPtzPosition"
+        },
+        "timeAtPreset": {
+          "type": "integer",
+          "minimum": 5,
+          "description": "Specifies the number of seconds to remain at a preset when in tour mode."
+        }
+      },
+      "required": [
+        "name",
+        "position",
+        "timeAtPreset"
+      ]
+    }
+  }
+}

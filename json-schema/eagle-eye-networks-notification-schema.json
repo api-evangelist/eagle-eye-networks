@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-notification-schema.json",
+  "title": "Notification",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-events-openapi.yml#/components/schemas/Notification",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "createTimestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sentTimestamp": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "alertId": {
+      "$ref": "#/$defs/alertId"
+    },
+    "alertType": {
+      "type": "string"
+    },
+    "actorId": {
+      "type": "string"
+    },
+    "actorName": {
+      "type": "string"
+    },
+    "actorType": {
+      "type": "string"
+    },
+    "actorAccountId": {
+      "type": "string"
+    },
+    "userId": {
+      "$ref": "#/$defs/userId"
+    },
+    "accountId": {
+      "$ref": "#/$defs/accountId"
+    },
+    "read": {
+      "type": "boolean"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "sent",
+        "outsideUsersSchedule",
+        "notificationsDisabled",
+        "noNotificationActions",
+        "sendingFailed",
+        "throttled",
+        "unableToGetSettings"
+      ]
+    },
+    "category": {
+      "$ref": "#/$defs/category1"
+    },
+    "description": {
+      "type": "string"
+    },
+    "notificationActions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "dataSchemas": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "data": {
+      "type": "object",
+      "default": {}
+    }
+  },
+  "$defs": {
+    "accountId": {
+      "type": "string"
+    },
+    "alertId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uuid"
+    },
+    "category1": {
+      "type": "string",
+      "enum": [
+        "health",
+        "video",
+        "operational",
+        "audit",
+        "job",
+        "security",
+        "sharing"
+      ]
+    },
+    "userId": {
+      "type": "string"
+    }
+  }
+}

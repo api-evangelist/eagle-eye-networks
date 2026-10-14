@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-api-application-create-schema.json",
+  "title": "ApiApplicationCreate",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-system-openapi.yml#/components/schemas/ApiApplicationCreate",
+  "allOf": [
+    {
+      "$ref": "#/$defs/ApiApplicationBase"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "technicalContact": {
+          "$ref": "#/$defs/ApplicationTechContact"
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "isPublic",
+        "technicalContact"
+      ]
+    }
+  ],
+  "$defs": {
+    "ApiApplicationBase": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the application.",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display name of the application.",
+          "maxLength": 255
+        },
+        "website": {
+          "type": "string",
+          "description": "URL to the website of this application.",
+          "format": "uri"
+        },
+        "developer": {
+          "type": "string",
+          "description": "Name of the developer/company which developed this application.",
+          "maxLength": 255
+        },
+        "privacyPolicy": {
+          "type": "string",
+          "description": "URL to the privacy policy of this application.",
+          "format": "uri"
+        },
+        "termsOfService": {
+          "type": "string",
+          "description": "URL to the terms of service of this application.",
+          "format": "uri"
+        },
+        "description": {
+          "type": "string",
+          "description": "The description of the application.",
+          "maxLength": 512
+        },
+        "isPublic": {
+          "type": "boolean",
+          "description": "Whether this application is intended to be public (available for other parties through an application store)."
+        },
+        "logo": {
+          "type": "string",
+          "description": "URL to the logo of the application.",
+          "format": "uri"
+        }
+      }
+    },
+    "ApplicationTechContact": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ApplicationTechContactUpdate"
+        }
+      ],
+      "required": [
+        "name",
+        "email"
+      ]
+    },
+    "ApplicationTechContactUpdate": {
+      "type": "object",
+      "description": "Request body for application update.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "First name of point of contact for this application.",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Last name of the person to contact for this application.",
+          "maxLength": 256
+        },
+        "email": {
+          "type": "string",
+          "description": "Email id of the person to contact for this application.",
+          "format": "email",
+          "maxLength": 75
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number of the person to contact for this application.",
+          "maxLength": 30
+        }
+      }
+    }
+  }
+}

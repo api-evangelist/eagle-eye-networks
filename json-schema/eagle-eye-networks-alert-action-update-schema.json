@@ -1,0 +1,625 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-alert-action-update-schema.json",
+  "title": "AlertActionUpdate",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-automations-openapi.yml#/components/schemas/AlertActionUpdate",
+  "allOf": [
+    {
+      "$ref": "#/$defs/AlertActionChangeable"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "settings": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/NotificationActionSettings"
+            },
+            {
+              "$ref": "#/$defs/SmsActionSettings"
+            },
+            {
+              "$ref": "#/$defs/SmtpActionSettings"
+            },
+            {
+              "$ref": "#/$defs/ZulipPrivateActionSettings"
+            },
+            {
+              "$ref": "#/$defs/ZulipStreamActionSettings"
+            },
+            {
+              "$ref": "#/$defs/SlackActionSettings"
+            },
+            {
+              "$ref": "#/$defs/WebhookActionSettings"
+            },
+            {
+              "$ref": "#/$defs/BrivoActionSettings"
+            },
+            {
+              "$ref": "#/$defs/ZendeskActionSettings"
+            },
+            {
+              "$ref": "#/$defs/ImmixActionSettings"
+            },
+            {
+              "$ref": "#/$defs/ZapierActionSettings"
+            },
+            {
+              "$ref": "#/$defs/SentinelActionSettings"
+            },
+            {
+              "$ref": "#/$defs/EvalinkTalosActionSettings"
+            },
+            {
+              "$ref": "#/$defs/OutputPortActionSettings"
+            },
+            {
+              "$ref": "#/$defs/EbusActionSettings"
+            },
+            {
+              "$ref": "#/$defs/PlaySpeakerAudioClipAction"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "AlertActionBase": {
+      "allOf": [
+        {
+          "type": "object",
+          "required": [
+            "type",
+            "settings",
+            "name",
+            "enabled"
+          ],
+          "properties": {
+            "id": {
+              "description": "Unique identifier of the alert action.",
+              "type": "string",
+              "readOnly": true
+            },
+            "createTimestamp": {
+              "description": "Time at which the alert action was created.",
+              "type": "string",
+              "format": "date-time",
+              "readOnly": true
+            },
+            "type": {
+              "description": "Alert action type.",
+              "type": "string",
+              "enum": [
+                "notification",
+                "sms",
+                "smtp",
+                "zulipPrivate",
+                "zulipStream",
+                "slack",
+                "webhook",
+                "brivo",
+                "zendesk",
+                "immix",
+                "zapier",
+                "sentinel",
+                "evalinkTalos",
+                "outputPort",
+                "ebus",
+                "playSpeakerAudioClip"
+              ]
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/AlertActionChangeable"
+        }
+      ]
+    },
+    "AlertActionChangeable": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Denotes if the alert rule action is enabled or not being applied.",
+          "default": true
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 126
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 500
+        }
+      }
+    },
+    "BrivoActionSettings": {
+      "description": "Settings for using a Brivo access point by an alert action. Supports Acctivation, Setting an Override and removing an override\n",
+      "type": "object",
+      "required": [
+        "service",
+        "oauthId",
+        "accessPointName"
+      ],
+      "properties": {
+        "service": {
+          "description": "Which service to use, has to be one of accessPoint, doorOverride, or doorOverrideCancel. There is accessPoint used to activate a brivo accesspoint. doorOverride is used to keep an access point activated either to a specified time or indefinite time. doorOverrideCancel removes the door override.\n",
+          "type": "string",
+          "enum": [
+            "accessPoint",
+            "doorOverride",
+            "doorOverrideCancel"
+          ]
+        },
+        "oauthId": {
+          "description": "The oauth id is the value that should be used to retrieve the oauth information from the oauth mode. These values are like access_token.\n"
+        },
+        "accessPointName": {
+          "description": "The access point name.\n"
+        },
+        "accessPointId": {
+          "description": "The access point id. It is a unique Id generated by Brivo. When serializer is used the access_point_name will be used to get this value.\n"
+        },
+        "brivoOverrideSettings": {
+          "$ref": "#/$defs/BrivoOverRideSettings"
+        }
+      }
+    },
+    "BrivoOverRideSettings": {
+      "description": "Optional Field for adding an override values to the access point. Should only be used if adding an override value\n",
+      "type": "object",
+      "required": [
+        "endTimeMode",
+        "behavior"
+      ],
+      "properties": {
+        "endTimeMode": {
+          "description": "When should over ride go to.\n  UNTIL_TIME: Used to say when time ends. EndTime is required for this. Not providing this will raise an validation error.\n  UNTIL_NEXT_SCHEDULE_CHANGE: Override will be placed until scheudle change is up\n  INDEFINITE: Door override will be in place until forcibly removed.\n"
+        },
+        "behavior": {
+          "description": "With Override in place should access point be LOCKED or UNLOCK\n"
+        },
+        "endTime": {
+          "description": "The time format is iso-8601. This is used for when will the override be removed. This is not required if the endTimeMode is INDEFINITE\n"
+        }
+      }
+    },
+    "EbusActionSettings": {
+      "description": "Settings for sending an alert to EBUS.\n",
+      "type": "object",
+      "required": [
+        "email",
+        "url",
+        "port"
+      ],
+      "properties": {
+        "email": {
+          "description": "Required\n",
+          "type": "string",
+          "format": "email"
+        },
+        "url": {
+          "description": "The ip address or domain name of the mail server are both acceptable.\n",
+          "type": "string"
+        },
+        "port": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "username": {
+          "description": "Check with ebus if this is required.\n",
+          "type": "string"
+        },
+        "password": {
+          "description": "Check with ebus if this is required.\n",
+          "type": "string"
+        }
+      }
+    },
+    "EvalinkTalosActionSettings": {
+      "description": "Settings for sending an alert via a Evalink Talos.  Currently only POST is supported.\n",
+      "type": "object",
+      "required": [
+        "url"
+      ],
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "auth_token": {
+          "description": "Optional bearer token to be included in the Authorization header when sending the the alert to Evalink Talos.\n",
+          "type": "string"
+        }
+      }
+    },
+    "ImmixActionSettings": {
+      "description": "Settings for sending an Immix alert.\n",
+      "required": [
+        "email",
+        "url",
+        "port"
+      ],
+      "properties": {
+        "email": {
+          "description": "The email address where alert will be delivered.\n",
+          "type": "string",
+          "format": "email"
+        },
+        "url": {
+          "description": "Accepts either the IP address or domain name of the mail server.\n",
+          "type": "string"
+        },
+        "port": {
+          "description": "The port number used to connect to the mail server.\n",
+          "type": "number",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "username": {
+          "description": "Check with your monitoring service if this is required.\n",
+          "type": "string"
+        },
+        "password": {
+          "description": "Check with your monitoring service if this is required.\n",
+          "type": "string"
+        },
+        "tls": {
+          "description": "If TLS is not present in the settings, the default is false\n",
+          "type": "boolean"
+        }
+      }
+    },
+    "NotificationActionSettings": {
+      "description": "Settings for sending notifications to a list of users.  Each item in the list is the id of the user and if the user wants email, push, and/or webapp notifications sent.\n",
+      "type": "object",
+      "required": [
+        "users"
+      ],
+      "properties": {
+        "users": {
+          "type": "array",
+          "description": "List of users to notify. Use `['*']` as the single item to target all users in the account.\n",
+          "minLength": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "push",
+              "email"
+            ],
+            "properties": {
+              "id": {
+                "description": "Unique id of the user to notify. Use `'*'` to target all users in the account.",
+                "type": "string"
+              },
+              "push": {
+                "description": "If true, try to notify the user using mobile push notifications.",
+                "type": "boolean"
+              },
+              "email": {
+                "description": "If true, try to notify the user using email notifications.",
+                "type": "boolean"
+              },
+              "webapp": {
+                "description": "If true, try to notify the user using an in-webapp popup notification. Webapp is a first-class channel — a user may opt into webapp only (with `email` and `push` both `false`). Omitting this field is equivalent to `false`.\n",
+                "type": "boolean",
+                "default": false
+              }
+            }
+          }
+        },
+        "rearmSeconds": {
+          "description": "If rearmSeconds are set, any alert that occurs for the alertActionRule within the rearmSeconds period will not be sent via email, push, and/or webapp. Instead, it will appear in /api/v3.0/notifications with the `status` = `throttled`\n",
+          "type": "number",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "maxPerHour": {
+          "description": "If maxPerHour is set, for any alert that occurs for the alertActionRule over the maxPerHour in the last 60 minutes will not be sent via email, push, and/or webapp.  Instead,  it will appear in /api/v3.0/notifications with the `status` = `throttled`\n",
+          "type": "number",
+          "minimum": 1,
+          "maximum": 65535
+        }
+      }
+    },
+    "OutputPortActionSettings": {
+      "description": "Settings for activating an output port alert action when an alert is triggered.\n",
+      "type": "object",
+      "required": [
+        "deviceId",
+        "portId",
+        "duration"
+      ],
+      "properties": {
+        "deviceId": {
+          "description": "The device id of the device to which the output port belongs.\n",
+          "type": "string"
+        },
+        "duration": {
+          "description": "The duration in seconds for which the device output port should be activated.\n",
+          "type": "number",
+          "minimum": 1,
+          "maximum": 3600000
+        },
+        "portId": {
+          "description": "The device output port id to be activated.\n",
+          "type": "string"
+        }
+      }
+    },
+    "PlaySpeakerAudioClipAction": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/AlertActionBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "playSpeakerAudioClip"
+              ]
+            },
+            "settings": {
+              "$ref": "#/$defs/PlaySpeakerAudioClipActionSettings"
+            }
+          }
+        }
+      ]
+    },
+    "PlaySpeakerAudioClipActionSettings": {
+      "description": "Settings that determine where an audio clip is played when an alert is triggered.\n\nThe clip will be played on the union of:\n- A fixed list of explicitly defined devices (`devices__in`), and\n - Optionally, additional triggering devices as defined by `playOnTriggeringDevice`:\n  - **none**: Do not include any triggering device.\n  - **alertActorDevices**: Include the device for which the event was created and from which the alert was generated.\n  - **conditionRuleDevices**: Include the devices that the rule, which created the alert, is filtering on.\n",
+      "type": "object",
+      "required": [
+        "speakerAudioClipId"
+      ],
+      "properties": {
+        "speakerAudioClipId": {
+          "description": "The ID of speaker audio clip to play.\n",
+          "type": "string"
+        },
+        "playOnTriggeringDevice": {
+          "description": "Specifies which devices should play the audio clip when the rule is triggered.\n - `none`: Do not attempt to play audio clips on any devices.\n - `alertActorDevices`: The device for which the event was created and from which the alert was triggered.\n - `conditionRuleDevices`: The devices that the rule, which created the alert, is filtering on.\n",
+          "type": "string",
+          "enum": [
+            "none",
+            "alertActorDevices",
+            "conditionRuleDevices"
+          ],
+          "default": "none"
+        },
+        "devices__in": {
+          "description": "A list of devices that will always play the audio clip,  \nregardless of the device that triggered the alert.  \nFormat: `\"<device_type>:<device_esn>\"` (e.g., `\"camera:10001abcd\"`, `\"speaker:1001abce\"`)\n",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      }
+    },
+    "SentinelActionSettings": {
+      "description": "Settings for sending an alert via a sentinel.  Currently only POST is supported.\n",
+      "type": "object",
+      "required": [
+        "url"
+      ],
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "auth_token": {
+          "description": "Optional bearer token to be included in the Authorization header when sending the the alert to Sentinel.\n",
+          "type": "string"
+        }
+      }
+    },
+    "SlackActionSettings": {
+      "description": "Settings for sending an alert message to Slack.  Slack bot apps require the `chat:write` permissions scope. In addition, the bot app will need explicit permission to the channel selected in the settings via the Slack app.\n",
+      "type": "object",
+      "required": [
+        "apiToken",
+        "channel"
+      ],
+      "properties": {
+        "apiToken": {
+          "description": "The Slack apiToken generated for your bot app.\n",
+          "type": "string"
+        },
+        "channel": {
+          "description": "The Slack channel for sending alert messages.\n",
+          "type": "string"
+        }
+      }
+    },
+    "SmsActionSettings": {
+      "description": "Settings for sending SMS notifications to a list of users. Each item in the list is the id of the user to notify via SMS.\n",
+      "type": "object",
+      "required": [
+        "users"
+      ],
+      "properties": {
+        "users": {
+          "type": "array",
+          "description": "List of users to notify via SMS. Use `['*']` as the single item to target all users in the account.\n",
+          "minLength": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "description": "Unique id of the user to notify via SMS. Use `'*'` to target all users in the account.",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "SmtpActionSettings": {
+      "description": "Settings for sending an alert via SMTP.  This alert action is primarily used for monitoring services.\n",
+      "type": "object",
+      "required": [
+        "email",
+        "url",
+        "port"
+      ],
+      "properties": {
+        "email": {
+          "description": "Required\n",
+          "type": "string",
+          "format": "email"
+        },
+        "url": {
+          "description": "The ip address or domain name of the mail server are both acceptable.\n",
+          "type": "string"
+        },
+        "port": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "username": {
+          "description": "Check with your monitoring service if this is required.\n",
+          "type": "string"
+        },
+        "password": {
+          "description": "Check with your monitoring service if this is required.\n",
+          "type": "string"
+        },
+        "tls": {
+          "description": "If tls is not present in the settings, the default is false\n",
+          "type": "boolean"
+        }
+      }
+    },
+    "WebhookActionSettings": {
+      "description": "Settings for sending an alert via a webhook.  Currently only POST is supported.\n",
+      "type": "object",
+      "required": [
+        "url"
+      ],
+      "properties": {
+        "url": {
+          "type": "string"
+        },
+        "auth_token": {
+          "description": "Optional bearer token to be included in the Authorization header when sending the alert to the webhook.\n",
+          "type": "string"
+        }
+      }
+    },
+    "ZapierActionSettings": {
+      "description": "Settings for sending an alert via Zapier.  Currently only POST is supported.\n",
+      "type": "object",
+      "required": [
+        "url"
+      ],
+      "properties": {
+        "url": {
+          "description": "The URL for the Zapier webhook to which alerts will be sent. This URL is provided by Zapier. For more information, refer to [Zapier Webhooks](https://help.zapier.com/hc/en-us/articles/8496083355661-How-to-Get-Started-with-Webhooks-by-Zapier#h_01HQ87H8BTMK49GY2RC8C4T59J) and [Trigger Zaps from Webhooks](https://help.zapier.com/hc/en-us/articles/8496288690317-Trigger-Zaps-from-webhooks#h_01HBGES5DW79VEMREX2Z7A0K48).\n",
+          "type": "string"
+        }
+      }
+    },
+    "ZendeskActionSettings": {
+      "description": "Settings for sending an alert message to Zendesk and creating a ticket.\n",
+      "type": "object",
+      "required": [
+        "apiToken",
+        "email",
+        "subdomain"
+      ],
+      "properties": {
+        "apiToken": {
+          "description": "The API token generated for your Zendesk account. For instructions on how to generate this token, please refer to [this guide](https://support.zendesk.com/hc/en-us/articles/4408889192858-Managing-access-to-the-Zendesk-API#topic_bsw_lfg_mmb).\n",
+          "type": "string"
+        },
+        "email": {
+          "description": "The email address associated with your Zendesk account. Please note that this email address does not need to be necessarily tied to a specific user and could belong to any admin or agent. Consider creating a dedicated user for automated interactions to streamline alert management.\n",
+          "type": "string"
+        },
+        "subdomain": {
+          "description": "The subdomain associated with your Zendesk account. This should follow the format https://subdomain.zendesk.com. Please provide only the subdomain and not the full URL. For more information on finding your Zendesk subdomain, please refer to [this guide](https://support.zendesk.com/hc/en-us/articles/4409381383578-Where-can-I-find-my-Zendesk-subdomain).\n",
+          "type": "string"
+        }
+      }
+    },
+    "ZulipActionSettings": {
+      "type": "object",
+      "required": [
+        "apiKey",
+        "email",
+        "organizationUrl"
+      ],
+      "properties": {
+        "apiKey": {
+          "description": "The apiKey for your Zulip bot\n",
+          "type": "string"
+        },
+        "email": {
+          "description": "The email address for your Zulip bot\n",
+          "type": "string"
+        },
+        "organizationUrl": {
+          "description": "The url for your Zulip instance\n",
+          "type": "string"
+        }
+      }
+    },
+    "ZulipPrivateActionSettings": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ZulipActionSettings"
+        },
+        {
+          "description": "Settings for sending a private alert message to a user Zulip. Zulip bots need to be supported by your organization. Bots can be created under `Personal Settings > Bots`.\n",
+          "type": "object",
+          "required": [
+            "user"
+          ],
+          "properties": {
+            "user": {
+              "description": "The user's Zulip email or user number.\n",
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "ZulipStreamActionSettings": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ZulipActionSettings"
+        },
+        {
+          "description": "Settings for sending an alert message to a stream in Zulip. Zulip bots need to be supported by your organization. Bots can be created under `Personal Settings > Bots`.\n",
+          "type": "object",
+          "required": [
+            "stream",
+            "topic"
+          ],
+          "properties": {
+            "stream": {
+              "type": "string",
+              "description": "The name or id of a stream.\n"
+            },
+            "topic": {
+              "description": "The topic to post the message in.\n",
+              "type": "string"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

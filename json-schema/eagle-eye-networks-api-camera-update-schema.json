@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-api-camera-update-schema.json",
+  "title": "ApiCameraUpdate",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-devices-openapi.yml#/components/schemas/ApiCameraUpdate",
+  "type": "object",
+  "properties": {
+    "name": {
+      "$ref": "#/$defs/DeviceName"
+    },
+    "notes": {
+      "$ref": "#/$defs/DeviceNotes"
+    },
+    "speakerId": {
+      "description": "Id of the speaker.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "locationId": {
+      "$ref": "#/$defs/LocationId"
+    },
+    "tags": {
+      "$ref": "#/$defs/DeviceTags"
+    },
+    "devicePosition": {
+      "$ref": "#/$defs/ApiDevicePosition"
+    },
+    "deviceAddress": {
+      "$ref": "#/$defs/DeviceAddress"
+    },
+    "publicSafetySharing": {
+      "$ref": "#/$defs/PublicSafetySharing"
+    }
+  },
+  "$defs": {
+    "ApiDevicePosition": {
+      "type": "object",
+      "x-jsoninclude-nonnull-annotation": true,
+      "properties": {
+        "latitude": {
+          "description": "The latitude of the device. (WGS 84)",
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "longitude": {
+          "description": "The longitude of the device. (WGS 84).",
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "minimum": -180,
+          "maximum": 180
+        },
+        "azimuth": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "minimum": 0,
+          "maximum": 360
+        },
+        "rangeInMeters": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "minimum": 0
+        },
+        "floor": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": -30,
+          "maximum": 300
+        },
+        "fieldOfView": {
+          "description": "Field of view is the range of the observable world visible at any given time through camera viewfinder.",
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double",
+          "minimum": 0,
+          "maximum": 360
+        }
+      }
+    },
+    "DeviceAddress": {
+      "type": "object",
+      "x-jsoninclude-nonnull-annotation": true,
+      "description": "Address of the device.",
+      "properties": {
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "address": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "DeviceName": {
+      "description": "User-defined name for the device.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 126
+    },
+    "DeviceNotes": {
+      "type": "string",
+      "maxLength": 5000
+    },
+    "DeviceTags": {
+      "type": "array",
+      "maxItems": 64,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 64
+      }
+    },
+    "LocationId": {
+      "description": "ID Of the location.",
+      "minLength": 1,
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "PublicSafetySharing": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "description": "Indicates whether the device is shared with public safety agencies.",
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

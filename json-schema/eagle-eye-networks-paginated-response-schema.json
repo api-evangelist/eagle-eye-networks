@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-paginated-response-schema.json",
+  "title": "PaginatedResponse",
+  "description": "Used to wrap results for a paginated response, containing information on how to retrieve further pages and, if  available, the total number of results.\n",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-video-search-openapi.yml#/components/schemas/PaginatedResponse",
+  "type": "object",
+  "properties": {
+    "nextPageToken": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true,
+      "description": "Token to retrieve the next page. The value of this token is passed into the field pageToken.  This value can be null if there is no next page.\n"
+    },
+    "prevPageToken": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true,
+      "description": "Token to retrieve the previous page. The value of this token is passed into the field pageToken.  This value can be null of there is no previous page.\n"
+    },
+    "totalSize": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0,
+      "readOnly": true,
+      "description": "The number of resource entries being returned from the result set.  This can be omitted if the API endpoint does not have total size information.\n"
+    },
+    "results": {
+      "type": "array",
+      "readOnly": true,
+      "description": "The result set from a collection API call.",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "required": [
+    "nextPageToken",
+    "prevPageToken",
+    "results"
+  ]
+}

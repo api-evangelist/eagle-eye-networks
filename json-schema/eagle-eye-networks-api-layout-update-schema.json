@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-api-layout-update-schema.json",
+  "title": "ApiLayoutUpdate",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-grouping-openapi.yml#/components/schemas/ApiLayoutUpdate",
+  "properties": {
+    "panes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ApiPane"
+      }
+    },
+    "settings": {
+      "$ref": "#/$defs/ApiLayoutSettingsUpdate"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the layout.",
+      "minLength": 1,
+      "maxLength": 126
+    }
+  },
+  "$defs": {
+    "ApiLayoutSettingsUpdate": {
+      "description": "Object identifying the layout settings",
+      "properties": {
+        "showCameraBorder": {
+          "type": "boolean",
+          "description": "This flag if enabled, shows pane borders."
+        },
+        "showCameraName": {
+          "type": "boolean",
+          "description": "This flag if enabled, shows camera name"
+        },
+        "cameraAspectRatio": {
+          "type": "string",
+          "description": "Aspect ratio of image",
+          "enum": [
+            "16x9",
+            "4x3"
+          ]
+        },
+        "paneColumns": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6,
+          "description": "Max number of cameras to show per row"
+        }
+      }
+    },
+    "ApiPane": {
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Unique identifier of pane in layout assigned to each pane. This determines the location indexing of panes in layout.",
+          "minimum": 0
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the pane in layout",
+          "maxLength": 126
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "preview",
+            "compositePreview"
+          ],
+          "description": "Possible values:\n* `preview` - show the view for a single camera using \"preview\" images which are lower resolution and lower frequency than the real stream. * `compositePreview` - show the composite of a de-warped camera view.\n"
+        },
+        "size": {
+          "type": "integer",
+          "description": "Size of displayed image in pane. Size 1 shows the smallest size",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "cameraId": {
+          "type": "string",
+          "description": "Unique identifier of the camera."
+        },
+        "compositeId": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Unique identifier of the composite of a de-warped camera view."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "type",
+        "size",
+        "cameraId"
+      ]
+    }
+  }
+}

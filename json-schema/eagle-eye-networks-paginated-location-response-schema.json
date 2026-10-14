@@ -1,0 +1,462 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-paginated-location-response-schema.json",
+  "title": "PaginatedLocationResponse",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-grouping-openapi.yml#/components/schemas/PaginatedLocationResponse",
+  "allOf": [
+    {
+      "$ref": "#/$defs/PaginatedResponseWithSize"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/LocationGet"
+              },
+              {
+                "$ref": "#/$defs/FullTextSearchRelated"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "BasicLocation": {
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 126
+        },
+        "parentId": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "description": "Unique identifier of this location's parent location in the hierarchy",
+              "default": null,
+              "readOnly": false
+            }
+          ]
+        },
+        "isDefault": {
+          "type": "boolean",
+          "description": "Specifies if a new device should be automatically assigned to this location if not supplied\n",
+          "default": false
+        }
+      }
+    },
+    "BridgeStatusCounts": {
+      "type": "object",
+      "properties": {
+        "online": {
+          "type": "integer"
+        },
+        "deviceOffline": {
+          "type": "integer"
+        },
+        "unknown": {
+          "type": "integer"
+        }
+      }
+    },
+    "BridgeStatusV2Counts": {
+      "type": "object",
+      "properties": {
+        "cloudConnectionStatus": {
+          "$ref": "#/$defs/CloudConnectionStatusCounts"
+        },
+        "edgeReportedDeviceStatus": {
+          "$ref": "#/$defs/EdgeReportedDeviceStatusCounts"
+        }
+      }
+    },
+    "CameraStatusCounts": {
+      "type": "object",
+      "properties": {
+        "online": {
+          "type": "integer"
+        },
+        "deviceOffline": {
+          "type": "integer"
+        },
+        "off": {
+          "type": "integer"
+        },
+        "bridgeOffline": {
+          "type": "integer"
+        },
+        "invalidCredentials": {
+          "type": "integer"
+        },
+        "error": {
+          "type": "integer"
+        },
+        "unknown": {
+          "type": "integer"
+        }
+      }
+    },
+    "CameraStatusV2Counts": {
+      "type": "object",
+      "properties": {
+        "cloudConnectionStatus": {
+          "$ref": "#/$defs/CloudConnectionStatusCounts"
+        },
+        "edgeReportedDeviceStatus": {
+          "$ref": "#/$defs/EdgeReportedDeviceStatusCounts"
+        }
+      }
+    },
+    "CloudConnectionStatusCounts": {
+      "type": "object",
+      "properties": {
+        "connected": {
+          "type": "integer"
+        },
+        "disconnected": {
+          "type": "integer"
+        }
+      }
+    },
+    "EdgeReportedDeviceStatusCounts": {
+      "type": "object",
+      "properties": {
+        "operational": {
+          "type": "integer"
+        },
+        "disabled": {
+          "type": "integer"
+        },
+        "unreachable": {
+          "type": "integer"
+        },
+        "error": {
+          "type": "integer"
+        },
+        "unknown": {
+          "type": "integer"
+        },
+        "initializing": {
+          "type": "integer"
+        }
+      }
+    },
+    "EffectiveLocationPermissions": {
+      "readOnly": true,
+      "type": "object",
+      "properties": {
+        "read": {
+          "type": "boolean"
+        },
+        "delete": {
+          "type": "boolean"
+        },
+        "edit": {
+          "type": "boolean"
+        }
+      }
+    },
+    "FullTextSearchRelated": {
+      "properties": {
+        "qRelevance": {
+          "type": "number",
+          "description": "Field is only returned when `q` parameter is used and its value indicates the relevance of the location in relation to the terms in the `q` parameter. The range of this value is between 0 and 1, higher is better.\n",
+          "format": "float",
+          "minimum": 0,
+          "maximum": 1,
+          "readOnly": true
+        }
+      }
+    },
+    "Location": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/BasicLocation"
+        }
+      ],
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/LocationAddress"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Description for the location",
+          "default": "",
+          "minLength": 0,
+          "maxLength": 128
+        },
+        "geometry": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "GeoJSON structure to store polygon for the specific location.\nCurrently the only supported geometry type is MultiPolygon, but in the future more GeoJSON schemas might be supported, so clients should be able to handle unknown schemas.\n\nThis field must be in the standard GeoJSON format, as described in https://datatracker.ietf.org/doc/html/rfc7946\n\nPlease read https://datatracker.ietf.org/doc/html/rfc7946 for more information about the GeoJSON standard.\n",
+          "default": null,
+          "required": [
+            "type",
+            "coordinates"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "MultiPolygon"
+              ]
+            },
+            "coordinates": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "minItems": 4,
+                  "items": {
+                    "type": "array",
+                    "minItems": 2,
+                    "items": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            },
+            "bbox": {
+              "type": "array",
+              "minItems": 4,
+              "items": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "childLocationCount": {
+          "readOnly": true,
+          "type": "integer",
+          "description": "The total count of direct children of the location"
+        },
+        "effectivePermissions": {
+          "$ref": "#/$defs/EffectiveLocationPermissions"
+        },
+        "resourceCounts": {
+          "$ref": "#/$defs/ResourceCounts1"
+        },
+        "resourceStatusCounts": {
+          "$ref": "#/$defs/ResourceStatusCounts1"
+        },
+        "resourceStatusV2Counts": {
+          "$ref": "#/$defs/ResourceStatusV2Counts1"
+        }
+      }
+    },
+    "LocationAddress": {
+      "allOf": [
+        {
+          "type": "object",
+          "properties": {
+            "country": {
+              "type": "string",
+              "default": "",
+              "minLength": 0,
+              "maxLength": 128
+            },
+            "region": {
+              "type": "string",
+              "default": "",
+              "minLength": 0,
+              "maxLength": 128
+            },
+            "city": {
+              "type": "string",
+              "default": "",
+              "minLength": 0,
+              "maxLength": 128
+            },
+            "streetAddress": {
+              "type": "string",
+              "minLength": 0,
+              "maxLength": 128
+            },
+            "streetAddress2": {
+              "type": "string",
+              "default": "",
+              "minLength": 0,
+              "maxLength": 128
+            },
+            "postalCode": {
+              "type": "string",
+              "default": "",
+              "minLength": 0,
+              "maxLength": 128
+            }
+          }
+        }
+      ]
+    },
+    "LocationGet": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/Location"
+        }
+      ],
+      "required": [
+        "id",
+        "name",
+        "isDefault",
+        "parentId"
+      ]
+    },
+    "PaginatedResponseNoTotalSize": {
+      "type": "object",
+      "description": "Used to wrap results for a paginated response, containing information on how to retrieve further pages.\n",
+      "properties": {
+        "nextPageToken": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true,
+          "description": "Token to retrieve the next page. The value of this token is passed into the field pageToken. This value can be null if there is no next page.\n"
+        },
+        "prevPageToken": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true,
+          "description": "Token to retrieve the previous page. The value of this token is passed into the field pageToken. This value can be null of there is no previous page.\n"
+        },
+        "results": {
+          "type": "array",
+          "readOnly": true,
+          "description": "The result set from a collection API call.",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "required": [
+        "nextPageToken",
+        "prevPageToken",
+        "results"
+      ]
+    },
+    "PaginatedResponseWithSize": {
+      "description": "Used to wrap results for a paginated response, containing information on how to retrieve further pages and  the total number of results.  \n",
+      "allOf": [
+        {
+          "$ref": "#/$defs/PaginatedResponseNoTotalSize"
+        },
+        {
+          "properties": {
+            "totalSize": {
+              "type": "integer",
+              "readOnly": true,
+              "description": "Size of the total result set.\n"
+            }
+          },
+          "required": [
+            "totalSize"
+          ]
+        }
+      ]
+    },
+    "ResourceCounts1": {
+      "description": "Count of resources.",
+      "type": "object",
+      "readOnly": true,
+      "properties": {
+        "cameras": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "bridges": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "speakers": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "users": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "multiCameras": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "ResourceStatusCounts1": {
+      "description": "Count of resources by status.",
+      "type": "object",
+      "readOnly": true,
+      "properties": {
+        "cameras": {
+          "$ref": "#/$defs/CameraStatusCounts"
+        },
+        "bridges": {
+          "$ref": "#/$defs/BridgeStatusCounts"
+        },
+        "users": {
+          "$ref": "#/$defs/UserStatusCounts"
+        },
+        "multiCameras": {
+          "$ref": "#/$defs/CameraStatusCounts"
+        }
+      }
+    },
+    "ResourceStatusV2Counts1": {
+      "description": "Count of resources by cloud connection status and edge-reported device status.",
+      "type": "object",
+      "readOnly": true,
+      "properties": {
+        "cameras": {
+          "$ref": "#/$defs/CameraStatusV2Counts"
+        },
+        "bridges": {
+          "$ref": "#/$defs/BridgeStatusV2Counts"
+        },
+        "users": {
+          "$ref": "#/$defs/UserStatusCounts"
+        },
+        "multiCameras": {
+          "$ref": "#/$defs/CameraStatusV2Counts"
+        }
+      }
+    },
+    "UserStatusCounts": {
+      "type": "object",
+      "properties": {
+        "active": {
+          "type": "integer"
+        },
+        "blocked": {
+          "type": "integer"
+        },
+        "pending": {
+          "type": "integer"
+        }
+      }
+    },
+    "id": {
+      "type": "string",
+      "description": "Unique identifier of the resource",
+      "readOnly": true
+    }
+  }
+}

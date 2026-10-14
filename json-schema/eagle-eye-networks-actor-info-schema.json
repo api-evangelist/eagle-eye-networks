@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-actor-info-schema.json",
+  "title": "ActorInfo",
+  "description": "Details of the selected group",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-video-search-openapi.yml#/components/schemas/ActorInfo",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "description": "Type of the data",
+      "enum": [
+        "actor"
+      ]
+    },
+    "id": {
+      "$ref": "#/$defs/ActorGenericId"
+    }
+  },
+  "required": [
+    "id",
+    "type"
+  ],
+  "$defs": {
+    "ActorGenericId": {
+      "type": "string",
+      "description": "This parameter filters events based on associated camera IDs for the specified actors.  The actor type is prefixed along with the actor ID in the format `actorType:actorId`. Supported actor types: - `camera` (e.g. `camera:100d4c41`) - `location` (e.g. `location:d0e4aad4-06c5-4c43-a4ac-3106738ed206`) - `bridge` (e.g. `bridge:10035b4a`)\n"
+    }
+  }
+}

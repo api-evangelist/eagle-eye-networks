@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-alert-schema.json",
+  "title": "Alert",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-events-openapi.yml#/components/schemas/Alert",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "createTimestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "creatorId": {
+      "type": "string"
+    },
+    "alertType": {
+      "type": "string"
+    },
+    "alertName": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "serviceRuleId": {
+      "type": "string",
+      "description": "The UUID of the service rule id for creation."
+    },
+    "eventType": {
+      "type": "string"
+    },
+    "actorId": {
+      "type": "string"
+    },
+    "actorType": {
+      "type": "string"
+    },
+    "actorAccountId": {
+      "type": "string"
+    },
+    "actorName": {
+      "type": "string"
+    },
+    "ruleId": {
+      "type": "string"
+    },
+    "eventId": {
+      "type": "string"
+    },
+    "locationId": {
+      "type": "string"
+    },
+    "locationName": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "priority": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 20
+    },
+    "dataSchemas": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "data": {
+      "type": "object"
+    },
+    "actions": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "name",
+          "type",
+          "success",
+          "timestamp"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "description": "Alert action type, see `type` field in `/alertActions` endpoint for possible values.",
+            "type": "string"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "Denotes if the action was taken successfully."
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Time at which the action was taken."
+          },
+          "status": {
+            "type": "string",
+            "description": "Detailed Status of the alert action, e.g. \"fired\", \"success\", \"partialSuccess\", \"silenced\", \"failed\", \"internalError\"."
+          }
+        }
+      }
+    },
+    "description": {
+      "type": "string"
+    }
+  }
+}

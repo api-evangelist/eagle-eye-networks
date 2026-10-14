@@ -1,0 +1,377 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-api-auth-settings-update-schema.json",
+  "title": "ApiAuthSettingsUpdate",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-account-settings-openapi.yml#/components/schemas/ApiAuthSettingsUpdate",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/ApiDisabledSsoSettingsUpdate"
+    },
+    {
+      "$ref": "#/$defs/ApiGenericOidcSsoSettingsUpdate"
+    },
+    {
+      "$ref": "#/$defs/ApiGoogleOidcSsoSettingsUpdate"
+    },
+    {
+      "$ref": "#/$defs/ApiOktaOidcSsoSettingsUpdate"
+    },
+    {
+      "$ref": "#/$defs/ApiMicrosoftGlobalOidcSsoSettingsUpdate"
+    },
+    {
+      "$ref": "#/$defs/ApiMicrosoftActiveDirectoryOidcSsoSettingsUpdate"
+    },
+    {
+      "$ref": "#/$defs/ApiBrivoSsoSettingsUpdate"
+    }
+  ],
+  "$defs": {
+    "ApiBrivoSsoSettingsUpdate": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/BrivoSsoSettings"
+        }
+      ]
+    },
+    "ApiDisabledSsoSettingsUpdate": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/BaseDisabledSsoSettings"
+        },
+        {
+          "$ref": "#/$defs/DisabledSsoSettings"
+        }
+      ]
+    },
+    "ApiGenericOidcSsoSettingsUpdate": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/BaseSsoSettings"
+        },
+        {
+          "$ref": "#/$defs/GenericOidcSsoSettings"
+        }
+      ]
+    },
+    "ApiGoogleOidcSsoSettingsUpdate": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/BaseSsoSettings"
+        },
+        {
+          "$ref": "#/$defs/GoogleOidcSsoSettings"
+        }
+      ]
+    },
+    "ApiIDPCredentials": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "clientSecret": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        }
+      },
+      "required": [
+        "clientId",
+        "clientSecret"
+      ]
+    },
+    "ApiIDPEndpoints": {
+      "type": "object",
+      "required": [
+        "authorization",
+        "token",
+        "userInfo",
+        "jwks"
+      ],
+      "properties": {
+        "authorization": {
+          "type": "string",
+          "format": "url",
+          "description": "Authorization URL of the IDP\n",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "token": {
+          "type": "string",
+          "format": "url",
+          "description": "Token URL of the IDP\n",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "userInfo": {
+          "type": "string",
+          "format": "url",
+          "description": "User info URL of the IDP\n",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "jwks": {
+          "type": "string",
+          "format": "url",
+          "description": "JWKs URL of the IDP\n",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      }
+    },
+    "ApiIDPIssuer": {
+      "type": "object",
+      "required": [
+        "url"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "url",
+          "description": "Issuer URL of the IDP\n",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      }
+    },
+    "ApiMicrosoftActiveDirectoryOidcSsoSettingsUpdate": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/BaseSsoSettings"
+        },
+        {
+          "$ref": "#/$defs/MicrosoftActiveDirectoryOidcSsoSettings"
+        }
+      ]
+    },
+    "ApiMicrosoftGlobalOidcSsoSettingsUpdate": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/BaseSsoSettings"
+        },
+        {
+          "$ref": "#/$defs/MicrosoftGlobalOidcSsoSettings"
+        }
+      ]
+    },
+    "ApiOktaOidcSsoSettingsUpdate": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/BaseSsoSettings"
+        },
+        {
+          "$ref": "#/$defs/OktaOidcSsoSettings"
+        }
+      ]
+    },
+    "BaseDisabledSsoSettings": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      }
+    },
+    "BaseSsoSettings": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "spInitiatedSsoLogin": {
+          "type": "boolean",
+          "description": "If this field is set to true, it means that all the non admin users under this account will use this SSO settings to authenticate when performing Service provider initiated login.  A Service provider initiated login means that an unauthenticated user tries to directly login to an application like the VMS webapp and the application redirects them to their configured Identity provider to authenticate themselves. This is the opposite of an Idp initiated login where the user directly logs in to their identity provider, which then shows them a catalog of applications they have access to.\n",
+          "default": false
+        }
+      }
+    },
+    "BrivoSsoSettings": {
+      "type": "object",
+      "description": "Brivo Security Suite (BSS) SSO config. Only available for BSS clients. Only the \"Brivo Management User\" Service Account (BMU) can update this setting.\n",
+      "required": [
+        "type",
+        "environment"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "bss"
+          ]
+        },
+        "environment": {
+          "type": "string",
+          "enum": [
+            "production",
+            "qa",
+            "development"
+          ],
+          "description": "Environment of the Brivo Security Suite.\n"
+        }
+      }
+    },
+    "DisabledSsoSettings": {
+      "type": "object",
+      "description": "No Single Sign On enabled and ssoOidcIdpConfigUrls include requested.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "disabled"
+          ]
+        }
+      }
+    },
+    "GenericOidcSsoSettings": {
+      "type": "object",
+      "description": "Generic OpenID Connect SSO config.",
+      "required": [
+        "config"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "oidc"
+          ]
+        },
+        "config": {
+          "type": "object",
+          "properties": {
+            "credentials": {
+              "$ref": "#/$defs/ApiIDPCredentials"
+            },
+            "endpoints": {
+              "$ref": "#/$defs/ApiIDPEndpoints"
+            },
+            "issuer": {
+              "$ref": "#/$defs/ApiIDPIssuer"
+            }
+          },
+          "required": [
+            "credentials",
+            "endpoints",
+            "issuer"
+          ]
+        },
+        "scim": {
+          "$ref": "#/$defs/scim"
+        }
+      }
+    },
+    "GoogleOidcSsoSettings": {
+      "type": "object",
+      "description": "Google OpenID Connect SSO config.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "google"
+          ]
+        }
+      }
+    },
+    "MicrosoftActiveDirectoryOidcSsoSettings": {
+      "type": "object",
+      "required": [
+        "config"
+      ],
+      "description": "With the \"Microsoft Active Directory\" OIDC SSO type, a specific active directory is configured as identity provider for the account.  The specific directory is identified by the required tenantId. Any user and guest under this specific active directory can use this configuration to login.  \"Microsoft Accounts\", also known as \"Personal accounts\" can only be used to identify as a user if that account has been invited as a guest account in the Active Directory.  Auto User Provisioning can be enabled for this configuration.\n",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "microsoftActiveDirectory"
+          ]
+        },
+        "config": {
+          "type": "object",
+          "properties": {
+            "credentials": {
+              "$ref": "#/$defs/ApiIDPCredentials"
+            },
+            "tenantId": {
+              "type": "string",
+              "description": "Tenant id of the IDP\n",
+              "minLength": 1,
+              "maxLength": 100
+            }
+          },
+          "required": [
+            "credentials",
+            "tenantId"
+          ]
+        },
+        "scim": {
+          "$ref": "#/$defs/scim"
+        }
+      }
+    },
+    "MicrosoftGlobalOidcSsoSettings": {
+      "type": "object",
+      "description": "If the \"Microsoft Global\" OIDC SSO type is configured, users with personal Microsoft accounts and users under any active directory can use it to login\n to the system. \nGuest users of an active directory can't use this configuration to login. As it is impossible to authoritatively decide which account an unknown user belongs to, Auto User Provisioning is not possible.\n",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "microsoftGlobal"
+          ]
+        }
+      }
+    },
+    "OktaOidcSsoSettings": {
+      "type": "object",
+      "description": "Okta OpenID Connect SSO config.",
+      "required": [
+        "config"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "okta"
+          ]
+        },
+        "config": {
+          "type": "object",
+          "properties": {
+            "credentials": {
+              "$ref": "#/$defs/ApiIDPCredentials"
+            },
+            "issuer": {
+              "$ref": "#/$defs/ApiIDPIssuer"
+            }
+          },
+          "required": [
+            "credentials",
+            "issuer"
+          ]
+        },
+        "scim": {
+          "$ref": "#/$defs/scim"
+        }
+      }
+    },
+    "scim": {
+      "type": "object",
+      "properties": {
+        "autoUserProvisioningEnabled": {
+          "type": "boolean",
+          "description": "If this option is enabled, it means that if the user does not exist in the VMS,  the system will automatically provision them, eliminating the need for any manual intervention.\n"
+        }
+      }
+    }
+  }
+}

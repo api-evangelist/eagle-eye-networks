@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-api-ptz-position-schema.json",
+  "title": "ApiPtzPosition",
+  "description": "The ptz coordinates of the camera in a space defined as pan:(-1,1), tilt:(-1,1), zoom:(0,1).",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-devices-openapi.yml#/components/schemas/ApiPtzPosition",
+  "type": "object",
+  "properties": {
+    "x": {
+      "type": "number",
+      "format": "double",
+      "description": "Pan coordinate given as value between -1(max left) and 1(max right).",
+      "minimum": -1,
+      "maximum": 1
+    },
+    "y": {
+      "type": "number",
+      "format": "double",
+      "description": "Tilt coordinate given as value between -1(max down) and 1(max up).",
+      "minimum": -1,
+      "maximum": 1
+    },
+    "z": {
+      "type": "number",
+      "format": "double",
+      "description": "Zoom coordinate given as value between 0(fully zoomed out) and 1(fully zoomed in).",
+      "minimum": 0,
+      "maximum": 1
+    }
+  },
+  "minProperties": 1
+}

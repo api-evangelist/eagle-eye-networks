@@ -1,0 +1,1075 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-search-event-v1-schema.json",
+  "title": "SearchEvent.v1",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-video-search-openapi.yml#/components/schemas/SearchEvent.v1",
+  "allOf": [
+    {
+      "$ref": "#/$defs/EventEnvelope"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "matchObjectIds": {
+          "$ref": "#/$defs/MatchObjectId"
+        },
+        "data": {
+          "type": "array",
+          "description": "List of data schemas supported in the results.\nThe decision on which schemas are to be enabled is based on the list mentioned in the `include` query parameter",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/EenObjectDetectionV1"
+              },
+              {
+                "$ref": "#/$defs/EenObjectClassificationV1"
+              },
+              {
+                "$ref": "#/$defs/EenPersonAttributesV1"
+              },
+              {
+                "$ref": "#/$defs/EenVehicleAttributesV1"
+              },
+              {
+                "$ref": "#/$defs/EenEEVAAttributesV1"
+              },
+              {
+                "$ref": "#/$defs/EenCustomLabelsV1"
+              },
+              {
+                "$ref": "#/$defs/EenFullFrameImageUrlV1"
+              },
+              {
+                "$ref": "#/$defs/EenCroppedFrameImageUrlV1"
+              },
+              {
+                "$ref": "#/$defs/EenObjectRegionMappingV1"
+              },
+              {
+                "$ref": "#/$defs/EenObjectEntityDetailsV1"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "BaseDataObject": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Specific data schema type, eg `een.lprDetection.v1` which describes what other fields will exist in this object.\n"
+        },
+        "creatorId": {
+          "type": "string",
+          "description": "Id of the application or system that created this piece of information, generally the same as the `creatorId` of the event itself. This field allows clients to disambiguate data from multiple sources in the same event."
+        }
+      }
+    },
+    "BoundingBoxV1": {
+      "type": "array",
+      "description": "Array of 4 floats describing a bounding box around the object of interest. Note that the percentage defined below\nis as a decimal value between 0 and 1. This means 55% would have to be provided as 0.55.\n* First - top left corner horizontal position (from left) as a percentage of the image width.\n* Second - top left corner vertical position (from top) as a percentage of the total image height.\n* Third - bottom right corner horizontal position (from left) as a percentage of the image width.\n* Fourth - bottom right corner vertical position (from top) as a percentage of the image height.",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "number",
+        "format": "double",
+        "minimum": 0,
+        "maximum": 1
+      }
+    },
+    "ColorDefinitions": {
+      "type": "string",
+      "description": "Standard color enumerations used across all object classes (person, vehicle, etc.).",
+      "enum": [
+        "beige",
+        "black",
+        "blue",
+        "brown",
+        "burgundy",
+        "gold-beige",
+        "green",
+        "gray",
+        "silver",
+        "silver-gray",
+        "maroon",
+        "orange",
+        "pink",
+        "purple",
+        "red",
+        "teal",
+        "white",
+        "yellow"
+      ]
+    },
+    "EenCroppedFrameImageUrlV1": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ObjectEnvelopeDataObject"
+        },
+        {
+          "type": "object",
+          "description": "Details about the cropped frame image url related to the event.",
+          "required": [
+            "type",
+            "httpsUrl",
+            "timestamp",
+            "objectId"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "een.croppedFrameImageUrl.v1"
+              ]
+            },
+            "httpsUrl": {
+              "type": "string",
+              "format": "url",
+              "description": "Link to obtain the frame crop image of the area of interest related to this event.  For example in case of LPR, it is beneficial for end user to obtain the crop of the license plate."
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Timestamp of the frame from which the crop was made."
+            }
+          }
+        }
+      ]
+    },
+    "EenCustomLabelsV1": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ObjectEnvelopeDataObject"
+        },
+        {
+          "type": "object",
+          "description": "Details about the custom label created by the user.",
+          "required": [
+            "type",
+            "label"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Type of this data schema. The value is fixed as 'een.customLabels.v1'",
+              "enum": [
+                "een.customLabels.v1"
+              ]
+            },
+            "label": {
+              "type": "string",
+              "maxLength": 25,
+              "description": "Label assigned by the user."
+            }
+          }
+        }
+      ]
+    },
+    "EenEEVAAttributesV1": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ObjectEnvelopeDataObject"
+        },
+        {
+          "type": "object",
+          "description": "Attributes related to an Eeva query that resulted in this event being detected in an image.",
+          "required": [
+            "type",
+            "queryType",
+            "query",
+            "binaryResponse",
+            "reason"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Type of this data schema. The value is fixed as 'een.eevaAttributes.v1'.",
+              "enum": [
+                "een.eevaAttributes.v1"
+              ]
+            },
+            "queryType": {
+              "type": "string",
+              "description": "The type of the Eeva query which is run on the image.",
+              "enum": [
+                "binaryTimestamp"
+              ]
+            },
+            "query": {
+              "type": "string",
+              "description": "Query set by the user to run on image."
+            },
+            "binaryResponse": {
+              "type": "boolean",
+              "description": "Boolean response returned by the OpenAI VLM in response to the query."
+            },
+            "reason": {
+              "type": "string",
+              "description": "An explanation detailing the reasoning or evidence behind the provided answer. This field helps clarify why the answer was determined to be true, or false, and may include relevant observations from the analyzed data."
+            }
+          }
+        }
+      ]
+    },
+    "EenFullFrameImageUrlV1": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/BaseDataObject"
+        },
+        {
+          "type": "object",
+          "description": "Details about the full frame image url related to the event.",
+          "required": [
+            "type",
+            "httpsUrl",
+            "timestamp"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "een.fullFrameImageUrl.v1"
+              ]
+            },
+            "httpsUrl": {
+              "type": "string",
+              "format": "url",
+              "description": "Link to obtain the full frame image related to this event."
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Timestamp of the frame from which the crop was made."
+            },
+            "feedType": {
+              "type": "string",
+              "enum": [
+                "main",
+                "preview"
+              ],
+              "description": "Multiple video feeds can be published per source, but they should all have the same viewpoint. They can differ in resolution:\n  * `main` is higher resolution and high framerate.\n  * `preview` is low resolution and low framerate.\n"
+            }
+          }
+        }
+      ]
+    },
+    "EenObjectClassificationV1": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ObjectEnvelopeDataObject"
+        },
+        {
+          "type": "object",
+          "description": "Details about the object's classification.",
+          "required": [
+            "class",
+            "objectId",
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "een.objectClassification.v1"
+              ]
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Optional timestamp of the frame for which the classification was made."
+            },
+            "class": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/ObjectClass"
+                },
+                {
+                  "type": "string",
+                  "x-filterable": true
+                }
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "description": "Confidence of the system in the classification. Higher is better.",
+              "format": "float",
+              "minimum": 0,
+              "maximum": 1,
+              "x-filterable": true
+            }
+          }
+        }
+      ]
+    },
+    "EenObjectDetectionV1": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ObjectEnvelopeDataObject"
+        },
+        {
+          "type": "object",
+          "description": "Details about the object that was detected.",
+          "required": [
+            "boundingBox",
+            "type",
+            "objectId",
+            "timestamp"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "een.objectDetection.v1"
+              ]
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "The moment at which the object was detected at the location given by the bounding box."
+            },
+            "boundingBox": {
+              "$ref": "#/$defs/BoundingBoxV1"
+            }
+          }
+        }
+      ]
+    },
+    "EenObjectEntityDetailsV1": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ObjectEnvelopeDataObject"
+        },
+        {
+          "type": "object",
+          "description": "Entity details for a detected object.\n\n**When is this schema included?**\nOnly emitted for events on accounts where cross-camera entity tracking is enabled,\nand only when the detected object has been assigned to an entity. Currently person-only;\ncoverage will extend to other object types in future revisions.\n\nThe absence of this schema on an event signifies one of:\n- the detection pre-dates clustering\n- the object was not assigned to any entity (e.g. stationary persons filtered before clustering)",
+          "required": [
+            "type",
+            "entityId",
+            "objectId"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Type of this data schema. The value is fixed as 'een.objectEntityDetails.v1'",
+              "enum": [
+                "een.objectEntityDetails.v1"
+              ]
+            },
+            "entityId": {
+              "type": "string",
+              "readOnly": true,
+              "description": "Stable Entity ID grouping this detection with all other appearances of the same\nobject across cameras and time."
+            }
+          }
+        }
+      ]
+    },
+    "EenObjectRegionMappingV1": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ObjectEnvelopeDataObject"
+        },
+        {
+          "type": "object",
+          "description": "Details about the region(s) to which a selected object is associated with.\nAn object is considered to be associated with a region, if >20% of the area of the object bounding box lies within the region.\nIf an object is associated with multiple regions, all those regions should be enumerated in a single instance of this schema.",
+          "required": [
+            "type",
+            "objectId",
+            "regions"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Type of this data schema. The value is fixed as 'een.objectRegionMapping.v1'",
+              "enum": [
+                "een.objectRegionMapping.v1"
+              ]
+            },
+            "regions": {
+              "description": "A list of the associated regions.",
+              "title": "ObjectRegionMappingV1",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "EenPersonAttributesV1": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ObjectEnvelopeDataObject"
+        },
+        {
+          "type": "object",
+          "description": "Attributes related to a person detected in an event image",
+          "required": [
+            "type",
+            "objectId"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Type of this data schema. The value is fixed as 'een.personAttributes.v1'",
+              "enum": [
+                "een.personAttributes.v1"
+              ]
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Optional timestamp of the frame for which the attributes were inferred."
+            },
+            "upperBodyClothingColor": {
+              "type": "string",
+              "x-filterable": true,
+              "allOf": [
+                {
+                  "description": "Color of the upper body clothing of the person"
+                },
+                {
+                  "$ref": "#/$defs/PersonUbcColorDefinitions"
+                }
+              ]
+            },
+            "upperBodyClothingColorConfidence": {
+              "description": "The confidence of the clothing color classification reported as a float value between 0 and 1.",
+              "type": "number",
+              "format": "float",
+              "minimum": 0,
+              "maximum": 1,
+              "x-filterable": true
+            },
+            "upperBodyClothingColorRgb": {
+              "description": "Optional RGB color values for the upper body clothing color. Preserves precise color data.",
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 255
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "lowerBodyClothingColor": {
+              "type": "string",
+              "x-filterable": true,
+              "allOf": [
+                {
+                  "description": "Color of the lower body clothing of the person"
+                },
+                {
+                  "$ref": "#/$defs/PersonLbcColorDefinitions"
+                }
+              ]
+            },
+            "lowerBodyClothingColorConfidence": {
+              "description": "The confidence of the clothing color classification reported as a float value between 0 and 1.",
+              "type": "number",
+              "format": "float",
+              "minimum": 0,
+              "maximum": 1,
+              "x-filterable": true
+            },
+            "lowerBodyClothingColorRgb": {
+              "description": "Optional RGB color values for the lower body clothing color. Preserves precise color data from AI models.",
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 255
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "upperBodyClothingColorSecondary": {
+              "type": "string",
+              "x-filterable": true,
+              "allOf": [
+                {
+                  "description": "Secondary color of the upper body clothing of the person"
+                },
+                {
+                  "$ref": "#/$defs/PersonUbcColorDefinitions"
+                }
+              ]
+            },
+            "upperBodyClothingColorSecondaryConfidence": {
+              "description": "The confidence of the secondary clothing color classification reported as a float value between 0 and 1.",
+              "type": "number",
+              "format": "float",
+              "minimum": 0,
+              "maximum": 1,
+              "x-filterable": true
+            },
+            "lowerBodyClothingColorSecondary": {
+              "type": "string",
+              "x-filterable": true,
+              "allOf": [
+                {
+                  "description": "Secondary color of the lower body clothing of the person"
+                },
+                {
+                  "$ref": "#/$defs/PersonLbcColorDefinitions"
+                }
+              ]
+            },
+            "lowerBodyClothingColorSecondaryConfidence": {
+              "description": "The confidence of the secondary clothing color classification reported as a float value between 0 and 1.",
+              "type": "number",
+              "format": "float",
+              "minimum": 0,
+              "maximum": 1,
+              "x-filterable": true
+            },
+            "gender": {
+              "type": "string",
+              "x-filterable": true,
+              "allOf": [
+                {
+                  "description": "Gender of the person"
+                },
+                {
+                  "$ref": "#/$defs/PersonGenderDefinitions"
+                }
+              ]
+            },
+            "genderConfidence": {
+              "description": "The confidence of the gender classification reported as a float value between 0 and 1.",
+              "type": "number",
+              "format": "float",
+              "minimum": 0,
+              "maximum": 1,
+              "x-filterable": true
+            },
+            "stationary": {
+              "type": "boolean",
+              "description": "Information regarding whether the person is moving or not",
+              "x-filterable": true
+            },
+            "stationaryConfidence": {
+              "type": "number",
+              "description": "The confidence on the value of `stationary` key",
+              "format": "float",
+              "minimum": 0,
+              "maximum": 1,
+              "x-filterable": true
+            },
+            "helmet": {
+              "type": "boolean",
+              "description": "Information regarding whether the person is wearing a helmet or not",
+              "x-filterable": true
+            },
+            "helmetConfidence": {
+              "type": "number",
+              "description": "The confidence on the value of `helmet` key",
+              "format": "float",
+              "minimum": 0,
+              "maximum": 1,
+              "x-filterable": true
+            },
+            "vest": {
+              "type": "boolean",
+              "description": "Information regarding whether the person is wearing a vest or not",
+              "x-filterable": true
+            },
+            "vestConfidence": {
+              "type": "number",
+              "description": "The confidence on the value of `vest` key",
+              "format": "float",
+              "minimum": 0,
+              "maximum": 1,
+              "x-filterable": true
+            }
+          }
+        }
+      ]
+    },
+    "EenVehicleAttributesV1": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ObjectEnvelopeDataObject"
+        },
+        {
+          "type": "object",
+          "description": "Attributes of the vehicle that created the LPR event.\n",
+          "required": [
+            "type",
+            "objectId"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "een.vehicleAttributes.v1"
+              ]
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Optional timestamp of the frame at which these attributes were inferred."
+            },
+            "color": {
+              "type": "string",
+              "x-filterable": true,
+              "allOf": [
+                {
+                  "description": "Enumerations of standard colors for vehicles."
+                },
+                {
+                  "$ref": "#/$defs/VehicleColorDefinitions"
+                }
+              ]
+            },
+            "colorConfidence": {
+              "description": "Confidence of the color classification reported as a float value between 0 and 1.",
+              "type": "number",
+              "format": "float",
+              "minimum": 0,
+              "maximum": 1,
+              "x-filterable": true
+            },
+            "colorRgb": {
+              "description": "Optional RGB color values for the vehicle color. Preserves precise color data.",
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 255
+              },
+              "minItems": 3,
+              "maxItems": 3
+            },
+            "make": {
+              "type": "string",
+              "x-filterable": true,
+              "allOf": [
+                {
+                  "description": "Make of the vehicle"
+                },
+                {
+                  "$ref": "#/$defs/VehicleMakeDefinitions"
+                }
+              ]
+            },
+            "makeDisplay": {
+              "type": "string",
+              "readOnly": true,
+              "description": "UI ready display name of the make of the vehicle",
+              "x-filterable": true
+            },
+            "makeConfidence": {
+              "description": "The confidence of the make classification reported as a float value between 0 and 1.",
+              "type": "number",
+              "format": "float",
+              "minimum": 0,
+              "maximum": 1,
+              "x-filterable": true
+            },
+            "model": {
+              "type": "string",
+              "description": "Model of the vehicle",
+              "x-filterable": true
+            },
+            "modelConfidence": {
+              "description": "The confidence of the model classification reported as a float value between 0 and 1.",
+              "type": "number",
+              "format": "float",
+              "minimum": 0,
+              "maximum": 1,
+              "x-filterable": true
+            },
+            "bodyType": {
+              "type": "string",
+              "x-filterable": true,
+              "allOf": [
+                {
+                  "description": "Type of the vehicle"
+                },
+                {
+                  "$ref": "#/$defs/VehicleBodyTypeDefinitions"
+                }
+              ]
+            },
+            "bodyTypeDisplay": {
+              "type": "string",
+              "readOnly": true,
+              "description": "UI ready display name of the bodyType of the vehicle",
+              "x-filterable": true
+            },
+            "bodyTypeConfidence": {
+              "description": "The confidence of the body type classification reported as a float value between 0 and 1.",
+              "type": "number",
+              "format": "float",
+              "minimum": 0,
+              "maximum": 1,
+              "x-filterable": true
+            },
+            "year": {
+              "type": "integer",
+              "description": "Year of production",
+              "x-filterable": true
+            },
+            "yearConfidence": {
+              "description": "The confidence of the year classification reported as a float value between 0 and 1.",
+              "type": "number",
+              "format": "float",
+              "minimum": 0,
+              "maximum": 1,
+              "x-filterable": true
+            },
+            "orientation": {
+              "type": "string",
+              "description": "Orientation of vehicle w.r.t. the camera. In other words, it describes how the camera viewed a specific vehicle.",
+              "enum": [
+                "front",
+                "rear",
+                "side"
+              ],
+              "x-filterable": true
+            },
+            "parked": {
+              "type": "boolean",
+              "description": "Information regarding whether the vehicle is parked or not",
+              "x-filterable": true
+            },
+            "parkedConfidence": {
+              "type": "number",
+              "description": "The confidence on the value of `parked` key reported as a float value between 0 and 1.",
+              "format": "float",
+              "minimum": 0,
+              "maximum": 1,
+              "x-filterable": true
+            }
+          }
+        }
+      ]
+    },
+    "EventEnvelope": {
+      "type": "object",
+      "description": "Envelope for een events",
+      "allOf": [
+        {
+          "$ref": "#/$defs/EventEnvelopeParent"
+        },
+        {
+          "required": [
+            "accountId",
+            "actorAccountId"
+          ]
+        }
+      ]
+    },
+    "EventEnvelopeParent": {
+      "type": "object",
+      "description": "Parent for envelope for een events",
+      "required": [
+        "startTimestamp",
+        "endTimestamp",
+        "span",
+        "actorId",
+        "actorType",
+        "creatorId",
+        "type",
+        "dataSchemas",
+        "data"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "System wide unique id of the event",
+          "readOnly": true
+        },
+        "startTimestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Time at which the event starts."
+        },
+        "endTimestamp": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "Time at which the event ended. If null, the event is ongoing."
+        },
+        "span": {
+          "type": "boolean",
+          "description": "True if the event describes a period of time instead of a single moment in time."
+        },
+        "accountId": {
+          "type": "string",
+          "description": "Id of the account the event belongs in. This can be a different account than the account of the actor that changed as part of the event, see the `actorAccountId` description for more details.\n"
+        },
+        "actorId": {
+          "type": "string",
+          "description": "Id of the entity that changed as part of the event, such as a camera id, user id, or account id. This id represents the specific entity that underwent a change, triggering the event notification.\n"
+        },
+        "actorAccountId": {
+          "type": "string",
+          "description": "Id of the account to which the changed actor belongs. This might be different from the `accountId` field in cases where one account is helping to manage another one. For example, a reseller that manages the bridges for one of their end-users would want to get alerts in their own account (`accountId`) that are about bridges located in their end-user's account (actorAccountId).\n"
+        },
+        "actorType": {
+          "type": "string",
+          "enum": [
+            "bridge",
+            "camera",
+            "multiCamera",
+            "speaker",
+            "account",
+            "user",
+            "layout",
+            "job",
+            "measurement",
+            "sensor",
+            "gateway",
+            "accessControlPoint",
+            "location"
+          ],
+          "default": "camera",
+          "description": "Type of actor that changed, triggering the event."
+        },
+        "creatorId": {
+          "type": "string",
+          "default": "unknown",
+          "description": "Id of the application or system that created this event. This id should not differ between instances or even versions of the same application."
+        },
+        "type": {
+          "type": "string",
+          "description": "Specific event type, e.g. een.motionDetectionEvent.v1, een.lprPlateReadEvent.v1"
+        },
+        "dataSchemas": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of all data schema types that can be found in this event."
+        },
+        "data": {
+          "type": "array",
+          "description": "Event specific data given as an array of objects that have a `type` field indicates the schema of the value.\n",
+          "items": {
+            "$ref": "#/$defs/BaseDataObject"
+          }
+        }
+      }
+    },
+    "MatchObjectId": {
+      "type": "array",
+      "description": "List of all the object Ids that match the search query",
+      "items": {
+        "$ref": "#/$defs/ObjectIdV1"
+      }
+    },
+    "ObjectClass": {
+      "type": "string",
+      "description": "The `class` of the object",
+      "enum": [
+        "person",
+        "vehicle",
+        "suitcase",
+        "backpack",
+        "handbag",
+        "weapon",
+        "face",
+        "animal",
+        "fire"
+      ]
+    },
+    "ObjectEnvelopeDataObject": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/BaseDataObject"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "objectId": {
+              "$ref": "#/$defs/ObjectIdV1"
+            }
+          }
+        }
+      ]
+    },
+    "ObjectIdV1": {
+      "type": "string",
+      "description": "ID given to the object by the detector. It is namespaced with a prefix to guarantee uniqueness while not\nneeding different detectors like camera, edge based algorithms and cloud based algorithms to coordinate.\nThe the prefix is followed by a colon and then the unique (within the namespace) id of the object.",
+      "pattern": "^.*:.*$"
+    },
+    "PersonGenderDefinitions": {
+      "type": "string",
+      "description": "Enumerations of gender for person.",
+      "enum": [
+        "male",
+        "female"
+      ]
+    },
+    "PersonLbcColorDefinitions": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ColorDefinitions"
+        },
+        {
+          "description": "Enumerations of lowerbody clothing color for person."
+        }
+      ]
+    },
+    "PersonUbcColorDefinitions": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ColorDefinitions"
+        },
+        {
+          "description": "Enumerations of upperbody clothing color for person."
+        }
+      ]
+    },
+    "VehicleBodyTypeDefinitions": {
+      "type": "string",
+      "description": "Enumerations of standard classes for vehicles. Warning: These body types are subject to future modifications\n",
+      "enum": [
+        "motorbike",
+        "car",
+        "bus",
+        "truck",
+        "sedan",
+        "hatchback",
+        "coupe",
+        "convertible",
+        "minivan",
+        "wagon",
+        "trike",
+        "roadster",
+        "crossover",
+        "scooter",
+        "sports_car",
+        "van",
+        "bicycle",
+        "tukTuk",
+        "suv",
+        "pickupTruck",
+        "forklift",
+        "others"
+      ]
+    },
+    "VehicleColorDefinitions": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ColorDefinitions"
+        },
+        {
+          "description": "Enumerations of standard colors for vehicles."
+        }
+      ]
+    },
+    "VehicleMakeDefinitions": {
+      "type": "string",
+      "description": "Enumerations of standard makes/brands for vehicles.",
+      "enum": [
+        "abarth",
+        "acura",
+        "alfa_romeo",
+        "aston_martin",
+        "audi",
+        "bentley",
+        "bmw",
+        "bugatti",
+        "buick",
+        "byd",
+        "cadillac",
+        "chevrolet",
+        "chrysler",
+        "citroen",
+        "dacia",
+        "daihatsu",
+        "dodge",
+        "dodge_ram",
+        "ferrari",
+        "fiat",
+        "fisker",
+        "ford",
+        "ford_mustang",
+        "garia",
+        "genesis",
+        "gmc",
+        "harley_davidson",
+        "honda",
+        "hummer",
+        "hyundai",
+        "infiniti",
+        "isuzu",
+        "jaguar",
+        "jeep",
+        "kia",
+        "lamborghini",
+        "land_rover",
+        "lexus",
+        "lincoln",
+        "lotus",
+        "lucid",
+        "mahindra",
+        "maruti_suzuki",
+        "maserati",
+        "mazda",
+        "mclaren",
+        "mercedes_benz",
+        "mini_cooper",
+        "mitsubishi",
+        "mg",
+        "nissan",
+        "oldsmobile",
+        "opel",
+        "perodua",
+        "peugeot",
+        "plymouth",
+        "polaris",
+        "polestar",
+        "pontiac",
+        "porsche",
+        "proton",
+        "ram",
+        "renault",
+        "rivian",
+        "rolls_royce",
+        "rover",
+        "saab",
+        "saturn",
+        "scion",
+        "skoda",
+        "smart",
+        "subaru",
+        "suzuki",
+        "tata",
+        "tesla",
+        "toyota",
+        "vinfast",
+        "volkswagen",
+        "volvo",
+        "wagoneer",
+        "others"
+      ]
+    }
+  }
+}

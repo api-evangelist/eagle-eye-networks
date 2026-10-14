@@ -1,0 +1,311 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-lpr-vehicle-list-untagged-record-update-schema.json",
+  "title": "LprVehicleListUntaggedRecordUpdate",
+  "description": "Encompasses all the fields of the vehicle record that are editable",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-vehicle-surveillance-package-openapi.yml#/components/schemas/LprVehicleListUntaggedRecordUpdate",
+  "type": "object",
+  "properties": {
+    "validFrom": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date",
+      "description": "Date from which this record is valid"
+    },
+    "validTo": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date",
+      "description": "Date upto which this record is valid"
+    },
+    "schedule": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/WeeklyIntervalSchedule"
+        }
+      ],
+      "nullable": true
+    },
+    "accessType": {
+      "$ref": "#/$defs/AccessType1"
+    },
+    "securityStatus": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/SecurityStatus"
+        }
+      ],
+      "nullable": true
+    },
+    "userData": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/UserDataLpr"
+        }
+      ],
+      "nullable": true
+    },
+    "userTags": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/UserTags"
+        }
+      ],
+      "nullable": true
+    },
+    "color": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/VehicleColorDefinitions"
+        }
+      ],
+      "nullable": true
+    },
+    "model": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/VehicleModelDefinitions"
+        }
+      ],
+      "nullable": true
+    },
+    "make": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/VehicleMakeDefinitions"
+        }
+      ],
+      "nullable": true
+    }
+  },
+  "$defs": {
+    "AccessType1": {
+      "type": "string",
+      "enum": [
+        "allow",
+        "deny"
+      ]
+    },
+    "ColorDefinitions1": {
+      "type": "string",
+      "description": "Standard color enumerations used across all object classes (person, vehicle, etc.).",
+      "enum": [
+        "beige",
+        "black",
+        "blue",
+        "brown",
+        "burgundy",
+        "gold-beige",
+        "green",
+        "gray",
+        "silver",
+        "silver-gray",
+        "maroon",
+        "orange",
+        "pink",
+        "purple",
+        "red",
+        "teal",
+        "white",
+        "yellow"
+      ]
+    },
+    "Interval": {
+      "type": "object",
+      "description": "Interval of a schedule. If the start time is greater than the end time, the interval is considered to cover the remaining time of the day from the start time until 24:00, and then from 00:00 to the end time. \nFor example, start: 16:30 and end: 06:00 on monday means the interval covers from 16:30 to 24:00 and continues from 00:00 to 06:00 on the same day (monday).\n",
+      "properties": {
+        "start": {
+          "type": "string",
+          "pattern": "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$",
+          "description": "Starting point of the interval. It should be in the range of 00:00 to 23:59 since this is the range for a day"
+        },
+        "end": {
+          "type": "string",
+          "pattern": "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$",
+          "description": "End point of the interval. It should be in the range of 00:00 to 23:59 since this is the range for the day"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ]
+    },
+    "SecurityStatus": {
+      "type": "string",
+      "deprecated": true,
+      "enum": [
+        "hotlist",
+        "exempted"
+      ],
+      "description": "Indicates whether vehicle is\n  * hotlist: Vehicle flagged for tracking\n  * exempted: Vehicle is exempt from watchlist rule and other rules. This is useful, for instance, when an organization wishes to avoid alerts on known vehicles, like employee vehicles.\n\n  * none: Empty value provided when no special consideration for the vehicle"
+    },
+    "UserDataLpr": {
+      "deprecated": true,
+      "type": "object",
+      "description": "Object containing all user information associated with the specific event. For example, for a plate read, this would contain user supplied attributes for the given plate like apartment number. the following are the guidelines for supplying User Data:\n  * It is recommended to use camelCase for field names, but this is not required\n  * Maximum of 5 unique keys.\n  * Each key or value should have only 256 characters max.\n  * The keys 'type' and 'creatorId' are reserved keys."
+    },
+    "UserTags": {
+      "type": "array",
+      "description": "Tags containing all user information associated with the specific vehicle entry.\n  * Maximum of 10 Tags per vehicle.\n  * Each Tag should have only 256 characters max.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "VehicleColorDefinitions": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ColorDefinitions1"
+        },
+        {
+          "description": "Enumerations of standard colors for vehicles."
+        }
+      ]
+    },
+    "VehicleMakeDefinitions": {
+      "type": "string",
+      "description": "Enumerations of standard makes/brands for vehicles.",
+      "enum": [
+        "abarth",
+        "acura",
+        "alfa_romeo",
+        "aston_martin",
+        "audi",
+        "bentley",
+        "bmw",
+        "bugatti",
+        "buick",
+        "byd",
+        "cadillac",
+        "chevrolet",
+        "chrysler",
+        "citroen",
+        "dacia",
+        "daihatsu",
+        "dodge",
+        "dodge_ram",
+        "ferrari",
+        "fiat",
+        "fisker",
+        "ford",
+        "ford_mustang",
+        "garia",
+        "genesis",
+        "gmc",
+        "harley_davidson",
+        "honda",
+        "hummer",
+        "hyundai",
+        "infiniti",
+        "isuzu",
+        "jaguar",
+        "jeep",
+        "kia",
+        "lamborghini",
+        "land_rover",
+        "lexus",
+        "lincoln",
+        "lotus",
+        "lucid",
+        "mahindra",
+        "maruti_suzuki",
+        "maserati",
+        "mazda",
+        "mclaren",
+        "mercedes_benz",
+        "mini_cooper",
+        "mitsubishi",
+        "mg",
+        "nissan",
+        "oldsmobile",
+        "opel",
+        "perodua",
+        "peugeot",
+        "plymouth",
+        "polaris",
+        "polestar",
+        "pontiac",
+        "porsche",
+        "proton",
+        "ram",
+        "renault",
+        "rivian",
+        "rolls_royce",
+        "rover",
+        "saab",
+        "saturn",
+        "scion",
+        "skoda",
+        "smart",
+        "subaru",
+        "suzuki",
+        "tata",
+        "tesla",
+        "toyota",
+        "vinfast",
+        "volkswagen",
+        "volvo",
+        "wagoneer",
+        "others"
+      ]
+    },
+    "VehicleModelDefinitions": {
+      "type": "string",
+      "description": "Name of the vehicle model as defined by the manufacturer. Meant to be machine parsable, so should be in `lowerCamelCase` without spaces."
+    },
+    "WeeklyIntervalSchedule": {
+      "type": "object",
+      "description": "It signifies a week long alert schedule. This schedule is effective according to actor's (user/camera/account) timezone. It allows setting different times for different days.\n",
+      "properties": {
+        "sunday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "monday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "tuesday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "wednesday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "thursday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "friday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "saturday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,364 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-api-paginated-file-response-schema.json",
+  "title": "ApiPaginatedFileResponse",
+  "description": "A paginated response containing a list of files with optional fields.",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-media-openapi.yml#/components/schemas/ApiPaginatedFileResponse",
+  "allOf": [
+    {
+      "$ref": "#/$defs/PaginatedResponse"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ApiFileGetWithIncludes"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "ApiFileGetWithIncludes": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ApiFileWithIncludes"
+        }
+      ],
+      "required": [
+        "id",
+        "directory",
+        "mimeType",
+        "name"
+      ]
+    },
+    "ApiFileMain": {
+      "description": "A file object.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "directory": {
+          "$ref": "#/$defs/directory"
+        },
+        "mimeType": {
+          "$ref": "#/$defs/mimeType"
+        },
+        "name": {
+          "$ref": "#/$defs/name"
+        }
+      }
+    },
+    "ApiFileWithIncludes": {
+      "description": "A file object with optional fields.",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/ApiFileMain"
+        }
+      ],
+      "properties": {
+        "accountId": {
+          "$ref": "#/$defs/accountId"
+        },
+        "publicShare": {
+          "$ref": "#/$defs/PublicShare"
+        },
+        "notes": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/notes"
+            }
+          ]
+        },
+        "createTimestamp": {
+          "description": "Date and time when the item was created.",
+          "readOnly": true,
+          "allOf": [
+            {
+              "$ref": "#/$defs/timestamp1"
+            }
+          ]
+        },
+        "updateTimestamp": {
+          "description": "Date and time when the item was last updated.",
+          "readOnly": true,
+          "allOf": [
+            {
+              "$ref": "#/$defs/timestamp1"
+            }
+          ]
+        },
+        "size": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/size"
+            }
+          ]
+        },
+        "metadata": {
+          "$ref": "#/$defs/metadata"
+        },
+        "tags": {
+          "$ref": "#/$defs/tags"
+        },
+        "childCount": {
+          "$ref": "#/$defs/childCount"
+        },
+        "details": {
+          "nullable": true,
+          "readOnly": true,
+          "allOf": [
+            {
+              "$ref": "#/$defs/fileDetails"
+            }
+          ]
+        }
+      }
+    },
+    "PaginatedResponse": {
+      "type": "object",
+      "description": "Used to wrap results for a paginated response, containing information on how to retrieve further pages and, if  available, the total number of results.\n",
+      "properties": {
+        "nextPageToken": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true,
+          "description": "Token to retrieve the next page. The value of this token is passed into the field pageToken.  This value can be null if there is no next page.\n"
+        },
+        "prevPageToken": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true,
+          "description": "Token to retrieve the previous page. The value of this token is passed into the field pageToken.  This value can be null of there is no previous page.\n"
+        },
+        "totalSize": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "readOnly": true,
+          "description": "The number of resource entries being returned from the result set.  This can be omitted if the API endpoint does not have total size information.\n"
+        },
+        "results": {
+          "type": "array",
+          "readOnly": true,
+          "description": "The result set from a collection API call.",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "required": [
+        "nextPageToken",
+        "prevPageToken",
+        "results"
+      ]
+    },
+    "Permissions": {
+      "description": "Permissions for a file object.",
+      "type": "object",
+      "properties": {
+        "write": {
+          "readOnly": false,
+          "type": "boolean",
+          "description": "Allows public users to modify file metadata."
+        }
+      }
+    },
+    "PublicShare": {
+      "description": "Public share properties.",
+      "type": "object",
+      "properties": {
+        "accountId": {
+          "description": "The account ID of the public share.",
+          "readOnly": true,
+          "allOf": [
+            {
+              "$ref": "#/$defs/accountId"
+            }
+          ]
+        },
+        "createTimestamp": {
+          "readOnly": true,
+          "description": "Date and time when the item was shared.",
+          "nullable": true,
+          "allOf": [
+            {
+              "$ref": "#/$defs/timestamp1"
+            }
+          ]
+        },
+        "expireTimestamp": {
+          "description": "Date and time when the item sharing link will expire. Public access will not be available after this time.",
+          "readOnly": false,
+          "nullable": true,
+          "allOf": [
+            {
+              "$ref": "#/$defs/timestamp1"
+            }
+          ]
+        },
+        "id": {
+          "description": "Public share ID.",
+          "readOnly": true,
+          "allOf": [
+            {
+              "$ref": "#/$defs/id"
+            }
+          ]
+        },
+        "active": {
+          "$ref": "#/$defs/active"
+        },
+        "permissions": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Permissions"
+            }
+          ]
+        },
+        "password": {
+          "readOnly": false,
+          "type": "string",
+          "description": "Password for public access. If unset, the password field will return an empty string. If set, the password salt and hash will be returned. When updating or setting a password, a minimum of six characters are required."
+        },
+        "url": {
+          "readOnly": true,
+          "type": "string",
+          "description": "Public share URL."
+        }
+      }
+    },
+    "accountId": {
+      "type": "string",
+      "description": "Account ID specified in as an ESN Type."
+    },
+    "active": {
+      "type": "boolean",
+      "description": "Boolean representing if a public share is active.",
+      "readOnly": false
+    },
+    "childCount": {
+      "type": "integer",
+      "description": "Count of child folders within the directory."
+    },
+    "directory": {
+      "type": "string",
+      "description": "Name of the parent directory.",
+      "readOnly": false
+    },
+    "exportFileDetails": {
+      "description": "Extra information about the parameters used to create the exported file",
+      "required": [
+        "type",
+        "deviceId",
+        "startTimestamp",
+        "endTimestamp"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "exportFileDetails"
+          ]
+        },
+        "deviceId": {
+          "type": "string",
+          "description": "ID of the source device for the export."
+        },
+        "jobId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "ID of the export job that created the file."
+        },
+        "videoType": {
+          "type": "string",
+          "description": "Type of video generated by the export. Normal video of the main video stream, or a time lapse of the preview stream.",
+          "enum": [
+            "video",
+            "timeLapse"
+          ]
+        },
+        "startTimestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Start timestamp of the export."
+        },
+        "endTimestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "End timestamp of the export."
+        }
+      }
+    },
+    "fileDetails": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/exportFileDetails"
+        }
+      ]
+    },
+    "id": {
+      "type": "string",
+      "description": "The ID of the item.",
+      "format": "uuid",
+      "readOnly": true
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Custom metadata associated with the file.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "mimeType": {
+      "type": "string",
+      "description": "The media content type.",
+      "readOnly": true,
+      "enum": [
+        "video/mp4",
+        "application/directory"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the item.",
+      "readOnly": false
+    },
+    "notes": {
+      "type": "string",
+      "description": "User entered annotations.",
+      "readOnly": false
+    },
+    "size": {
+      "type": "integer",
+      "description": "Size of the file in Bytes.",
+      "readOnly": true
+    },
+    "tags": {
+      "description": "List of tags associated with the file.",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "timestamp1": {
+      "type": "string",
+      "description": "Date and time when the item was created.",
+      "format": "date-time",
+      "readOnly": true
+    }
+  }
+}

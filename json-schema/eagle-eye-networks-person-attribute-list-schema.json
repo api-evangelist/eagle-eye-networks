@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-person-attribute-list-schema.json",
+  "title": "PersonAttributeList",
+  "description": "List of all the attributes related to object of `person` class",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-video-search-openapi.yml#/components/schemas/PersonAttributeList",
+  "allOf": [
+    {
+      "$ref": "#/$defs/PersonGenderList"
+    },
+    {
+      "$ref": "#/$defs/PersonUbcColorList"
+    },
+    {
+      "$ref": "#/$defs/PersonLbcColorList"
+    }
+  ],
+  "$defs": {
+    "ColorDefinitions": {
+      "type": "string",
+      "description": "Standard color enumerations used across all object classes (person, vehicle, etc.).",
+      "enum": [
+        "beige",
+        "black",
+        "blue",
+        "brown",
+        "burgundy",
+        "gold-beige",
+        "green",
+        "gray",
+        "silver",
+        "silver-gray",
+        "maroon",
+        "orange",
+        "pink",
+        "purple",
+        "red",
+        "teal",
+        "white",
+        "yellow"
+      ]
+    },
+    "PersonGenderDefinitions": {
+      "type": "string",
+      "description": "Enumerations of gender for person.",
+      "enum": [
+        "male",
+        "female"
+      ]
+    },
+    "PersonGenderList": {
+      "type": "object",
+      "properties": {
+        "gender": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PersonGenderDefinitions"
+          }
+        }
+      },
+      "description": "List of all available options for gender attribute of person"
+    },
+    "PersonLbcColorDefinitions": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ColorDefinitions"
+        },
+        {
+          "description": "Enumerations of lowerbody clothing color for person."
+        }
+      ]
+    },
+    "PersonLbcColorList": {
+      "type": "object",
+      "properties": {
+        "lowerBodyClothingColor": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PersonLbcColorDefinitions"
+          }
+        }
+      },
+      "description": "List of all available options for lowerbody clothing color attribute of person"
+    },
+    "PersonUbcColorDefinitions": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ColorDefinitions"
+        },
+        {
+          "description": "Enumerations of upperbody clothing color for person."
+        }
+      ]
+    },
+    "PersonUbcColorList": {
+      "type": "object",
+      "properties": {
+        "upperBodyClothingColor": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PersonUbcColorDefinitions"
+          }
+        }
+      },
+      "description": "List of all available options for upperbody clothing color attribute of person"
+    }
+  }
+}

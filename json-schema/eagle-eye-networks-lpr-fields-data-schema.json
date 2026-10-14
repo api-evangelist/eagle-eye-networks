@@ -1,0 +1,315 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-lpr-fields-data-schema.json",
+  "title": "LprFieldsData",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-vehicle-surveillance-package-openapi.yml#/components/schemas/LprFieldsData",
+  "type": "object",
+  "properties": {
+    "actor": {
+      "type": "array",
+      "description": "List of all actor Ids that have contributed to lpr events, typically refers to camera ESNs, locations",
+      "items": {
+        "$ref": "#/$defs/Actor"
+      }
+    },
+    "color": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/$defs/EntityDescriptor"
+          },
+          {
+            "type": "object",
+            "description": "List of the distinct vehicle colors present across all the events for this account",
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/ColorDefinitions"
+              }
+            },
+            "required": [
+              "value"
+            ]
+          }
+        ]
+      }
+    },
+    "make": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/$defs/EntityDescriptor"
+          },
+          {
+            "type": "object",
+            "description": "List of the distinct vehicle makes present across all the events for this account",
+            "properties": {
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value"
+            ]
+          }
+        ]
+      }
+    },
+    "model": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/$defs/EntityDescriptor"
+          },
+          {
+            "type": "object",
+            "description": "List of the distinct vehicle models present across all events for this account",
+            "properties": {
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value"
+            ]
+          }
+        ]
+      }
+    },
+    "plateRegion": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/$defs/EntityDescriptor"
+          },
+          {
+            "type": "object",
+            "description": "List of the distinct provinces/states present across all events for this account. List values in accordance with ISO 3166.2",
+            "properties": {
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value"
+            ]
+          }
+        ]
+      }
+    },
+    "direction": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/$defs/EntityDescriptor"
+          },
+          {
+            "type": "object",
+            "description": "List of the distinct directions present across all events for this account.",
+            "properties": {
+              "value": {
+                "type": "string",
+                "enum": [
+                  "entry",
+                  "exit"
+                ]
+              }
+            },
+            "required": [
+              "value"
+            ]
+          }
+        ]
+      }
+    },
+    "accessType": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/$defs/EntityDescriptor"
+          },
+          {
+            "type": "object",
+            "description": "List of the access types present across all events for this account.",
+            "properties": {
+              "value": {
+                "$ref": "#/$defs/AccessType"
+              }
+            },
+            "required": [
+              "value"
+            ]
+          }
+        ]
+      }
+    },
+    "bodyType": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/$defs/EntityDescriptor"
+          },
+          {
+            "type": "object",
+            "description": "List of the distinct vehicle body types present across all the events for this account",
+            "properties": {
+              "value": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "value"
+            ]
+          }
+        ]
+      }
+    },
+    "insightType": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/$defs/EntityDescriptor"
+          },
+          {
+            "type": "object",
+            "description": "List of the distinct insight types present across all the events for this account.",
+            "required": [
+              "value"
+            ]
+          }
+        ]
+      }
+    },
+    "userTags": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/$defs/EntityDescriptor"
+          },
+          {
+            "type": "object",
+            "description": "List of the distinct userTags present across all the events for this account.",
+            "required": [
+              "value"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "required": [
+    "actor",
+    "color",
+    "make",
+    "model",
+    "plateRegion",
+    "direction",
+    "accessType",
+    "bodyType",
+    "insightType",
+    "userTags"
+  ],
+  "$defs": {
+    "AccessType": {
+      "type": "string",
+      "enum": [
+        "allow",
+        "deny",
+        "null"
+      ]
+    },
+    "Actor": {
+      "type": "object",
+      "description": "Specifies the complete attributes of an actor, including the user-supplied field `name`",
+      "allOf": [
+        {
+          "$ref": "#/$defs/ActorFilter"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "User-defined name for the actor"
+            }
+          }
+        }
+      ]
+    },
+    "ActorFilter": {
+      "type": "object",
+      "description": "Specifies the attributes of an actor, useful for passing as a filter",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The id of the thing that caused the event This can be camera or location ID. If not supplied for any entry in the array, it is taken to mean as the entire account."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "camera",
+            "location"
+          ],
+          "default": "camera",
+          "description": "Type of actor that caused the event."
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "ColorDefinitions": {
+      "type": "string",
+      "description": "Enumerations of standard colors for vehicles.",
+      "enum": [
+        "black",
+        "blue",
+        "brown",
+        "gold-beige",
+        "green",
+        "gray",
+        "silver",
+        "silver-gray",
+        "orange",
+        "pink",
+        "purple",
+        "red",
+        "white",
+        "yellow"
+      ]
+    },
+    "EntityDescriptor": {
+      "type": "object",
+      "properties": {
+        "display": {
+          "type": "string",
+          "description": "Value to be used for presenting in UI"
+        },
+        "value": {
+          "type": "string",
+          "description": "Value to be used for backend processing"
+        }
+      }
+    }
+  }
+}

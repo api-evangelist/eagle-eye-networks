@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-event-metric-query-response-schema.json",
+  "title": "EventMetricQueryResponse",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-events-openapi.yml#/components/schemas/EventMetricQueryResponse",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "allOf": [
+      {
+        "$ref": "#/$defs/MetricQuery"
+      }
+    ],
+    "description": "A generic schema for all events emitted by the system.",
+    "required": [
+      "eventType",
+      "actorId",
+      "actorType",
+      "dataPoints",
+      "target"
+    ],
+    "properties": {
+      "eventType": {
+        "type": "string",
+        "description": "The event type for which the metrics was requested."
+      },
+      "actorId": {
+        "type": "string",
+        "description": "Id of the thing that caused the event ie camera id, user id or account id."
+      },
+      "actorType": {
+        "type": "string",
+        "description": "Type of actor that caused the event.",
+        "enum": [
+          "bridge",
+          "camera",
+          "speaker",
+          "account",
+          "user",
+          "layout",
+          "job"
+        ]
+      },
+      "target": {
+        "type": "string",
+        "description": "The type of the metric."
+      }
+    },
+    "additionalProperties": true
+  },
+  "$defs": {
+    "MetricQuery": {
+      "type": "object",
+      "required": [
+        "target",
+        "dataPoints"
+      ],
+      "properties": {
+        "target": {
+          "type": "string"
+        },
+        "dataPoints": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "description": "First value is unix timestamp in milliseconds. Second value is Metric value as a float.\n",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  }
+}

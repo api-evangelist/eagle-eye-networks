@@ -1,0 +1,208 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-contract-list-schema.json",
+  "title": "ContractList",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-contract-vault-api-openapi.yml#/components/schemas/ContractList",
+  "allOf": [
+    {
+      "type": "object",
+      "description": "Used to wrap results for a paginated response, containing information on how to retrieve further pages.\n",
+      "properties": {
+        "nextPageToken": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true,
+          "description": "Token to retrieve the next page. The value of this token is passed into the field pageToken.  This value can be null if there is no next page.\n"
+        },
+        "prevPageToken": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true,
+          "description": "Token to retrieve the previous page. The value of this token is passed into the field pageToken.  This value can be null of there is no previous page.\n"
+        },
+        "results": {
+          "type": "array",
+          "readOnly": true,
+          "description": "The result set from a collection API call.",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "required": [
+        "nextPageToken",
+        "prevPageToken",
+        "results"
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ContractRecord"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "ContractRecord": {
+      "type": "object",
+      "description": "Represents a contract vault record.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the recording."
+        },
+        "customers": {
+          "type": "array",
+          "description": "List of customer names associated with the recording. A primary and secondary customer may be present.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "firstName": {
+                "type": "string",
+                "description": "First name of the customer."
+              },
+              "lastName": {
+                "type": "string",
+                "description": "Last name of the customer."
+              },
+              "primary": {
+                "type": "boolean",
+                "description": "Indicates if this customer is the primary contact."
+              }
+            },
+            "required": [
+              "firstName",
+              "lastName",
+              "primary"
+            ],
+            "maxItems": 2,
+            "minItems": 1
+          }
+        },
+        "agent": {
+          "type": "object",
+          "description": "Information about the agent associated with the recording.",
+          "properties": {
+            "firstName": {
+              "type": "string",
+              "description": "First name of the agent."
+            },
+            "lastName": {
+              "type": "string",
+              "description": "Last name of the agent."
+            },
+            "email": {
+              "type": "string",
+              "format": "email",
+              "description": "Email address of the agent."
+            }
+          }
+        },
+        "manager": {
+          "type": "object",
+          "description": "Information about the manager associated with the recording.",
+          "properties": {
+            "firstName": {
+              "type": "string",
+              "description": "First name of the manager."
+            },
+            "lastName": {
+              "type": "string",
+              "description": "Last name of the manager."
+            }
+          }
+        },
+        "extStockNumber": {
+          "type": "string",
+          "description": "Stock number associated with the recording."
+        },
+        "extContractNumber": {
+          "type": "string",
+          "description": "Contract number associated with the recording."
+        },
+        "extServiceEntity": {
+          "type": "string",
+          "description": "The service entity associated with the recording."
+        },
+        "videoAvailable": {
+          "type": "boolean",
+          "description": "Indicates if the video is available."
+        },
+        "noVideoReason": {
+          "type": "string",
+          "description": "Reason for not having a video.",
+          "enum": [
+            "equipmentOrCommunicationFailure",
+            "ownerRefusedConsent",
+            "noRoomAvailable",
+            "noQaAvailable",
+            "noVloAvailable",
+            "recording",
+            "medical",
+            "unspecified",
+            "other"
+          ]
+        },
+        "video": {
+          "type": "object",
+          "description": "Video metadata including URL and other details.",
+          "properties": {
+            "durationSec": {
+              "type": "string",
+              "description": "Length of the video recording."
+            },
+            "startTimestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Start time of the video recording in ISO 8601 format."
+            },
+            "endTimestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "End time of the video recording in ISO 8601 format."
+            }
+          },
+          "required": [
+            "durationSec",
+            "startTimestamp",
+            "endTimestamp"
+          ]
+        },
+        "cameraIds": {
+          "type": "array",
+          "description": "Unique identifiers for the cameras used in the recording.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "layoutId": {
+          "type": "string",
+          "description": "Unique identifier for the layout used in the recording."
+        },
+        "updateTimestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date and time when the record was last updated."
+        }
+      },
+      "required": [
+        "id",
+        "customers",
+        "agent",
+        "videoAvailable"
+      ]
+    }
+  }
+}

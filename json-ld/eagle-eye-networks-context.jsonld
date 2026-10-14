@@ -1,0 +1,1269 @@
+{
+  "@context": {
+    "@vocab": "https://een.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "eagle": "https://een.com/schema#",
+    "BaseSsoSettings": "eagle:BaseSsoSettings",
+    "type": {
+      "@id": "eagle:type",
+      "@type": "xsd:string"
+    },
+    "spInitiatedSsoLogin": {
+      "@id": "eagle:spInitiatedSsoLogin",
+      "@type": "xsd:boolean"
+    },
+    "BaseDisabledSsoSettings": "eagle:BaseDisabledSsoSettings",
+    "GoogleOidcSsoSettings": "eagle:GoogleOidcSsoSettings",
+    "MicrosoftActiveDirectoryOidcSsoSettings": "eagle:MicrosoftActiveDirectoryOidcSsoSettings",
+    "config": {
+      "@id": "eagle:config"
+    },
+    "scim": {
+      "@id": "eagle:scim",
+      "@type": "@id"
+    },
+    "MicrosoftGlobalOidcSsoSettings": "eagle:MicrosoftGlobalOidcSsoSettings",
+    "BrivoSsoSettings": "eagle:BrivoSsoSettings",
+    "environment": {
+      "@id": "eagle:environment",
+      "@type": "xsd:string"
+    },
+    "OktaOidcSsoSettings": "eagle:OktaOidcSsoSettings",
+    "GenericOidcSsoSettings": "eagle:GenericOidcSsoSettings",
+    "DisabledSsoSettings": "eagle:DisabledSsoSettings",
+    "ssoOidcIdpConfigUrls": "eagle:ssoOidcIdpConfigUrls",
+    "ApiV3Error": "eagle:ApiV3Error",
+    "code": {
+      "@id": "eagle:code",
+      "@type": "xsd:integer"
+    },
+    "status": {
+      "@id": "eagle:status",
+      "@type": "xsd:string"
+    },
+    "message": {
+      "@id": "eagle:message",
+      "@type": "xsd:string"
+    },
+    "details": {
+      "@id": "eagle:details",
+      "@container": "@list"
+    },
+    "ExceptionDetail": "eagle:ExceptionDetail",
+    "ErrorInfoExceptionDetail": "eagle:ErrorInfoExceptionDetail",
+    "reason": {
+      "@id": "eagle:reason",
+      "@type": "xsd:string"
+    },
+    "domain": {
+      "@id": "eagle:domain",
+      "@type": "xsd:string"
+    },
+    "metadata": {
+      "@id": "eagle:metadata",
+      "@type": "@id"
+    },
+    "BadRequestExceptionDetail": "eagle:BadRequestExceptionDetail",
+    "argumentViolations": {
+      "@id": "eagle:argumentViolations",
+      "@container": "@list"
+    },
+    "ArgumentViolation": "eagle:ArgumentViolation",
+    "argumentName": {
+      "@id": "eagle:argumentName",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "eagle:description",
+      "@type": "xsd:string"
+    },
+    "ResourceInfoExceptionDetail": "eagle:ResourceInfoExceptionDetail",
+    "resource": {
+      "@id": "eagle:resource",
+      "@type": "xsd:string"
+    },
+    "ids": {
+      "@id": "eagle:ids",
+      "@container": "@list"
+    },
+    "ExceptionMetadata": "eagle:ExceptionMetadata",
+    "path": {
+      "@id": "eagle:path",
+      "@type": "xsd:string"
+    },
+    "method": {
+      "@id": "eagle:method",
+      "@type": "xsd:string"
+    },
+    "ApiIDPEndpoints": "eagle:ApiIDPEndpoints",
+    "authorization": {
+      "@id": "eagle:authorization",
+      "@type": "@id"
+    },
+    "token": {
+      "@id": "eagle:token",
+      "@type": "@id"
+    },
+    "userInfo": {
+      "@id": "eagle:userInfo",
+      "@type": "@id"
+    },
+    "jwks": {
+      "@id": "eagle:jwks",
+      "@type": "@id"
+    },
+    "ApiIDPIssuer": "eagle:ApiIDPIssuer",
+    "url": {
+      "@id": "eagle:url",
+      "@type": "@id"
+    },
+    "ApiIDPCredentials": "eagle:ApiIDPCredentials",
+    "clientId": {
+      "@id": "eagle:clientId",
+      "@type": "xsd:string"
+    },
+    "clientSecret": {
+      "@id": "eagle:clientSecret",
+      "@type": "xsd:string"
+    },
+    "ApiClientSettings": "eagle:ApiClientSettings",
+    "httpsBaseUrl": {
+      "@id": "eagle:httpsBaseUrl",
+      "@type": "@id"
+    },
+    "ApiHttpsBaseUrl": "eagle:ApiHttpsBaseUrl",
+    "hostname": {
+      "@id": "eagle:hostname",
+      "@type": "xsd:string"
+    },
+    "port": {
+      "@id": "eagle:port",
+      "@type": "xsd:integer"
+    },
+    "EventFilter": "eagle:EventFilter",
+    "eventTypes": {
+      "@id": "eagle:eventTypes",
+      "@container": "@list"
+    },
+    "data": {
+      "@id": "eagle:data"
+    },
+    "schedule": {
+      "@id": "eagle:schedule",
+      "@type": "@id"
+    },
+    "resourceFilter": {
+      "@id": "eagle:resourceFilter",
+      "@type": "@id"
+    },
+    "ResourceFilter": "eagle:ResourceFilter",
+    "actors": {
+      "@id": "eagle:actors",
+      "@container": "@list"
+    },
+    "EventAlertConditionRuleBase": "eagle:EventAlertConditionRuleBase",
+    "name": {
+      "@id": "eagle:name",
+      "@type": "xsd:string"
+    },
+    "priority": {
+      "@id": "eagle:priority",
+      "@type": "@id"
+    },
+    "notes": {
+      "@id": "eagle:notes",
+      "@type": "xsd:string"
+    },
+    "enabled": {
+      "@id": "eagle:enabled",
+      "@type": "xsd:boolean"
+    },
+    "cooldownSeconds": {
+      "@id": "eagle:cooldownSeconds",
+      "@type": "xsd:integer"
+    },
+    "humanValidation": {
+      "@id": "eagle:humanValidation"
+    },
+    "eventFilter": {
+      "@id": "eagle:eventFilter",
+      "@type": "@id"
+    },
+    "ApiEventAlertConditionRuleCreate": "eagle:ApiEventAlertConditionRuleCreate",
+    "endUserAccountId": {
+      "@id": "eagle:endUserAccountId",
+      "@type": "xsd:string"
+    },
+    "WeeklyIntervalSchedule": "eagle:WeeklyIntervalSchedule",
+    "sunday": {
+      "@id": "eagle:sunday",
+      "@container": "@list"
+    },
+    "monday": {
+      "@id": "eagle:monday",
+      "@container": "@list"
+    },
+    "tuesday": {
+      "@id": "eagle:tuesday",
+      "@container": "@list"
+    },
+    "wednesday": {
+      "@id": "eagle:wednesday",
+      "@container": "@list"
+    },
+    "thursday": {
+      "@id": "eagle:thursday",
+      "@container": "@list"
+    },
+    "friday": {
+      "@id": "eagle:friday",
+      "@container": "@list"
+    },
+    "saturday": {
+      "@id": "eagle:saturday",
+      "@container": "@list"
+    },
+    "Interval": "eagle:Interval",
+    "start": {
+      "@id": "eagle:start",
+      "@type": "xsd:string"
+    },
+    "end": {
+      "@id": "eagle:end",
+      "@type": "xsd:string"
+    },
+    "PaginatedResponse": "eagle:PaginatedResponse",
+    "nextPageToken": {
+      "@id": "eagle:nextPageToken",
+      "@type": "xsd:string"
+    },
+    "prevPageToken": {
+      "@id": "eagle:prevPageToken",
+      "@type": "xsd:string"
+    },
+    "totalSize": {
+      "@id": "eagle:totalSize",
+      "@type": "xsd:integer"
+    },
+    "results": {
+      "@id": "eagle:results",
+      "@container": "@list"
+    },
+    "ApiEventRulesFields": "eagle:ApiEventRulesFields",
+    "AlertActionRuleUpdate": "eagle:AlertActionRuleUpdate",
+    "id": {
+      "@id": "eagle:id",
+      "@type": "xsd:string"
+    },
+    "createTimestamp": {
+      "@id": "eagle:createTimestamp",
+      "@type": "xsd:dateTime"
+    },
+    "alertTypes": {
+      "@id": "eagle:alertTypes",
+      "@container": "@list"
+    },
+    "actorIds": {
+      "@id": "eagle:actorIds",
+      "@container": "@list"
+    },
+    "actorTypes": {
+      "@id": "eagle:actorTypes",
+      "@container": "@list"
+    },
+    "actorAccountIds": {
+      "@id": "eagle:actorAccountIds",
+      "@container": "@list"
+    },
+    "ruleIds": {
+      "@id": "eagle:ruleIds",
+      "@container": "@list"
+    },
+    "priority__gte": {
+      "@id": "eagle:priority__gte",
+      "@type": "xsd:integer"
+    },
+    "priority__lte": {
+      "@id": "eagle:priority__lte",
+      "@type": "xsd:integer"
+    },
+    "alertActionIds": {
+      "@id": "eagle:alertActionIds",
+      "@container": "@list"
+    },
+    "locationIds": {
+      "@id": "eagle:locationIds",
+      "@container": "@list"
+    },
+    "imageOptions": {
+      "@id": "eagle:imageOptions"
+    },
+    "ImageOptions": "eagle:ImageOptions",
+    "alertImage": {
+      "@id": "eagle:alertImage",
+      "@type": "@id"
+    },
+    "contextImages": {
+      "@id": "eagle:contextImages",
+      "@container": "@list"
+    },
+    "AlertImageConfig": "eagle:AlertImageConfig",
+    "embeddedOverlay": {
+      "@id": "eagle:embeddedOverlay",
+      "@type": "xsd:boolean"
+    },
+    "includeCropUrl": {
+      "@id": "eagle:includeCropUrl",
+      "@type": "xsd:boolean"
+    },
+    "ContextImageItem": "eagle:ContextImageItem",
+    "offsetSeconds": {
+      "@id": "eagle:offsetSeconds",
+      "@type": "xsd:integer"
+    },
+    "imageType": {
+      "@id": "eagle:imageType",
+      "@type": "xsd:string"
+    },
+    "AlertActionChangeable": "eagle:AlertActionChangeable",
+    "NotificationActionSettings": "eagle:NotificationActionSettings",
+    "users": {
+      "@id": "eagle:users",
+      "@container": "@list"
+    },
+    "rearmSeconds": {
+      "@id": "eagle:rearmSeconds",
+      "@type": "xsd:decimal"
+    },
+    "maxPerHour": {
+      "@id": "eagle:maxPerHour",
+      "@type": "xsd:decimal"
+    },
+    "SmsActionSettings": "eagle:SmsActionSettings",
+    "SmtpActionSettings": "eagle:SmtpActionSettings",
+    "email": {
+      "@id": "eagle:email",
+      "@type": "xsd:string"
+    },
+    "username": {
+      "@id": "eagle:username",
+      "@type": "xsd:string"
+    },
+    "password": {
+      "@id": "eagle:password",
+      "@type": "xsd:string"
+    },
+    "tls": {
+      "@id": "eagle:tls",
+      "@type": "xsd:boolean"
+    },
+    "EbusActionSettings": "eagle:EbusActionSettings",
+    "PlaySpeakerAudioClipActionSettings": "eagle:PlaySpeakerAudioClipActionSettings",
+    "speakerAudioClipId": {
+      "@id": "eagle:speakerAudioClipId",
+      "@type": "xsd:string"
+    },
+    "playOnTriggeringDevice": {
+      "@id": "eagle:playOnTriggeringDevice",
+      "@type": "xsd:string"
+    },
+    "devices__in": {
+      "@id": "eagle:devices__in",
+      "@container": "@list"
+    },
+    "ZulipActionSettings": "eagle:ZulipActionSettings",
+    "apiKey": {
+      "@id": "eagle:apiKey",
+      "@type": "xsd:string"
+    },
+    "organizationUrl": {
+      "@id": "eagle:organizationUrl",
+      "@type": "xsd:string"
+    },
+    "SlackActionSettings": "eagle:SlackActionSettings",
+    "apiToken": {
+      "@id": "eagle:apiToken",
+      "@type": "xsd:string"
+    },
+    "channel": {
+      "@id": "eagle:channel",
+      "@type": "xsd:string"
+    },
+    "WebhookActionSettings": "eagle:WebhookActionSettings",
+    "auth_token": {
+      "@id": "eagle:auth_token",
+      "@type": "xsd:string"
+    },
+    "SentinelActionSettings": "eagle:SentinelActionSettings",
+    "ZapierActionSettings": "eagle:ZapierActionSettings",
+    "EvalinkTalosActionSettings": "eagle:EvalinkTalosActionSettings",
+    "OutputPortActionSettings": "eagle:OutputPortActionSettings",
+    "deviceId": {
+      "@id": "eagle:deviceId",
+      "@type": "xsd:string"
+    },
+    "duration": {
+      "@id": "eagle:duration",
+      "@type": "xsd:decimal"
+    },
+    "portId": {
+      "@id": "eagle:portId",
+      "@type": "xsd:string"
+    },
+    "BrivoActionSettings": "eagle:BrivoActionSettings",
+    "service": {
+      "@id": "eagle:service",
+      "@type": "xsd:string"
+    },
+    "oauthId": {
+      "@id": "eagle:oauthId"
+    },
+    "accessPointName": {
+      "@id": "eagle:accessPointName"
+    },
+    "accessPointId": {
+      "@id": "eagle:accessPointId"
+    },
+    "brivoOverrideSettings": {
+      "@id": "eagle:brivoOverrideSettings",
+      "@type": "@id"
+    },
+    "BrivoOverRideSettings": "eagle:BrivoOverRideSettings",
+    "endTimeMode": {
+      "@id": "eagle:endTimeMode"
+    },
+    "behavior": {
+      "@id": "eagle:behavior"
+    },
+    "endTime": {
+      "@id": "eagle:endTime"
+    },
+    "ZendeskActionSettings": "eagle:ZendeskActionSettings",
+    "subdomain": {
+      "@id": "eagle:subdomain",
+      "@type": "xsd:string"
+    },
+    "ImmixActionSettings": "eagle:ImmixActionSettings",
+    "ContractRecord": "eagle:ContractRecord",
+    "customers": {
+      "@id": "eagle:customers",
+      "@container": "@list"
+    },
+    "agent": {
+      "@id": "eagle:agent"
+    },
+    "manager": {
+      "@id": "eagle:manager"
+    },
+    "extStockNumber": {
+      "@id": "eagle:extStockNumber",
+      "@type": "xsd:string"
+    },
+    "extContractNumber": {
+      "@id": "eagle:extContractNumber",
+      "@type": "xsd:string"
+    },
+    "extServiceEntity": {
+      "@id": "eagle:extServiceEntity",
+      "@type": "xsd:string"
+    },
+    "videoAvailable": {
+      "@id": "eagle:videoAvailable",
+      "@type": "xsd:boolean"
+    },
+    "noVideoReason": {
+      "@id": "eagle:noVideoReason",
+      "@type": "xsd:string"
+    },
+    "video": {
+      "@id": "eagle:video"
+    },
+    "cameraIds": {
+      "@id": "eagle:cameraIds",
+      "@container": "@list"
+    },
+    "layoutId": {
+      "@id": "eagle:layoutId",
+      "@type": "xsd:string"
+    },
+    "updateTimestamp": {
+      "@id": "eagle:updateTimestamp",
+      "@type": "xsd:dateTime"
+    },
+    "ApiCameraMain": "eagle:ApiCameraMain",
+    "accountId": {
+      "@id": "eagle:accountId",
+      "@type": "xsd:string"
+    },
+    "bridgeId": {
+      "@id": "eagle:bridgeId",
+      "@type": "@id"
+    },
+    "locationId": {
+      "@id": "eagle:locationId",
+      "@type": "@id"
+    },
+    "multiCameraId": {
+      "@id": "eagle:multiCameraId",
+      "@type": "xsd:string"
+    },
+    "ApiCameraIncludes": "eagle:ApiCameraIncludes",
+    "statusV2": {
+      "@id": "eagle:statusV2",
+      "@type": "@id"
+    },
+    "locationSummary": {
+      "@id": "eagle:locationSummary",
+      "@type": "@id"
+    },
+    "bridgeSummary": {
+      "@id": "eagle:bridgeSummary"
+    },
+    "deviceAddress": {
+      "@id": "eagle:deviceAddress",
+      "@type": "@id"
+    },
+    "speakerId": {
+      "@id": "eagle:speakerId",
+      "@type": "@id"
+    },
+    "timeZone": {
+      "@id": "eagle:timeZone",
+      "@type": "@id"
+    },
+    "tags": {
+      "@id": "eagle:tags",
+      "@type": "@id"
+    },
+    "devicePosition": {
+      "@id": "eagle:devicePosition",
+      "@type": "@id"
+    },
+    "networkInfo": {
+      "@id": "eagle:networkInfo",
+      "@type": "@id"
+    },
+    "deviceInfo": {
+      "@id": "eagle:deviceInfo",
+      "@type": "@id"
+    },
+    "firmware": {
+      "@id": "eagle:firmware",
+      "@type": "@id"
+    },
+    "adminCredentials": {
+      "@id": "eagle:adminCredentials",
+      "@type": "@id"
+    },
+    "visibleByBridges": {
+      "@id": "eagle:visibleByBridges",
+      "@container": "@list"
+    },
+    "capabilities": {
+      "@id": "eagle:capabilities",
+      "@type": "@id"
+    },
+    "effectivePermissions": {
+      "@id": "eagle:effectivePermissions",
+      "@type": "@id"
+    },
+    "shareDetails": {
+      "@id": "eagle:shareDetails",
+      "@type": "@id"
+    },
+    "analog": {
+      "@id": "eagle:analog",
+      "@type": "@id"
+    },
+    "packages": {
+      "@id": "eagle:packages",
+      "@container": "@list"
+    },
+    "dewarpConfig": {
+      "@id": "eagle:dewarpConfig",
+      "@type": "@id"
+    },
+    "publicSafetySharing": {
+      "@id": "eagle:publicSafetySharing",
+      "@type": "@id"
+    },
+    "enabledAnalytics": {
+      "@id": "eagle:enabledAnalytics",
+      "@type": "@id"
+    },
+    "ApiCameraFTSRelated": "eagle:ApiCameraFTSRelated",
+    "qRelevance": {
+      "@id": "eagle:qRelevance",
+      "@type": "xsd:decimal"
+    },
+    "Analog": "eagle:Analog",
+    "input": {
+      "@id": "eagle:input",
+      "@type": "xsd:integer"
+    },
+    "EffectiveCameraPermissions": "eagle:EffectiveCameraPermissions",
+    "read": {
+      "@id": "eagle:read",
+      "@type": "xsd:boolean"
+    },
+    "addToLayout": {
+      "@id": "eagle:addToLayout",
+      "@type": "xsd:boolean"
+    },
+    "viewPreviewVideo": {
+      "@id": "eagle:viewPreviewVideo",
+      "@type": "xsd:boolean"
+    },
+    "viewLiveVideo": {
+      "@id": "eagle:viewLiveVideo",
+      "@type": "xsd:boolean"
+    },
+    "viewHistoricVideo": {
+      "@id": "eagle:viewHistoricVideo",
+      "@type": "xsd:boolean"
+    },
+    "turnOnOff": {
+      "@id": "eagle:turnOnOff",
+      "@type": "xsd:boolean"
+    },
+    "controlPTZ": {
+      "@id": "eagle:controlPTZ",
+      "@type": "xsd:boolean"
+    },
+    "editPTZStations": {
+      "@id": "eagle:editPTZStations",
+      "@type": "xsd:boolean"
+    },
+    "downloadVideo": {
+      "@id": "eagle:downloadVideo",
+      "@type": "xsd:boolean"
+    },
+    "delete": {
+      "@id": "eagle:delete",
+      "@type": "xsd:boolean"
+    },
+    "editBillingSettings": {
+      "@id": "eagle:editBillingSettings",
+      "@type": "xsd:boolean"
+    },
+    "editNoBillingSettings": {
+      "@id": "eagle:editNoBillingSettings",
+      "@type": "xsd:boolean"
+    },
+    "editMotionAreas": {
+      "@id": "eagle:editMotionAreas",
+      "@type": "xsd:boolean"
+    },
+    "talkDown": {
+      "@id": "eagle:talkDown",
+      "@type": "xsd:boolean"
+    },
+    "ApiDevicePosition": "eagle:ApiDevicePosition",
+    "latitude": {
+      "@id": "eagle:latitude",
+      "@type": "xsd:decimal"
+    },
+    "longitude": {
+      "@id": "eagle:longitude",
+      "@type": "xsd:decimal"
+    },
+    "azimuth": {
+      "@id": "eagle:azimuth",
+      "@type": "xsd:decimal"
+    },
+    "rangeInMeters": {
+      "@id": "eagle:rangeInMeters",
+      "@type": "xsd:decimal"
+    },
+    "floor": {
+      "@id": "eagle:floor",
+      "@type": "xsd:integer"
+    },
+    "fieldOfView": {
+      "@id": "eagle:fieldOfView",
+      "@type": "xsd:decimal"
+    },
+    "ApiDeviceInfo": "eagle:ApiDeviceInfo",
+    "icon": {
+      "@id": "eagle:icon",
+      "@type": "xsd:string"
+    },
+    "directToCloud": {
+      "@id": "eagle:directToCloud",
+      "@type": "xsd:boolean"
+    },
+    "make": {
+      "@id": "eagle:make",
+      "@type": "xsd:string"
+    },
+    "model": {
+      "@id": "eagle:model",
+      "@type": "xsd:string"
+    },
+    "guid": {
+      "@id": "eagle:guid",
+      "@type": "@id"
+    },
+    "ApiCameraCapabilities": "eagle:ApiCameraCapabilities",
+    "ptz": {
+      "@id": "eagle:ptz",
+      "@type": "@id"
+    },
+    "audio": {
+      "@id": "eagle:audio",
+      "@type": "@id"
+    },
+    "imageTuning": {
+      "@id": "eagle:imageTuning",
+      "@type": "@id"
+    },
+    "io": {
+      "@id": "eagle:io",
+      "@type": "@id"
+    },
+    "varifocal": {
+      "@id": "eagle:varifocal",
+      "@type": "@id"
+    },
+    "ApiCameraPTZCapabilities": "eagle:ApiCameraPTZCapabilities",
+    "capable": {
+      "@id": "eagle:capable",
+      "@type": "xsd:boolean"
+    },
+    "panTilt": {
+      "@id": "eagle:panTilt",
+      "@type": "xsd:boolean"
+    },
+    "zoom": {
+      "@id": "eagle:zoom",
+      "@type": "xsd:boolean"
+    },
+    "positionMove": {
+      "@id": "eagle:positionMove",
+      "@type": "xsd:boolean"
+    },
+    "directionMove": {
+      "@id": "eagle:directionMove",
+      "@type": "xsd:boolean"
+    },
+    "centerOnMove": {
+      "@id": "eagle:centerOnMove",
+      "@type": "xsd:boolean"
+    },
+    "fisheye": {
+      "@id": "eagle:fisheye",
+      "@type": "xsd:boolean"
+    },
+    "ApiCameraAudioCapabilities": "eagle:ApiCameraAudioCapabilities",
+    "recordingEnabled": {
+      "@id": "eagle:recordingEnabled",
+      "@type": "xsd:boolean"
+    },
+    "speaker": {
+      "@id": "eagle:speaker",
+      "@type": "xsd:boolean"
+    },
+    "halfDuplex": {
+      "@id": "eagle:halfDuplex",
+      "@type": "xsd:boolean"
+    },
+    "fullDuplex": {
+      "@id": "eagle:fullDuplex",
+      "@type": "xsd:boolean"
+    },
+    "ApiCameraImageTuningCapabilities": "eagle:ApiCameraImageTuningCapabilities",
+    "continuousZoom": {
+      "@id": "eagle:continuousZoom",
+      "@type": "xsd:boolean"
+    },
+    "ShareDetails": "eagle:ShareDetails",
+    "shared": {
+      "@id": "eagle:shared",
+      "@type": "xsd:boolean"
+    },
+    "firstResponder": {
+      "@id": "eagle:firstResponder",
+      "@type": "xsd:boolean"
+    },
+    "accountName": {
+      "@id": "eagle:accountName",
+      "@type": "xsd:string"
+    },
+    "DeviceStatus": "eagle:DeviceStatus",
+    "connectionStatus": {
+      "@id": "eagle:connectionStatus",
+      "@type": "@id"
+    },
+    "DeviceConnectionStatus": "eagle:DeviceConnectionStatus",
+    "DeviceStatusV2": "eagle:DeviceStatusV2",
+    "cloudConnectionStatus": {
+      "@id": "eagle:cloudConnectionStatus",
+      "@type": "@id"
+    },
+    "edgeReportedDeviceStatus": {
+      "@id": "eagle:edgeReportedDeviceStatus",
+      "@type": "@id"
+    },
+    "deviceSpecificError": {
+      "@id": "eagle:deviceSpecificError",
+      "@type": "@id"
+    },
+    "DeviceAddress": "eagle:DeviceAddress",
+    "address": {
+      "@id": "eagle:address",
+      "@type": "xsd:string"
+    },
+    "BridgeSummary": "eagle:BridgeSummary",
+    "LocationSummary": "eagle:LocationSummary",
+    "ApiTimeZone": "eagle:ApiTimeZone",
+    "zone": {
+      "@id": "eagle:zone",
+      "@type": "xsd:string"
+    },
+    "ApiNetworkInfoWithMainIp": "eagle:ApiNetworkInfoWithMainIp",
+    "globalIP": {
+      "@id": "eagle:globalIP",
+      "@type": "@id"
+    },
+    "ipUsedByBridge": {
+      "@id": "eagle:ipUsedByBridge",
+      "@type": "@id"
+    },
+    "adapters": {
+      "@id": "eagle:adapters",
+      "@container": "@list"
+    },
+    "ApiDeviceCredentials": "eagle:ApiDeviceCredentials",
+    "ApiFirmware": "eagle:ApiFirmware",
+    "currentVersion": {
+      "@id": "eagle:currentVersion",
+      "@type": "xsd:string"
+    },
+    "ApiAdapterInfo": "eagle:ApiAdapterInfo",
+    "macAddress": {
+      "@id": "eagle:macAddress",
+      "@type": "@id"
+    },
+    "ipAddress": {
+      "@id": "eagle:ipAddress",
+      "@type": "@id"
+    },
+    "PublicSafetySharing": "eagle:PublicSafetySharing",
+    "deviceCloudConnectionStatusV2": "eagle:deviceCloudConnectionStatusV2",
+    "DeviceCommonStatus": "eagle:DeviceCommonStatus",
+    "DeviceErrorStatus": "eagle:DeviceErrorStatus",
+    "PaginatedResponseNoTotalSize": "eagle:PaginatedResponseNoTotalSize",
+    "Mount": "eagle:Mount",
+    "ApiDewarpConfigComposite": "eagle:ApiDewarpConfigComposite",
+    "aspect": {
+      "@id": "eagle:aspect",
+      "@type": "xsd:decimal"
+    },
+    "panes": {
+      "@id": "eagle:panes",
+      "@container": "@list"
+    },
+    "ApiDewarpConfigPane": "eagle:ApiDewarpConfigPane",
+    "x": {
+      "@id": "eagle:x",
+      "@type": "xsd:string"
+    },
+    "y": {
+      "@id": "eagle:y",
+      "@type": "xsd:string"
+    },
+    "width": {
+      "@id": "eagle:width",
+      "@type": "xsd:string"
+    },
+    "height": {
+      "@id": "eagle:height",
+      "@type": "xsd:string"
+    },
+    "shader": {
+      "@id": "eagle:shader",
+      "@type": "xsd:string"
+    },
+    "fov": {
+      "@id": "eagle:fov",
+      "@type": "xsd:decimal"
+    },
+    "lookAt": {
+      "@id": "eagle:lookAt"
+    },
+    "ApiDewarpConfigVector3": "eagle:ApiDewarpConfigVector3",
+    "z": {
+      "@id": "eagle:z",
+      "@type": "xsd:decimal"
+    },
+    "ApiDewarpConfig": "eagle:ApiDewarpConfig",
+    "cameraId": {
+      "@id": "eagle:cameraId",
+      "@type": "xsd:string"
+    },
+    "curve": {
+      "@id": "eagle:curve",
+      "@type": "xsd:string"
+    },
+    "mount": {
+      "@id": "eagle:mount",
+      "@type": "@id"
+    },
+    "scale": {
+      "@id": "eagle:scale"
+    },
+    "offset": {
+      "@id": "eagle:offset"
+    },
+    "composites": {
+      "@id": "eagle:composites",
+      "@container": "@list"
+    },
+    "ApiDeviceIOCapabilities": "eagle:ApiDeviceIOCapabilities",
+    "sharedTrigger": {
+      "@id": "eagle:sharedTrigger",
+      "@type": "xsd:boolean"
+    },
+    "ApiBaseCameraCreate": "eagle:ApiBaseCameraCreate",
+    "ApiChannelCameraCreate": "eagle:ApiChannelCameraCreate",
+    "ApiAddCamera": "eagle:ApiAddCamera",
+    "registrationStrategy": {
+      "@id": "eagle:registrationStrategy",
+      "@type": "@id"
+    },
+    "ApiRegistrationStrategy": "eagle:ApiRegistrationStrategy",
+    "ApiUpdateBulkCamera": "eagle:ApiUpdateBulkCamera",
+    "updateFields": {
+      "@id": "eagle:updateFields"
+    },
+    "CameraBulkUpdate": "eagle:CameraBulkUpdate",
+    "response": {
+      "@id": "eagle:response",
+      "@type": "@id"
+    },
+    "BulkUpdateResponse": "eagle:BulkUpdateResponse",
+    "ApiCameraUpdate": "eagle:ApiCameraUpdate",
+    "ApiTunnelResponse": "eagle:ApiTunnelResponse",
+    "httpUrl": {
+      "@id": "eagle:httpUrl",
+      "@type": "xsd:string"
+    },
+    "httpsUrl": {
+      "@id": "eagle:httpsUrl",
+      "@type": "xsd:string"
+    },
+    "MetricQuery": "eagle:MetricQuery",
+    "target": {
+      "@id": "eagle:target",
+      "@type": "xsd:string"
+    },
+    "dataPoints": {
+      "@id": "eagle:dataPoints",
+      "@container": "@list"
+    },
+    "CameraSwap": "eagle:CameraSwap",
+    "PortRules": "eagle:PortRules",
+    "recordOnActive": {
+      "@id": "eagle:recordOnActive",
+      "@type": "xsd:boolean"
+    },
+    "iconEnabled": {
+      "@id": "eagle:iconEnabled",
+      "@type": "xsd:boolean"
+    },
+    "PortStatusGet": "eagle:PortStatusGet",
+    "state": {
+      "@id": "eagle:state",
+      "@type": "xsd:string"
+    },
+    "Port": "eagle:Port",
+    "idleCircuitState": {
+      "@id": "eagle:idleCircuitState",
+      "@type": "xsd:string"
+    },
+    "rules": {
+      "@id": "eagle:rules",
+      "@type": "@id"
+    },
+    "PortStatusPatch": "eagle:PortStatusPatch",
+    "durationSeconds": {
+      "@id": "eagle:durationSeconds",
+      "@type": "xsd:integer"
+    },
+    "CameraSettings": "eagle:CameraSettings",
+    "proposedValues": {
+      "@id": "eagle:proposedValues",
+      "@type": "@id"
+    },
+    "Settings": "eagle:Settings",
+    "rtsp": {
+      "@id": "eagle:rtsp",
+      "@type": "@id"
+    },
+    "credentials": {
+      "@id": "eagle:credentials",
+      "@type": "@id"
+    },
+    "retention": {
+      "@id": "eagle:retention",
+      "@type": "@id"
+    },
+    "previewVideo": {
+      "@id": "eagle:previewVideo",
+      "@type": "@id"
+    },
+    "mainVideo": {
+      "@id": "eagle:mainVideo",
+      "@type": "@id"
+    },
+    "operatingSettings": {
+      "@id": "eagle:operatingSettings",
+      "@type": "@id"
+    },
+    "talkdown": {
+      "@id": "eagle:talkdown",
+      "@type": "@id"
+    },
+    "imaging": {
+      "@id": "eagle:imaging",
+      "@type": "@id"
+    },
+    "PreviewVideo": "eagle:PreviewVideo",
+    "transmitMode": {
+      "@id": "eagle:transmitMode",
+      "@type": "xsd:string"
+    },
+    "resolution": {
+      "@id": "eagle:resolution",
+      "@type": "xsd:string"
+    },
+    "intervalMs": {
+      "@id": "eagle:intervalMs",
+      "@type": "xsd:integer"
+    },
+    "quality": {
+      "@id": "eagle:quality",
+      "@type": "xsd:string"
+    },
+    "supportedResolutions": {
+      "@id": "eagle:supportedResolutions",
+      "@type": "@id"
+    },
+    "PreviewResolutionsItem": "eagle:PreviewResolutionsItem",
+    "qualities": {
+      "@id": "eagle:qualities",
+      "@type": "@id"
+    },
+    "PreviewQualitiesItem": "eagle:PreviewQualitiesItem",
+    "kbps": {
+      "@id": "eagle:kbps",
+      "@type": "xsd:integer"
+    },
+    "MainVideoResolutionsItem": "eagle:MainVideoResolutionsItem",
+    "MainVideoQualitiesItem": "eagle:MainVideoQualitiesItem",
+    "fps": {
+      "@id": "eagle:fps",
+      "@type": "xsd:integer"
+    },
+    "MainVideo": "eagle:MainVideo",
+    "kbpsFactor": {
+      "@id": "eagle:kbpsFactor",
+      "@type": "xsd:integer"
+    },
+    "captureMode": {
+      "@id": "eagle:captureMode",
+      "@type": "xsd:string"
+    },
+    "Audio": "eagle:Audio",
+    "microphoneEnabled": {
+      "@id": "eagle:microphoneEnabled",
+      "@type": "xsd:boolean"
+    },
+    "inputSourceId": {
+      "@id": "eagle:inputSourceId",
+      "@type": "xsd:string"
+    },
+    "Retention": "eagle:Retention",
+    "cloudDays": {
+      "@id": "eagle:cloudDays",
+      "@type": "xsd:integer"
+    },
+    "cloudPreviewOnly": {
+      "@id": "eagle:cloudPreviewOnly",
+      "@type": "xsd:boolean"
+    },
+    "minimumOnPremiseDays": {
+      "@id": "eagle:minimumOnPremiseDays",
+      "@type": "xsd:integer"
+    },
+    "maximumOnPremiseDays": {
+      "@id": "eagle:maximumOnPremiseDays",
+      "@type": "xsd:integer"
+    },
+    "alwaysRecordingDays": {
+      "@id": "eagle:alwaysRecordingDays",
+      "@type": "xsd:integer"
+    },
+    "Analog1": "eagle:Analog1",
+    "videoStandard": {
+      "@id": "eagle:videoStandard",
+      "@type": "xsd:string"
+    },
+    "badSignalProtection": {
+      "@id": "eagle:badSignalProtection",
+      "@type": "xsd:boolean"
+    },
+    "badSignalDetected": {
+      "@id": "eagle:badSignalDetected",
+      "@type": "xsd:boolean"
+    },
+    "OperatingSettings": "eagle:OperatingSettings",
+    "on": {
+      "@id": "eagle:on",
+      "@type": "@id"
+    },
+    "scheduledOverride": {
+      "@id": "eagle:scheduledOverride",
+      "@type": "@id"
+    },
+    "ScheduledOverride": "eagle:ScheduledOverride",
+    "Imaging": "eagle:Imaging",
+    "brightness": {
+      "@id": "eagle:brightness",
+      "@type": "xsd:decimal"
+    },
+    "contrast": {
+      "@id": "eagle:contrast",
+      "@type": "xsd:decimal"
+    },
+    "saturation": {
+      "@id": "eagle:saturation",
+      "@type": "xsd:decimal"
+    },
+    "sharpness": {
+      "@id": "eagle:sharpness",
+      "@type": "xsd:decimal"
+    },
+    "exposureMaxGain": {
+      "@id": "eagle:exposureMaxGain",
+      "@type": "xsd:decimal"
+    },
+    "irCutFilter": {
+      "@id": "eagle:irCutFilter",
+      "@type": "xsd:string"
+    },
+    "wideDynamicRange": {
+      "@id": "eagle:wideDynamicRange",
+      "@type": "xsd:string"
+    },
+    "wideDynamicRangeLevel": {
+      "@id": "eagle:wideDynamicRangeLevel",
+      "@type": "xsd:decimal"
+    },
+    "whiteBalanceMode": {
+      "@id": "eagle:whiteBalanceMode",
+      "@type": "xsd:string"
+    },
+    "whiteBalanceRedGain": {
+      "@id": "eagle:whiteBalanceRedGain",
+      "@type": "xsd:decimal"
+    },
+    "whiteBalanceBlueGain": {
+      "@id": "eagle:whiteBalanceBlueGain",
+      "@type": "xsd:decimal"
+    },
+    "exposureMode": {
+      "@id": "eagle:exposureMode",
+      "@type": "xsd:string"
+    },
+    "exposureTime": {
+      "@id": "eagle:exposureTime",
+      "@type": "xsd:string"
+    },
+    "rotation": {
+      "@id": "eagle:rotation",
+      "@type": "xsd:string"
+    },
+    "mirror": {
+      "@id": "eagle:mirror",
+      "@type": "xsd:string"
+    },
+    "flip": {
+      "@id": "eagle:flip",
+      "@type": "xsd:string"
+    },
+    "backlightCompensation": {
+      "@id": "eagle:backlightCompensation",
+      "@type": "xsd:string"
+    },
+    "noiseReductionLevel": {
+      "@id": "eagle:noiseReductionLevel",
+      "@type": "xsd:decimal"
+    },
+    "defoggingMode": {
+      "@id": "eagle:defoggingMode",
+      "@type": "xsd:string"
+    },
+    "defoggingLevel": {
+      "@id": "eagle:defoggingLevel",
+      "@type": "xsd:decimal"
+    },
+    "dayNightMode": {
+      "@id": "eagle:dayNightMode",
+      "@type": "xsd:string"
+    },
+    "dayNightSensitivityDayToNight": {
+      "@id": "eagle:dayNightSensitivityDayToNight",
+      "@type": "xsd:string"
+    },
+    "dayNightSensitivityNightToDay": {
+      "@id": "eagle:dayNightSensitivityNightToDay",
+      "@type": "xsd:string"
+    },
+    "focusMode": {
+      "@id": "eagle:focusMode",
+      "@type": "xsd:string"
+    },
+    "focusDefaultSpeed": {
+      "@id": "eagle:focusDefaultSpeed",
+      "@type": "xsd:decimal"
+    },
+    "CameraSettingProposedValues": "eagle:CameraSettingProposedValues",
+    "TalkdownSettings": "eagle:TalkdownSettings",
+    "protocol": {
+      "@id": "eagle:protocol",
+      "@type": "xsd:string"
+    },
+    "audioMode": {
+      "@id": "eagle:audioMode",
+      "@type": "xsd:string"
+    },
+    "sipCredentials": {
+      "@id": "eagle:sipCredentials"
+    },
+    "WeeklyScheduleAllRequired": "eagle:WeeklyScheduleAllRequired",
+    "days": {
+      "@id": "eagle:days",
+      "@type": "@id"
+    },
+    "hours": {
+      "@id": "eagle:hours",
+      "@type": "@id"
+    },
+    "WeeklyScheduleDays": "eagle:WeeklyScheduleDays",
+    "WeeklyScheduleHours": "eagle:WeeklyScheduleHours"
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Eagle Eye Networks API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Eagle Eye Networks's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-14) from openapi/eagle-eye-networks-account-settings-openapi.yml, openapi/eagle-eye-networks-automations-openapi.yml, openapi/eagle-eye-networks-contract-vault-api-openapi.yml.",
+  "dcterms:created": "2026-10-14",
+  "dcterms:source": [
+    "openapi/eagle-eye-networks-account-settings-openapi.yml",
+    "openapi/eagle-eye-networks-automations-openapi.yml",
+    "openapi/eagle-eye-networks-contract-vault-api-openapi.yml",
+    "openapi/eagle-eye-networks-devices-openapi.yml",
+    "openapi/eagle-eye-networks-events-openapi.yml"
+  ]
+}

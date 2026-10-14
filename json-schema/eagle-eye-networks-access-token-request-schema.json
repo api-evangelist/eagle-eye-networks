@@ -1,0 +1,198 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-access-token-request-schema.json",
+  "title": "AccessTokenRequest",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-resellers-account-switching-openapi.yml#/components/schemas/AccessTokenRequest",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/ApiApplicationTokenRequest"
+    },
+    {
+      "$ref": "#/$defs/ApiResellerTokenRequest"
+    },
+    {
+      "$ref": "#/$defs/ApiApplicationToResellerSubAccountTokenRequest"
+    },
+    {
+      "$ref": "#/$defs/ApiIdentityTokenRequest"
+    }
+  ],
+  "$defs": {
+    "ApiApplicationToResellerSubAccountTokenRequest": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ApiTokenRequestBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "resellerUserId": {
+              "type": "string",
+              "description": "Id of the reseller user which is going to be used for \"Switching into\" an end-user account."
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "applicationToResellerSubAccount"
+              ]
+            },
+            "targetId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Id of the sub-account for which a token should be generated."
+            },
+            "targetType": {
+              "type": "string",
+              "enum": [
+                "account"
+              ]
+            },
+            "expirationTimestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "The time at which the token will expire, if it isn't revoked beforehand. Maximum expiration time is 6 months, minimum expiration time is 15 minutes. If not provided, the token expiry time will be set based on account settings."
+            }
+          },
+          "required": [
+            "resellerUserId",
+            "type",
+            "targetId",
+            "targetType"
+          ]
+        }
+      ]
+    },
+    "ApiApplicationTokenRequest": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ApiTokenRequestBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "application"
+              ]
+            },
+            "targetId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Id of the user for which a token should be generated."
+            },
+            "targetType": {
+              "type": "string",
+              "enum": [
+                "user"
+              ]
+            },
+            "expirationTimestamp": {
+              "type": "string",
+              "format": "date-time",
+              "description": "The time at which the token will expire, if it isn't revoked beforehand. Maximum expiration time is 6 months, minimum expiration time is 15 minutes. If not provided, the token expiry time will be set based on account settings."
+            }
+          },
+          "required": [
+            "type",
+            "targetId",
+            "targetType"
+          ]
+        }
+      ]
+    },
+    "ApiIdentityTokenRequest": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ApiTokenRequestBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "identity"
+              ]
+            },
+            "targetId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Id of the account for which a token should be generated."
+            },
+            "targetType": {
+              "type": "string",
+              "enum": [
+                "account"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "targetId",
+            "targetType"
+          ]
+        }
+      ]
+    },
+    "ApiResellerTokenRequest": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ApiTokenRequestBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": [
+                "reseller"
+              ]
+            },
+            "targetId": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Id of the account for which a token should be generated."
+            },
+            "targetType": {
+              "type": "string",
+              "enum": [
+                "account"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "targetId",
+            "targetType"
+          ]
+        }
+      ]
+    },
+    "ApiTokenRequestBase": {
+      "type": "object",
+      "properties": {
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "vms.all"
+            ]
+          },
+          "default": [
+            "vms.all"
+          ],
+          "description": "The sets of scopes the token's authorization should be limited to. Since a user can also have limited\npermissions, the final set of scopes is the intersection of the user's permissions and the requested scopes.\nSupported scopes:\n * `vms.all`: All possible scopes.\nCurrently only `vms.all` is supported.\n"
+        }
+      },
+      "required": [
+        "targetId",
+        "scopes"
+      ]
+    }
+  }
+}

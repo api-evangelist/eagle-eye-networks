@@ -1,0 +1,212 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-api-event-alert-condition-rule-create-schema.json",
+  "title": "ApiEventAlertConditionRuleCreate",
+  "description": "Encompasses all the user specified properties of a rule used to generate alerts.",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-automations-openapi.yml#/components/schemas/ApiEventAlertConditionRuleCreate",
+  "type": "object",
+  "required": [
+    "name",
+    "priority"
+  ],
+  "allOf": [
+    {
+      "$ref": "#/$defs/EventAlertConditionRuleBase"
+    }
+  ],
+  "properties": {
+    "enabled": {
+      "type": "boolean",
+      "description": "Whether the rule is enabled",
+      "default": false
+    },
+    "endUserAccountId": {
+      "type": "string",
+      "description": "The end user account this rule should target. Required when the caller is a reseller (with or without wildcard actors); the caller must have permission to edit automations on the target end user account. Must not be set by non-reseller callers."
+    }
+  },
+  "$defs": {
+    "EventAlertConditionRuleBase": {
+      "type": "object",
+      "description": "Encompasses all the user specified properties of a rule used to generate alerts.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name for the rule",
+          "minLength": 1,
+          "maxLength": 126
+        },
+        "priority": {
+          "$ref": "#/$defs/Priority"
+        },
+        "notes": {
+          "type": "string",
+          "description": "A verbose explanation of the rule"
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether rule is enabled"
+        },
+        "cooldownSeconds": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Cooldown period (in seconds). If two events for the same actor and event type have event timestamps within this duration, only the first will trigger an alert while the second event will be suppressed. A value of 0 disables the cooldown checks.\n",
+          "default": 10,
+          "minimum": 0
+        },
+        "humanValidation": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "If set to true, the alert will be validated by a human before being applied. This is useful for rules that are not 100% reliable and need human confirmation.\n"
+            },
+            "service": {
+              "type": "string",
+              "description": "The service that will be used for human validation. Currently, the only supported service is Eagle Eye Human Review, which is the default.\n",
+              "enum": [
+                "eenV1"
+              ],
+              "default": "eenV1"
+            },
+            "maxWaitTimeSeconds": {
+              "type": "integer",
+              "format": "int32",
+              "description": "The maximum time (in seconds) to wait for human validation before the alert is applied. If the human validation is not completed within this time, the alert will be applied automatically.\n",
+              "default": 60,
+              "minimum": 1,
+              "maximum": 60
+            }
+          }
+        },
+        "eventFilter": {
+          "$ref": "#/$defs/EventFilter"
+        }
+      }
+    },
+    "EventFilter": {
+      "type": "object",
+      "description": "A list of attributes of the event used to funnel down a specific set of events for any downstream action.",
+      "properties": {
+        "eventTypes": {
+          "type": "array",
+          "description": "Specifies the types of events that this rule should evaluate. Only events matching one of the specified types will trigger the rule. For example, if this field includes `een.personDetectionEvent.v1`, but the incoming event is a `een.motionDetectionEvent.v1`, the rule will not be triggered.\n",
+          "items": {
+            "type": "string"
+          }
+        },
+        "data": {
+          "type": "object",
+          "description": "A key-value map used to filter events based on fields defined in event data schemas.\n\nKeys must follow the format: `{schema}.{field}__{operator}`. Refer to the event descriptions and corresponding data schemas to determine the available schema names and their respective fields.\n\nIf the operator is omitted, equality is assumed.\n\nThe `schema` and `field` names used in the keys must match the `dataSchemas` associated with the filtered `eventTypes`. \nIf any schema or field is invalid for the given event type(s), the API will return a validation error.\n\nSupported operators:\n  - `__in`: Match if the field value is in the provided list\n  - `__gte`: Match if the field value is greater than or equal to the given value (number or date-time)\n  - `__lte`: Match if the field value is less than or equal to the given value (number or date-time)\n",
+          "properties": {
+            "and": {
+              "type": "array",
+              "description": "All conditions must match",
+              "items": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "schedule": {
+          "$ref": "#/$defs/WeeklyIntervalSchedule"
+        },
+        "resourceFilter": {
+          "$ref": "#/$defs/ResourceFilter"
+        }
+      }
+    },
+    "Interval": {
+      "type": "object",
+      "description": "Interval of a schedule. If the start time is greater than the end time, the interval is considered to cover the remaining time of the day from the start time until 24:00, and then from 00:00 to the end time. \nFor example, start: 16:30 and end: 06:00 on monday means the interval covers from 16:30 to 24:00 and continues from 00:00 to 06:00 on the same day (monday).\n",
+      "properties": {
+        "start": {
+          "type": "string",
+          "pattern": "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$",
+          "description": "Starting point of the interval. It should be in the range of 00:00 to 23:59 since this is the range for a day"
+        },
+        "end": {
+          "type": "string",
+          "pattern": "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$",
+          "description": "End point of the interval. It should be in the range of 00:00 to 23:59 since this is the range for the day"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ]
+    },
+    "Priority": {
+      "type": "integer",
+      "description": "Defines the priority of the alert",
+      "format": "int32",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "ResourceFilter": {
+      "type": "object",
+      "description": "List of actors against which filtering has to happen",
+      "properties": {
+        "actors": {
+          "description": "Actors that can trigger alerts for this rule, in the format `actorType:actorId`.\nWildcard Support: Use `<actorType>:*` to match all actors of a specific type (e.g., `camera:*` matches all cameras).  Only full wildcards (`<actorType>:*`) are supported. Partial wildcards like `camera:123*` are not allowed.  Only admin users can use wildcard actors.\n",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "WeeklyIntervalSchedule": {
+      "type": "object",
+      "description": "It signifies a week long alert schedule. This schedule is effective according to actor's (user/camera/account) timezone. It allows setting different times for different days.\n",
+      "properties": {
+        "sunday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "monday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "tuesday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "wednesday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "thursday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "friday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "saturday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        }
+      }
+    }
+  }
+}

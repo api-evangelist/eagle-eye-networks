@@ -1,23 +1,28 @@
 aid: eagle-eye-networks
+
 name: Eagle Eye Networks
-description: 'Eagle Eye Networks is a cloud video surveillance and video management
-  system (VMS) provider whose Video API Platform (v3) exposes REST APIs for managing
-  bridges, cameras, speakers, switches and multi-cameras; streaming live and recorded
-  video (HLS, RTSP, MP4, WebRTC two-way audio); archiving, exporting and downloading
-  media; locations, floors, floor plans and layouts; events, alerts, notifications
-  and automations; video analytics deep search, license plate recognition (LPR) and
-  vehicle surveillance; and account, user, role, application and OAuth client
-  management. Authentication is OAuth 2.0 (authorization code, client credentials,
-  refresh token, device code) issued from auth.eagleeyenetworks.com, and the platform
-  ships first-party SDKs (Android/iOS/Web video, two-way audio), an een CLI, webhook
-  event subscriptions and an llms.txt for agent consumption.'
+
+description: Eagle Eye Networks is a cloud video surveillance and video management system (VMS) provider whose Video API Platform (v3) exposes
+  REST APIs for managing bridges, cameras, speakers, switches and multi-cameras; streaming live and recorded video (HLS, RTSP, MP4, WebRTC two-way
+  audio); archiving, exporting and downloading media; locations, floors, floor plans and layouts; events, alerts, notifications and automations;
+  video analytics deep search, license plate recognition (LPR) and vehicle surveillance; and account, user, role, application and OAuth client
+  management. Authentication is OAuth 2.0 (authorization code, client credentials, refresh token, device code) issued from auth.eagleeyenetworks.com,
+  and the platform ships first-party SDKs (Android/iOS/Web video, two-way audio), an een CLI, webhook event subscriptions and an llms.txt for
+  agent consumption.
+
 url: https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/refs/heads/main/apis.yml
+
 x-type: company
+
 x-source: vc-portfolio
+
 x-backed-by:
 - accel
+
 x-tier: stub
+
 x-tier-reason: portfolio-lead
+
 deliveryModel:
   model: library
   open_source: false
@@ -29,6 +34,7 @@ deliveryModel:
   - none
   generated: '2026-08-28'
   method: derived
+
 accessModel:
   pricing: unknown
   onboarding: self-serve
@@ -41,13 +47,21 @@ accessModel:
   - authentication
   generated: '2026-07-22'
   method: derived
+
 image: https://www.een.com/wp-content/uploads/2017/08/Eagle-Eye-Devices-4.png
+
 specificationVersion: '0.23'
+
 created: '2026-07-17'
+
 modified: '2026-10-06'
+
 x-docs-platform: readme
+
 x-docs-platform-confidence: high
+
 x-docs-platform-checked: 2026-10-03
+
 tags:
 - Company
 - Security
@@ -61,6 +75,7 @@ tags:
 - Streaming
 - Webhook
 - Authentication
+
 tags_raw:
 - Company
 - Security
@@ -74,53 +89,30 @@ tags_raw:
 - Streaming
 - Webhooks
 - OAuth
-apis:
-- name: Eagle Eye Video API Platform (v3)
-  description: 'REST API v3 for the Eagle Eye Networks cloud VMS: devices (bridges,
-    cameras, speakers, switches, multi-cameras), live and recorded media streaming,
-    archiving/exports/downloads, locations/floors/layouts, events/alerts/notifications/automations,
-    video analytics deep search, LPR and vehicle surveillance, and account/user/role/application
-    management. OAuth 2.0 secured; per-account dynamic API host returned at login.'
-  humanURL: https://developer.eagleeyenetworks.com/reference
-  baseURL: https://api.eagleeyenetworks.com
-  tags:
-  - Video Surveillance
-  - Camera
-  - Streaming
-  - Event
-  - LPR
-  tags_raw:
-  - Video Surveillance
-  - Cameras
-  - Streaming
-  - Events
-  - LPR
-  properties:
-  - type: APIReference
-    url: https://developer.eagleeyenetworks.com/reference
-  - type: Authentication
-    url: authentication/eagle-eye-networks-authentication.yml
-  - type: OAuthScopes
-    url: scopes/eagle-eye-networks-scopes.yml
-  - type: Conventions
-    url: conventions/eagle-eye-networks-conventions.yml
-  - type: X-MCPServerCandidate
-    url: mcp/eagle-eye-networks-mcp.yml
-    note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
-  - type: Webhooks
-    url: asyncapi/eagle-eye-networks-events-webhooks.yml
-  - type: ErrorCatalog
-    url: errors/eagle-eye-networks-problem-types.yml
-  - type: DataModel
-    url: data-model/eagle-eye-networks-data-model.yml
-  - type: Conformance
-    url: conformance/eagle-eye-networks-conformance.yml
+
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+
 common:
+- type: AgenticAccess
+  url: agentic-access/eagle-eye-networks-agentic-access.yml
+- type: Spectral
+  url: rules/eagle-eye-networks-rules.yml
+- type: JSONLD
+  url: json-ld/eagle-eye-networks-context.jsonld
+- type: Vocabulary
+  url: vocabulary/eagle-eye-networks-vocabulary.yml
+- type: Hosts
+  url: hosts/eagle-eye-networks-hosts.yml
+- type: Vendors
+  url: vendors/eagle-eye-networks-vendors.yml
+- type: Support
+  url: https://support.een.com/portal/en/home?_ga=2.29615542.806981952.1650288438-321054554.1626117036&_gac=1.194145759.1646847401.CjwKCAiAvaGRBhBlEiwAiY-yMHpvMOrNzWkYV1IdzrzdihUcPSWOdnel3hoUXUawXN3CoTj_BM3S7hoCVOcQAvD_BwE
+- type: Security
+  url: https://www.een.com/security/
 - url: https://www.een.com/feed/
   type: BlogRSS
 - type: DomainSecurity
@@ -171,7 +163,9 @@ common:
   url: components/eagle-eye-networks-components.yml
 - type: X-MCPServerCandidate
   url: mcp/eagle-eye-networks-mcp.yml
-  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published
+    API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting
+    the artifact-type surfaces with a server that does not exist.'
 - type: Webhooks
   url: asyncapi/eagle-eye-networks-events-webhooks.yml
 - type: ErrorCatalog
@@ -182,8 +176,298 @@ common:
   url: conformance/eagle-eye-networks-conformance.yml
 - type: AgentSkill
   url: skills/_index.yml
+
+apis:
+- name: Eagle Eye Video API Platform (v3)
+  description: 'REST API v3 for the Eagle Eye Networks cloud VMS: devices (bridges, cameras, speakers, switches, multi-cameras), live and recorded
+    media streaming, archiving/exports/downloads, locations/floors/layouts, events/alerts/notifications/automations, video analytics deep search,
+    LPR and vehicle surveillance, and account/user/role/application management. OAuth 2.0 secured; per-account dynamic API host returned at login.'
+  humanURL: https://developer.eagleeyenetworks.com/reference
+  baseURL: https://api.eagleeyenetworks.com
+  tags:
+  - Video Surveillance
+  - Camera
+  - Streaming
+  - Event
+  - LPR
+  tags_raw:
+  - Video Surveillance
+  - Cameras
+  - Streaming
+  - Events
+  - LPR
+  properties:
+  - type: APIReference
+    url: https://developer.eagleeyenetworks.com/reference
+  - type: Authentication
+    url: authentication/eagle-eye-networks-authentication.yml
+  - type: OAuthScopes
+    url: scopes/eagle-eye-networks-scopes.yml
+  - type: Conventions
+    url: conventions/eagle-eye-networks-conventions.yml
+  - type: X-MCPServerCandidate
+    url: mcp/eagle-eye-networks-mcp.yml
+    note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published
+      API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting
+      the artifact-type surfaces with a server that does not exist.'
+  - type: Webhooks
+    url: asyncapi/eagle-eye-networks-events-webhooks.yml
+  - type: ErrorCatalog
+    url: errors/eagle-eye-networks-problem-types.yml
+  - type: DataModel
+    url: data-model/eagle-eye-networks-data-model.yml
+  - type: Conformance
+    url: conformance/eagle-eye-networks-conformance.yml
+  aid: eagle-eye-networks:eagle-eye-video-api-platform-v3
+- aid: eagle-eye-networks:eagle-eye-networks-account-settings
+  name: Eagle Eye Networks SSO API
+  description: Single Sign On
+  humanURL: https://developer.eagleeyenetworks.com/reference
+  baseURL: https://api.eagleeyenetworks.com
+  tags:
+  - SSO
+  properties:
+  - type: OpenAPI
+    url: openapi/eagle-eye-networks-account-settings-openapi.yml
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-auth-settings-update-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-auth-settings-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-client-settings-schema.json
+- aid: eagle-eye-networks:eagle-eye-networks-automations
+  name: Eagle Eye Networks Event Alert Rules API
+  description: Describe when an event should trigger an alert.
+  humanURL: https://developer.eagleeyenetworks.com/reference
+  baseURL: https://api.eagleeyenetworks.com
+  tags:
+  - Event Alert Rules
+  properties:
+  - type: OpenAPI
+    url: openapi/eagle-eye-networks-automations-openapi.yml
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-alert-action-rule-update-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-alert-action-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-event-alert-condition-rule-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-alert-action-update-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-event-alert-condition-rule-create-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-event-rules-fields-schema.json
+- aid: eagle-eye-networks:eagle-eye-networks-contract-vault-api
+  name: Eagle Eye Networks Contract Vault API
+  description: API for managing contract vault records and reports.
+  humanURL: https://developer.eagleeyenetworks.com/reference
+  baseURL: https://api.eagleeyenetworks.com
+  tags:
+  - Contract Vault
+  properties:
+  - type: OpenAPI
+    url: openapi/eagle-eye-networks-contract-vault-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-contract-record-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-contract-list-schema.json
+- aid: eagle-eye-networks:eagle-eye-networks-devices
+  name: Eagle Eye Networks Cameras API
+  description: All core operations on cameras.
+  humanURL: https://developer.eagleeyenetworks.com/reference
+  baseURL: https://api.eagleeyenetworks.com
+  tags:
+  - Cameras
+  properties:
+  - type: OpenAPI
+    url: openapi/eagle-eye-networks-devices-openapi.yml
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-ptz-settings-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-add-camera-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-update-bulk-camera-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-ptz-position-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-camera-update-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-tunnel-response-schema.json
+- aid: eagle-eye-networks:eagle-eye-networks-events
+  name: Eagle Eye Networks Events API
+  description: Retrieve events generated by the system.
+  humanURL: https://developer.eagleeyenetworks.com/reference
+  baseURL: https://api.eagleeyenetworks.com
+  tags:
+  - Events
+  properties:
+  - type: OpenAPI
+    url: openapi/eagle-eye-networks-events-openapi.yml
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-event-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-alert-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-notification-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-filter-create-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-event-metric-query-response-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-events-by-type-response-schema.json
+- aid: eagle-eye-networks:eagle-eye-networks-grouping
+  name: Eagle Eye Networks Layouts API
+  description: All core operations on one layouts, which are used to show multiple feeds at the same time.
+  humanURL: https://developer.eagleeyenetworks.com/reference
+  baseURL: https://api.eagleeyenetworks.com
+  tags:
+  - Layouts
+  properties:
+  - type: OpenAPI
+    url: openapi/eagle-eye-networks-grouping-openapi.yml
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-location-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-layout-for-single-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-layout-update-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-paginated-location-response-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-paginated-location-descendants-response-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-paginated-floor-plans-response-schema.json
+- aid: eagle-eye-networks:eagle-eye-networks-media
+  name: Eagle Eye Networks Media API
+  description: Retrieve information about and manage recorded media.
+  humanURL: https://developer.eagleeyenetworks.com/reference
+  baseURL: https://api.eagleeyenetworks.com
+  tags:
+  - Media
+  properties:
+  - type: OpenAPI
+    url: openapi/eagle-eye-networks-media-openapi.yml
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-download-details-with-includes-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-video-summary-export-details-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-job-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-copy-export-body-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-paginated-file-response-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-create-export-response-schema.json
+- aid: eagle-eye-networks:eagle-eye-networks-resellers-account-switching
+  name: Eagle Eye Networks Tokens API
+  description: Create authorization tokens on demand.
+  humanURL: https://developer.eagleeyenetworks.com/reference
+  baseURL: https://api.eagleeyenetworks.com
+  tags:
+  - Tokens
+  properties:
+  - type: OpenAPI
+    url: openapi/eagle-eye-networks-resellers-account-switching-openapi.yml
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-token-response-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-access-token-request-schema.json
+- aid: eagle-eye-networks:eagle-eye-networks-system
+  name: Eagle Eye Networks Applications API
+  description: Applications that can get access to an account and interact with it.
+  humanURL: https://developer.eagleeyenetworks.com/reference
+  baseURL: https://api.eagleeyenetworks.com
+  tags:
+  - Applications
+  properties:
+  - type: OpenAPI
+    url: openapi/eagle-eye-networks-system-openapi.yml
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-application-oauth-client-update-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-application-oauth-client-create-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-application-oauth-client-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-application-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-application-create-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-paginated-oauth-client-response-schema.json
+- aid: eagle-eye-networks:eagle-eye-networks-user-accounts
+  name: Eagle Eye Networks Users API
+  description: Core operations on users in the current account.
+  humanURL: https://developer.eagleeyenetworks.com/reference
+  baseURL: https://api.eagleeyenetworks.com
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/eagle-eye-networks-user-accounts-openapi.yml
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-add-user-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-role-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-user-update-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-user-self-update-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-api-user-main-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-edition-schema.json
+- aid: eagle-eye-networks:eagle-eye-networks-vehicle-surveillance-package
+  name: Eagle Eye Networks LPR Events API
+  description: LPR plate read events.
+  humanURL: https://developer.eagleeyenetworks.com/reference
+  baseURL: https://api.eagleeyenetworks.com
+  tags:
+  - LPR Events
+  properties:
+  - type: OpenAPI
+    url: openapi/eagle-eye-networks-vehicle-surveillance-package-openapi.yml
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-lpr-fields-data-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-lpr-alert-condition-rule-untagged-for-post-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-lpr-alert-condition-rule-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-lpr-vehicle-list-untagged-record-update-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-lpr-vehicle-list-meta-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-lpr-vehicle-list-untagged-record-schema.json
+- aid: eagle-eye-networks:eagle-eye-networks-video-search
+  name: Eagle Eye Networks Video Analytics Events API
+  description: The Video Analytics Events API from Eagle Eye Networks — 7 operation(s) for video analytics events.
+  humanURL: https://developer.eagleeyenetworks.com/reference
+  baseURL: https://api.eagleeyenetworks.com
+  tags:
+  - Video Analytics Events
+  properties:
+  - type: OpenAPI
+    url: openapi/eagle-eye-networks-video-search-openapi.yml
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-search-event-v1-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-paginated-response-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-region-info-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-actor-info-schema.json
+  - type: JSONSchema
+    url: json-schema/eagle-eye-networks-person-attribute-list-schema.json
+
 x-enrichment:
   date: '2026-07-19'
   status: backfilled
   pass: local-v1
   note: backfilled from .gitignore signal + verified work evidence
+
+x-readme-harvest:
+  date: '2026-10-14'
+  ops: 214
+  tool: harvest-readme-openapi.py
+  portal: https://developer.eagleeyenetworks.com

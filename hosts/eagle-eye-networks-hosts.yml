@@ -1,0 +1,71 @@
+generated: '2026-10-14'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 5
+  own: 1
+  other_domain: 3
+  platform: 1
+  roles:
+  - api
+  - portal
+  - source
+  - status
+  - website
+hosts:
+- host: api.eagleeyenetworks.com
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  registrable_domain: eagleeyenetworks.com
+  role: api
+  relation: other-domain
+- host: developer.eagleeyenetworks.com
+  found_by:
+  - pointer
+  - apis[]
+  types:
+  - DeveloperPortal
+  - Documentation
+  - APIReference
+  - GettingStarted
+  - Deprecation
+  - ChangeLog
+  serves:
+  - docs
+  registrable_domain: eagleeyenetworks.com
+  role: portal
+  relation: other-domain
+- host: github.com
+  found_by:
+  - pointer
+  types:
+  - GitHubOrganization
+  serves: []
+  registrable_domain: github.com
+  role: source
+  relation: platform
+- host: status.eagleeyenetworks.com
+  found_by:
+  - pointer
+  types:
+  - StatusPage
+  serves: []
+  registrable_domain: eagleeyenetworks.com
+  role: status
+  relation: other-domain
+- host: www.een.com
+  found_by:
+  - pointer
+  types:
+  - BlogRSS
+  - Website
+  - Blog
+  - PrivacyPolicy
+  serves: []
+  registrable_domain: een.com
+  role: website
+  relation: own

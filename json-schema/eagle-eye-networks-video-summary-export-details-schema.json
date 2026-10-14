@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-video-summary-export-details-schema.json",
+  "title": "VideoSummaryExportDetails",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-media-openapi.yml#/components/schemas/VideoSummaryExportDetails",
+  "allOf": [
+    {
+      "$ref": "#/$defs/ApiExportDetails"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "videoSummary"
+          ]
+        },
+        "maxDurationSeconds": {
+          "type": "integer",
+          "description": "Maximum duration of the summary video in seconds.\nThe system will prioritize and select events to fit within this duration.\nRecommended presets: 30, 60, 120, 300, 600 seconds.\n",
+          "minimum": 30,
+          "maximum": 600
+        },
+        "eventTypes": {
+          "type": "array",
+          "description": "List of event type IDs to include in the summary. Must specify at least one event type.\nAvailable event types should be retrieved from the /events endpoint schema.\nExamples: \"een.motionDetectionEvent.v1\", \"een.personDetectionEvent.v1\", \"een.lineCrossingEvent.v1\"\n",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "maxDurationSeconds",
+        "eventTypes"
+      ]
+    }
+  ],
+  "$defs": {
+    "ApiExportDetails": {
+      "type": "object",
+      "required": [
+        "deviceId",
+        "period",
+        "type",
+        "info"
+      ],
+      "properties": {
+        "deviceId": {
+          "description": "The ID of the device",
+          "type": "string"
+        },
+        "type": {
+          "description": "Type of export to make. Should be one of: video, timeLapse, bundle, or videoSummary.\nWhere:\n* video: Export the full video interval(s) between the given times to mp4.\n* timeLapse: Export the preview video as a time lapse video to mp4.\n* bundle: combination of video and timeLapse.\n* videoSummary: Export a condensed video from preview images (max 3 per event) around selected events (motion, person detection, etc.).\n",
+          "type": "string"
+        },
+        "autoDelete": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true the export is placed into the read-only \"downloads\" folder of archive, and will be removed after 2 weeks.\nElse the export is placed in archive with the end user having full control over it.\n"
+        },
+        "skipSyncToCloud": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/skipSyncToCloud"
+            },
+            {
+              "default": false
+            }
+          ]
+        },
+        "period": {
+          "type": "object",
+          "description": "Period for which to make the export.\nFor video, timeLapse, and bundle exports: the duration can't exceed 8 hours.\nFor videoSummary exports: the duration can span up to the camera's retention period.\nIf `endTimestamp` is not given, the current time will be used.\n",
+          "required": [
+            "startTimestamp"
+          ],
+          "properties": {
+            "startTimestamp": {
+              "$ref": "#/$defs/startTimestamp"
+            },
+            "endTimestamp": {
+              "$ref": "#/$defs/endTimestamp"
+            }
+          }
+        },
+        "osd": {
+          "type": "object",
+          "description": "If included the timestamp of each frame is super imposed in the export.",
+          "required": [
+            "timeZone"
+          ],
+          "properties": {
+            "timeZone": {
+              "type": "string",
+              "description": "Timezone used to render the timestamps"
+            }
+          }
+        },
+        "info": {
+          "type": "object",
+          "required": [
+            "name",
+            "directory"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "[^\\/]*",
+              "description": "Name of the export."
+            },
+            "directory": {
+              "type": "string",
+              "maxLength": 256,
+              "description": "Destination path in archive to be used to save the generated files into."
+            },
+            "notes": {
+              "type": "string",
+              "maxLength": 1024,
+              "description": "The description that is added to the file/folder in archive"
+            },
+            "tags": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "maxLength": 32
+              }
+            }
+          }
+        }
+      }
+    },
+    "endTimestamp": {
+      "description": "Where to stop the export.",
+      "type": "string",
+      "format": "date-time"
+    },
+    "skipSyncToCloud": {
+      "type": "boolean",
+      "description": "If true: the job will not try to sync any data to the cloud, instead the export will only contain the data that is currently in the cloud.\nThe missing parts can be found in the field: `detailedState.intervals.missingIntervals`.\n"
+    },
+    "startTimestamp": {
+      "description": "Where to start the export.",
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

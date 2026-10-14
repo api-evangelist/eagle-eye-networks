@@ -1,0 +1,380 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-application-oauth-client-schema.json",
+  "title": "ApplicationOauthClient",
+  "description": "OAuth client response object. The response structure depends on the authorizationType: - user: Contains standard fields, scopes are [\"vms.all\"], no permissions object - application: Contains standard fields plus permissions object with boolean flags\n",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-system-openapi.yml#/components/schemas/ApplicationOauthClient",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/UserLevelClientResponse"
+    },
+    {
+      "$ref": "#/$defs/ApplicationLevelClientResponse"
+    }
+  ],
+  "$defs": {
+    "AdminPermission": {
+      "properties": {
+        "administrator": {
+          "type": "boolean",
+          "x-jsoninclude-nonnull-annotation": true,
+          "description": "All permissions are enabled - create, delete, edit, and view access to all accounts and user settings, bridges, cameras, layouts, audit log and archive.\n"
+        }
+      }
+    },
+    "ApplicationLevelClientResponse": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/OauthClientResponseBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "authorizationType": {
+              "type": "string",
+              "enum": [
+                "application"
+              ],
+              "description": "Client operates as an independent service account with its own permissions. Access is not tied to any specific user and persists regardless of user changes. Permissions must be explicitly configured.\n"
+            },
+            "permissions": {
+              "$ref": "#/$defs/Permissions"
+            }
+          },
+          "required": [
+            "authorizationType",
+            "permissions"
+          ]
+        }
+      ],
+      "description": "Response schema for application-level OAuth clients. Includes permissions object with boolean flags."
+    },
+    "OauthClientResponseBase": {
+      "type": "object",
+      "description": "Base properties for OAuth client responses",
+      "properties": {
+        "id": {
+          "maxLength": 255,
+          "type": "string",
+          "description": "Unique client identifier"
+        },
+        "secret": {
+          "maxLength": 255,
+          "type": "string",
+          "description": "String representing a secret passphrase."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the oauth client.",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of this OAuth client",
+          "enum": [
+            "public",
+            "confidential"
+          ]
+        },
+        "redirectUris": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "List of allowed redirect URIs support by the client.",
+            "format": "uri"
+          },
+          "minItems": 1,
+          "maxItems": 250
+        },
+        "loginUris": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "List of allowed login URIs support by the client.",
+            "format": "uri"
+          },
+          "maxItems": 250
+        }
+      },
+      "required": [
+        "id",
+        "secret",
+        "name",
+        "type",
+        "redirectUris"
+      ]
+    },
+    "Permissions": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/AdminPermission"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "editAccounts": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Edit Control, Days, Security, Camera, Alerts, Notifications, Privacy, Sharing, Responders, Default retentions, and camera resolution settings.\n"
+            },
+            "layoutAdministrator": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Create, delete and edit any accessible layouts. All user layouts are visible to admin users.\n"
+            },
+            "createLayouts": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Ability to create layouts and edit the layouts created. This does not grant permission to edit layouts created by other users.\n"
+            },
+            "editNoBillingDeviceSettings": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Edit Camera Settings except for Cloud Retention and Full Video Resolution. Cannot add or delete cameras. Edit existing Analytics. Cannot add or delete Analytics.\n"
+            },
+            "turnCamerasOnOff": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Turn Cameras on/off. Cameras off cannot be recorded."
+            },
+            "editMotionAreas": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Edit Motion Settings. Set object size and sensitivity, add/delete regions, add/delete alerts for regions. Edit existing Analytics. Set object size and sensitivity, add/delete alerts.\n"
+            },
+            "editAllCameraSettings": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Editing all Camera Settings. Cannot add or delete cameras."
+            },
+            "editUsers": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Create, delete and edit non-admin users in an end user account."
+            },
+            "upgradeEdition": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Upgrade current edition subscription to a higher level edition."
+            },
+            "addEditBridgesCameras": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Create, delete, edit, and view Bridges and Cameras. This is the only permission for a non-admin to be able to add and view bridges in an end user account.\n"
+            },
+            "editSharing": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Edit Sharing and Responders settings."
+            },
+            "controlPTZ": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Control Pan, Tilt, Zoom, & recall stations while viewing a preview or live video of PTZ cameras.\n"
+            },
+            "editPTZStations": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Edit PTZ Settings. Set PTZ mode and create, delete, edit stations.\n"
+            },
+            "addEditSpeakers": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Add speakers, edit speaker settings, delete speakers."
+            },
+            "editSpeakers": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Edit speaker settings. Cannot add or delete speakers."
+            },
+            "viewLiveVideo": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "View full resolution video live."
+            },
+            "viewHistoricVideo": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "View history browser and historic video."
+            },
+            "downloadVideo": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Download preview and full resolution video."
+            },
+            "viewPreviewVideo": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "View preview images from cameras."
+            },
+            "talkDown": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Allows the users to initiate Talk Down to the camera field(s) of view."
+            },
+            "editMap": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Add and edit floors, lines, shapes, and cameras on the map."
+            },
+            "viewAuditLog": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "View Audit Log and download reports from it."
+            },
+            "viewArchive": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "View all files and folders within the Archive."
+            },
+            "editArchive": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Save videos to Archive - delete, edit, and view files and folders within the Archive."
+            },
+            "viewPlugins": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "View all Plugins."
+            },
+            "editPlugins": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Add and remove plugins."
+            },
+            "exportUsers": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Export a list of account users in .csv format."
+            },
+            "viewVSP": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "User access to view vehicle data, search vehicle across camera & location, set rules, and alert."
+            },
+            "editResellerUsers": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Create, delete and edit reseller user who is not an Admin."
+            },
+            "editAdminUsers": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Create, delete and edit admin and non-admin users in an end user account. Give access to bridges, cameras, and layouts. Create new end user accounts and give access to them.\n"
+            },
+            "viewContract": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "View recordings, search, and create new recordings."
+            },
+            "addRemovePayment": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Add and remove payment methods."
+            },
+            "viewInvoice": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "View and download invoices."
+            },
+            "placeOrders": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Add products to the shopping cart and place orders."
+            },
+            "viewShipments": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "View the status of shipments."
+            },
+            "viewPricingInformation": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "View pricing information."
+            },
+            "viewResellerProgramInformation": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "View Marketing's reseller program information."
+            },
+            "viewVSPRule": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "View VSP rules."
+            },
+            "editVSPRule": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Edit VSP rules."
+            },
+            "viewVehicleList": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "View vehicle lists."
+            },
+            "editVehicleList": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Edit vehicle lists."
+            },
+            "viewAutomations": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "View automation alerts, rules, and actions."
+            },
+            "editAutomations": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Edit automation alerts, rules, and actions."
+            },
+            "editAlertManagerRulesAndActions": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "Edit Automations rules and actions."
+            },
+            "viewAlertManagerRulesAndActions": {
+              "type": "boolean",
+              "x-jsoninclude-nonnull-annotation": true,
+              "description": "View Alert Manager rules and actions."
+            }
+          }
+        }
+      ]
+    },
+    "UserLevelClientResponse": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/OauthClientResponseBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "authorizationType": {
+              "type": "string",
+              "enum": [
+                "user"
+              ],
+              "description": "Client operates on behalf of the authenticating user. Permissions and access are tied to that user's account. If the user is deleted, blocked, or has permissions changed, the client's access is affected accordingly. Scopes are automatically set to [\"vms.all\"].\n"
+            },
+            "scopes": {
+              "type": "array",
+              "description": "List of scopes granted to this OAuth client.",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "authorizationType",
+            "scopes"
+          ]
+        }
+      ],
+      "description": "Response schema for user-level OAuth clients. Scopes are [\"vms.all\"] and no permissions object is present."
+    }
+  }
+}

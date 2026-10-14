@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-api-user-self-update-schema.json",
+  "title": "ApiUserSelfUpdate",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-user-accounts-openapi.yml#/components/schemas/ApiUserSelfUpdate",
+  "type": "object",
+  "properties": {
+    "firstName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 126
+    },
+    "lastName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 126
+    },
+    "email": {
+      "$ref": "#/$defs/Email"
+    },
+    "contactDetails": {
+      "$ref": "#/$defs/ContactDetails"
+    },
+    "support": {
+      "$ref": "#/$defs/Support"
+    },
+    "language": {
+      "type": "string"
+    },
+    "timeZone": {
+      "$ref": "#/$defs/TimeZone"
+    },
+    "layoutSettings": {
+      "$ref": "#/$defs/LayoutSettings"
+    },
+    "previewSettings": {
+      "$ref": "#/$defs/PreviewSettings"
+    },
+    "timeSettings": {
+      "$ref": "#/$defs/TimeSettings"
+    }
+  },
+  "$defs": {
+    "AlternateEmail": {
+      "type": "string",
+      "description": "This email is used sending notifications from user account.",
+      "format": "email"
+    },
+    "ContactDetails": {
+      "type": "object",
+      "properties": {
+        "alternateEmail": {
+          "$ref": "#/$defs/AlternateEmail"
+        },
+        "phone": {
+          "type": "string"
+        }
+      }
+    },
+    "Email": {
+      "type": "string",
+      "description": "This email is used for login.",
+      "format": "email"
+    },
+    "LayoutSettings": {
+      "type": "object",
+      "properties": {
+        "rotationInterval": {
+          "type": "integer",
+          "description": "Layout rotation internal in seconds after which current layout is switched to next one in the below list."
+        },
+        "rotationOrder": {
+          "type": "array",
+          "description": "Ordered list of layout IDs that user has access to, which will be displayed in order after rotationInterval. This array may contain deleted layouts or those to which the user lost access. They need to be filtered out on the client side.\n",
+          "items": {
+            "type": "string",
+            "description": "Unique layout identifier"
+          }
+        }
+      },
+      "required": [
+        "rotationInterval",
+        "rotationOrder"
+      ]
+    },
+    "Pin": {
+      "type": "string",
+      "description": "Six digit string that signifies a support pin. Support can use this pin to login to user account.",
+      "pattern": "^[0-9]*$",
+      "minLength": 6,
+      "maxLength": 6
+    },
+    "PreviewSettings": {
+      "type": "object",
+      "properties": {
+        "showMotionBoxes": {
+          "type": "boolean",
+          "description": "Indicates whether motion boxes should be shown"
+        },
+        "showAnalytics": {
+          "type": "boolean",
+          "description": "Indicates whether additional analytics should be shown"
+        },
+        "showPluginExtensions": {
+          "type": "boolean",
+          "description": "Indicates whether to show custom annotations for third party applications."
+        }
+      }
+    },
+    "Support": {
+      "type": "object",
+      "properties": {
+        "pin": {
+          "$ref": "#/$defs/Pin"
+        }
+      }
+    },
+    "TimeSettings": {
+      "type": "object",
+      "properties": {
+        "showMilliseconds": {
+          "type": "boolean",
+          "description": "Select to display milliseconds when playing video."
+        },
+        "format": {
+          "type": "string",
+          "description": "Select between 12 and 24 hour mode for the display of time.",
+          "enum": [
+            "24h",
+            "12h"
+          ]
+        }
+      }
+    },
+    "TimeZone": {
+      "type": "object",
+      "properties": {
+        "timeZone": {
+          "type": "string",
+          "description": "The timezone the user is in."
+        }
+      }
+    }
+  }
+}

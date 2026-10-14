@@ -1,0 +1,673 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-job-schema.json",
+  "title": "Job",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-media-openapi.yml#/components/schemas/Job",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/JobStarted"
+    },
+    {
+      "$ref": "#/$defs/JobPending"
+    },
+    {
+      "$ref": "#/$defs/JobSuccess"
+    },
+    {
+      "$ref": "#/$defs/JobFailure"
+    },
+    {
+      "$ref": "#/$defs/JobRevoked"
+    }
+  ],
+  "$defs": {
+    "ApiV3Error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "HTTP code defined in EEN Standard Code Values",
+          "type": "integer"
+        },
+        "status": {
+          "description": "A string enum describing the code",
+          "type": "string",
+          "enum": [
+            "cancelled",
+            "unknown",
+            "invalidArgument",
+            "deadlineExceeded",
+            "notFound",
+            "conflict",
+            "permissionDenied",
+            "resourceExhausted",
+            "failedPrecondition",
+            "aborted",
+            "outOfRange",
+            "unimplemented",
+            "internal",
+            "unavailable",
+            "dataLoss",
+            "unauthenticated",
+            "mediaTypeNotSupported",
+            "acceptNotSupported",
+            "methodNotSupported",
+            "tooManyRequests",
+            "badGateway"
+          ]
+        },
+        "message": {
+          "description": "Developer friendly human readable error message in English",
+          "type": "string"
+        },
+        "details": {
+          "description": "An array of extensible objects that define error information",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ExceptionDetail"
+          }
+        }
+      },
+      "required": [
+        "code",
+        "status",
+        "message",
+        "details"
+      ]
+    },
+    "ArgumentViolation": {
+      "properties": {
+        "argumentName": {
+          "type": "string",
+          "description": "Name of the argument"
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the violation"
+        }
+      }
+    },
+    "BadRequestExceptionDetail": {
+      "properties": {
+        "type": {
+          "description": "A string enum describing the type of detail object.",
+          "type": "string",
+          "enum": [
+            "badRequest"
+          ]
+        },
+        "argumentViolations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ArgumentViolation"
+          }
+        }
+      }
+    },
+    "DateTimeBase": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 (RFC 3339)",
+      "x-faker": {
+        "date.between": [
+          "2020-01-01T00:00:00.000+00:00",
+          "2030-01-01T00:00:00.000+00:00"
+        ]
+      }
+    },
+    "DetailedState": {
+      "type": "object",
+      "description": "This object allows for a flexible way of returning detailed progress information to the end user.  It is allowed to be null, otherwise the format of data is dynamic.  This object is allowed to be present on a Job of any state except pending and revoked.\n"
+    },
+    "ErrorInfoExceptionDetail": {
+      "properties": {
+        "type": {
+          "description": "A string enum describing the type of detail object.",
+          "type": "string",
+          "enum": [
+            "errorInfo"
+          ]
+        },
+        "reason": {
+          "description": "The reason for the error. This is a constant value that identifies the proximate cause of the\nerror. Error reasons are unique within a particular domain of errors.\n",
+          "type": "string",
+          "enum": [
+            "unauthenticated",
+            "unexpectedArgument",
+            "missingRequiredArgument",
+            "wrongArgumentValue",
+            "invalidPermission",
+            "wrongEdition",
+            "wrongAccountType",
+            "resourceNotFound",
+            "endpointNotFound",
+            "methodNotSupported",
+            "unexpectedError",
+            "acceptNotSupported",
+            "alreadyExists",
+            "foreignKeyConflict",
+            "childDevicesExist",
+            "contentNotSupported",
+            "deadlineExpired",
+            "tooManyRequests",
+            "deviceUnavailable",
+            "serviceUnavailable",
+            "invalidJSON",
+            "resourceLocked",
+            "notSupportedOnBridge",
+            "outOfRetention",
+            "deviceIdentificationFailed",
+            "credentialValidationFailed",
+            "credentialSetupFailed",
+            "localUrlValidationFailed",
+            "hwRegistrationFailed",
+            "failedAddingCameraAfterValidation",
+            "neverConnected",
+            "reconnectFailed",
+            "unsupportedModel",
+            "purged",
+            "userBlocked",
+            "userTemporarilyBlocked",
+            "quotaExceeded",
+            "alreadyValidated",
+            "reAuthenticationRequired",
+            "badGateway"
+          ]
+        },
+        "domain": {
+          "description": "Logical grouping to which the \"reason\" belongs\n",
+          "type": "string"
+        },
+        "metadata": {
+          "$ref": "#/$defs/ExceptionMetadata"
+        }
+      }
+    },
+    "ExceptionDetail": {
+      "type": "object",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ErrorInfoExceptionDetail"
+        },
+        {
+          "$ref": "#/$defs/BadRequestExceptionDetail"
+        },
+        {
+          "$ref": "#/$defs/ResourceInfoExceptionDetail"
+        }
+      ],
+      "properties": {
+        "type": {
+          "description": "A string enum describing the type of detail object.",
+          "type": "string",
+          "enum": [
+            "errorInfo",
+            "badRequest",
+            "resourceInfo"
+          ]
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "ExceptionMetadata": {
+      "properties": {
+        "path": {
+          "description": "Path of the request",
+          "type": "string"
+        },
+        "method": {
+          "description": "Method of the request",
+          "type": "string"
+        }
+      }
+    },
+    "JobArguments": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Variable data for each type of job, specified in argumentSchema of the Get Job Types API in JSON Schema format. Empty object or null is an acceptable value when no arguments are required."
+    },
+    "JobBase": {
+      "required": [
+        "id",
+        "type",
+        "namespace",
+        "arguments",
+        "userId",
+        "createTimestamp",
+        "updateTimestamp",
+        "expireTimestamp"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "type": {
+          "$ref": "#/$defs/JobTypeId"
+        },
+        "namespace": {
+          "$ref": "#/$defs/JobNamespace"
+        },
+        "arguments": {
+          "$ref": "#/$defs/JobArguments"
+        },
+        "userId": {
+          "$ref": "#/$defs/UserId"
+        },
+        "scheduleTimestamp": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/NullableDateTimeBase"
+            },
+            {
+              "description": "When the Job is/was expected to run.  Null when the Job was 'on-demand'.  Not changeable."
+            }
+          ]
+        },
+        "createTimestamp": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/DateTimeBase"
+            },
+            {
+              "description": "When the Job was created.  Not changeable."
+            }
+          ]
+        },
+        "updateTimestamp": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/DateTimeBase"
+            },
+            {
+              "description": "When the Job was updated.  Not directly changeable by user."
+            }
+          ]
+        },
+        "expireTimestamp": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/DateTimeBase"
+            },
+            {
+              "description": "4 weeks in the future from when the Job was created.  Not changeable by user."
+            }
+          ]
+        }
+      }
+    },
+    "JobFailure": {
+      "description": "Example of a State Failure Job",
+      "allOf": [
+        {
+          "type": "object",
+          "required": [
+            "state",
+            "detailedState",
+            "progress",
+            "result",
+            "error"
+          ],
+          "properties": {
+            "state": {
+              "type": "string",
+              "enum": [
+                "failure"
+              ]
+            },
+            "detailedState": {
+              "$ref": "#/$defs/DetailedState"
+            },
+            "progress": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0
+            },
+            "result": {
+              "$ref": "#/$defs/NullObject"
+            },
+            "error": {
+              "$ref": "#/$defs/ApiV3Error"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/JobBase"
+        }
+      ]
+    },
+    "JobNamespace": {
+      "type": "string",
+      "description": "Jobs with common concerns are grouped according to their namespace. For example, Reports has it's own reports namespace to make filtering and finding report type jobs easier.\n",
+      "x-faker": {
+        "helpers.arrayElement": [
+          [
+            "reports",
+            "jobs",
+            "export"
+          ]
+        ]
+      }
+    },
+    "JobPending": {
+      "description": "Example of a State Pending Job",
+      "allOf": [
+        {
+          "type": "object",
+          "required": [
+            "state",
+            "detailedState",
+            "progress",
+            "result",
+            "error"
+          ],
+          "properties": {
+            "state": {
+              "type": "string",
+              "enum": [
+                "pending"
+              ]
+            },
+            "detailedState": {
+              "$ref": "#/$defs/NullObject"
+            },
+            "progress": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0
+            },
+            "result": {
+              "$ref": "#/$defs/NullObject"
+            },
+            "error": {
+              "$ref": "#/$defs/NullObject"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/JobBase"
+        }
+      ]
+    },
+    "JobProgress": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Job percent complete expressed as a float",
+      "x-faker": {
+        "datatype.float": {
+          "min": 0,
+          "max": 1
+        }
+      }
+    },
+    "JobResultFile": {
+      "type": "object",
+      "required": [
+        "name",
+        "size",
+        "mimetype",
+        "url",
+        "description"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "x-faker": "system.fileName"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1,
+          "x-faker": {
+            "dataType": "datatype.bigInt",
+            "options": {
+              "min": 1,
+              "max": 2147483648
+            }
+          }
+        },
+        "mimetype": {
+          "type": "string",
+          "x-faker": "system.mimeType"
+        },
+        "url": {
+          "type": "string",
+          "x-faker": "image.abstract"
+        },
+        "description": {
+          "type": "string",
+          "x-faker": {
+            "helpers.arrayElement": [
+              [
+                "User Permissions Report",
+                "Camera Settings Report"
+              ]
+            ]
+          }
+        }
+      }
+    },
+    "JobResultFiles": {
+      "required": [
+        "files"
+      ],
+      "properties": {
+        "files": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/JobResultFile"
+          }
+        }
+      }
+    },
+    "JobResultNull": {
+      "description": "A null result.  Used for JobTypes that don't return any output and simply indicate their success or failure via the Job state.  Will appear as \"result\": null in JSON, the same as if the Job was not in a success state.\n",
+      "nullable": true
+    },
+    "JobResultText": {
+      "description": "A result that is only raw text.\n",
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "x-faker": {
+            "dataType": "lorem.sentence"
+          }
+        }
+      },
+      "required": [
+        "text"
+      ]
+    },
+    "JobRevoked": {
+      "description": "Example of a State Revoked (cancelled) Job",
+      "allOf": [
+        {
+          "type": "object",
+          "required": [
+            "state",
+            "detailedState",
+            "progress",
+            "result",
+            "error"
+          ],
+          "properties": {
+            "state": {
+              "type": "string",
+              "enum": [
+                "revoked"
+              ]
+            },
+            "detailedState": {
+              "$ref": "#/$defs/NullObject"
+            },
+            "progress": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0
+            },
+            "result": {
+              "$ref": "#/$defs/NullObject"
+            },
+            "error": {
+              "$ref": "#/$defs/NullObject"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/JobBase"
+        }
+      ]
+    },
+    "JobStarted": {
+      "description": "Example of a State Started Job",
+      "allOf": [
+        {
+          "type": "object",
+          "required": [
+            "state",
+            "detailedState",
+            "progress",
+            "result",
+            "error"
+          ],
+          "properties": {
+            "state": {
+              "type": "string",
+              "enum": [
+                "started"
+              ]
+            },
+            "detailedState": {
+              "$ref": "#/$defs/DetailedState"
+            },
+            "progress": {
+              "$ref": "#/$defs/JobProgress"
+            },
+            "result": {
+              "$ref": "#/$defs/NullObject"
+            },
+            "error": {
+              "$ref": "#/$defs/NullObject"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/JobBase"
+        }
+      ]
+    },
+    "JobSuccess": {
+      "description": "Example of a State Success Job",
+      "allOf": [
+        {
+          "type": "object",
+          "required": [
+            "state",
+            "detailedState",
+            "progress",
+            "result",
+            "error"
+          ],
+          "properties": {
+            "state": {
+              "type": "string",
+              "enum": [
+                "success"
+              ]
+            },
+            "detailedState": {
+              "$ref": "#/$defs/DetailedState"
+            },
+            "progress": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 1
+            },
+            "result": {
+              "type": "object",
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/JobResultFiles"
+                },
+                {
+                  "$ref": "#/$defs/JobResultText"
+                },
+                {
+                  "$ref": "#/$defs/JobResultNull"
+                }
+              ]
+            },
+            "error": {
+              "$ref": "#/$defs/NullObject"
+            }
+          }
+        },
+        {
+          "$ref": "#/$defs/JobBase"
+        }
+      ]
+    },
+    "JobTypeId": {
+      "type": "string",
+      "description": "Concatenation of JobType namespace and a name which forms a unique ID. Type determines what kind of Job is run.\n",
+      "x-faker": {
+        "random.word": null
+      }
+    },
+    "NullObject": {
+      "description": "Null object",
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "NullableDateTimeBase": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/DateTimeBase"
+        }
+      ],
+      "nullable": true
+    },
+    "ResourceInfoExceptionDetail": {
+      "properties": {
+        "type": {
+          "description": "A string enum describing the type of detail object.",
+          "type": "string",
+          "enum": [
+            "resourceInfo"
+          ]
+        },
+        "resource": {
+          "description": "Referenced resource type, eg \"cameras\", \"bridges\", or \"locations\".",
+          "type": "string"
+        },
+        "ids": {
+          "type": "array",
+          "description": "Identities of resources",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "UserId": {
+      "type": "string",
+      "description": "User that the Job runs under and/or for.  In the case a regular user invokes the POST /jobs endpoint, this is their user ID.\n",
+      "x-faker": {
+        "helpers.arrayElement": [
+          [
+            "cafe0010"
+          ]
+        ]
+      }
+    }
+  }
+}

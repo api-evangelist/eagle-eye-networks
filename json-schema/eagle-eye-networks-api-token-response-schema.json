@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-api-token-response-schema.json",
+  "title": "ApiTokenResponse",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-resellers-account-switching-openapi.yml#/components/schemas/ApiTokenResponse",
+  "type": "object",
+  "properties": {
+    "accessToken": {
+      "type": "string",
+      "description": "An OAuth 2.0 access token that authorizes access to protected resources.\n"
+    },
+    "refreshToken": {
+      "type": "string",
+      "x-jsoninclude-nonnull-annotation": true,
+      "description": "An OAuth 2.0 refresh token that can be used to request a new access token without  requiring the user to reauthenticate. The refresh token may be issued when generating  tokens using an identity access token.\n"
+    },
+    "expireTimestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The time at which the token will expire, if it isn't revoked beforehand."
+    },
+    "scopes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "httpsBaseUrl": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ApiHttpsBaseUrl"
+        },
+        {
+          "description": "Represents base URL to use to do REST API calls over https. This includes the host and port information."
+        }
+      ]
+    }
+  },
+  "required": [
+    "accessToken",
+    "expireTimestamp",
+    "scopes",
+    "httpBaseUrl"
+  ],
+  "$defs": {
+    "ApiHttpsBaseUrl": {
+      "type": "object",
+      "description": "Represents base URL to use to do REST API calls over https. This includes the host and port information.\n",
+      "properties": {
+        "hostname": {
+          "type": "string",
+          "description": "Host to connect to do REST API calls\n"
+        },
+        "port": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "hostname",
+        "port"
+      ]
+    }
+  }
+}

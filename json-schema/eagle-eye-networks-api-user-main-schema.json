@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-api-user-main-schema.json",
+  "title": "ApiUserMain",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-user-accounts-openapi.yml#/components/schemas/ApiUserMain",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "createTimestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "firstName": {
+      "type": "string"
+    },
+    "lastName": {
+      "type": "string"
+    },
+    "email": {
+      "$ref": "#/$defs/Email"
+    },
+    "accountId": {
+      "type": "string"
+    },
+    "locationId": {
+      "$ref": "#/$defs/LocationId"
+    },
+    "language": {
+      "type": "string"
+    },
+    "employeeId": {
+      "$ref": "#/$defs/EmployeeId"
+    }
+  },
+  "required": [
+    "id",
+    "firstName",
+    "lastName",
+    "accountId",
+    "email",
+    "language",
+    "employeeId"
+  ],
+  "$defs": {
+    "Email": {
+      "type": "string",
+      "description": "This email is used for login.",
+      "format": "email"
+    },
+    "EmployeeId": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Custom text field",
+      "maxLength": 50
+    },
+    "LocationId": {
+      "description": "ID Of the location.",
+      "minLength": 1,
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

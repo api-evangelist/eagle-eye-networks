@@ -1,0 +1,1016 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/eagle-eye-networks/main/json-schema/eagle-eye-networks-lpr-alert-condition-rule-schema.json",
+  "title": "LprAlertConditionRule",
+  "description": "Encompasses all the user specified and system generated properties of a rule used to generate alerts.",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/eagle-eye-networks-vehicle-surveillance-package-openapi.yml#/components/schemas/LprAlertConditionRule",
+  "type": "object",
+  "allOf": [
+    {
+      "$ref": "#/$defs/LprAlertConditionRuleUntaggedForGet"
+    },
+    {
+      "type": "object",
+      "required": [
+        "id",
+        "createTimeStamp",
+        "updateTimeStamp",
+        "createdByUserId",
+        "outputAlertTypes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The system generated id of this rule resource",
+          "readOnly": true
+        },
+        "createTimeStamp": {
+          "type": "string",
+          "description": "Time at which the Alert Condition Rule was created.",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "updateTimeStamp": {
+          "type": "string",
+          "description": "Time at which the Alert Condition Rule was updated.",
+          "readOnly": true,
+          "format": "date-time"
+        },
+        "createdByUserId": {
+          "type": "string",
+          "description": "User id of the creator of the rule",
+          "readOnly": true
+        },
+        "outputAlertTypes": {
+          "type": "array",
+          "description": "Possible Alert Types that are producible by this rule. For a given event, what alert is produced depends on the configuration parameters of the rule and the event properties",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "ActorFilter": {
+      "type": "object",
+      "description": "Specifies the attributes of an actor, useful for passing as a filter",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The id of the thing that caused the event This can be camera or location ID. If not supplied for any entry in the array, it is taken to mean as the entire account."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "camera",
+            "location"
+          ],
+          "default": "camera",
+          "description": "Type of actor that caused the event."
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "EventFilter": {
+      "type": "object",
+      "description": "A list of attributes of the event used to funnel down a specific set of events for any downstream action. This filtering construct is as such independent of VSP and quite generic",
+      "properties": {
+        "eventTypes": {
+          "type": "array",
+          "description": "List of event types allowed to be processed by this rule",
+          "items": {
+            "type": "string"
+          }
+        },
+        "schedule": {
+          "$ref": "#/$defs/WeeklyIntervalScheduleAllRequired"
+        },
+        "resourceFilter": {
+          "$ref": "#/$defs/ResourceFilter"
+        }
+      }
+    },
+    "Interval": {
+      "type": "object",
+      "description": "Interval of a schedule. If the start time is greater than the end time, the interval is considered to cover the remaining time of the day from the start time until 24:00, and then from 00:00 to the end time. \nFor example, start: 16:30 and end: 06:00 on monday means the interval covers from 16:30 to 24:00 and continues from 00:00 to 06:00 on the same day (monday).\n",
+      "properties": {
+        "start": {
+          "type": "string",
+          "pattern": "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$",
+          "description": "Starting point of the interval. It should be in the range of 00:00 to 23:59 since this is the range for a day"
+        },
+        "end": {
+          "type": "string",
+          "pattern": "^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$",
+          "description": "End point of the interval. It should be in the range of 00:00 to 23:59 since this is the range for the day"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ]
+    },
+    "LprAlertConditionRuleAccessControl": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprAlertConditionRuleBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Rules of type `lprRuleAccessControlAllow` and `lprRuleAccessControlDeny` create an alert when vehicles are seen whose access type is `allow` or `deny` respectively.",
+              "enum": [
+                "lprRuleAccessControlAllow",
+                "lprRuleAccessControlDeny"
+              ]
+            },
+            "configuration": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/LprRuleCfgAccessControlByPlate"
+                },
+                {
+                  "$ref": "#/$defs/LprRuleCfgAccessControlByList"
+                },
+                {
+                  "$ref": "#/$defs/LprRuleCfgAccessControlByAnyPlateExcept"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "LprAlertConditionRuleAccessControlForPost": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprAlertConditionRuleAccessControl"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "eventFilter": {
+              "$ref": "#/$defs/EventFilter"
+            }
+          },
+          "required": [
+            "name",
+            "type",
+            "configuration"
+          ]
+        }
+      ]
+    },
+    "LprAlertConditionRuleBase": {
+      "type": "object",
+      "description": "Encompasses all the user specified properties of a rule used to generate alerts.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Meaningful name for the rule"
+        },
+        "priority": {
+          "$ref": "#/$defs/Priority"
+        },
+        "notes": {
+          "type": "string",
+          "description": "A verbose explanation of the rule"
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether rule is enabled"
+        },
+        "configuration": {
+          "type": "object"
+        }
+      }
+    },
+    "LprAlertConditionRuleEventAggr": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprAlertConditionRuleBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Rule of type `lprRuleCountAggr` sets up aggregation for camera or location and fires an alert if the aggregation (detection count) in a specified time interval falls above or below threshold.",
+              "enum": [
+                "lprRuleCountAggr"
+              ]
+            },
+            "configuration": {
+              "type": "object",
+              "description": "Configuration Parameters pertaining to Event Aggregation Rule. This rule checks for the count vehicle events in a window of specified size, for any camera under the purview of this rule. It fires on this count being either above or below this threshold, as specified by the configuration parameters. In other words, the rule can be used for checking either too many or too few events in a given time window.",
+              "properties": {
+                "windowSize": {
+                  "type": "string",
+                  "description": "Window size of event aggregation. For example, if set to 1h, then the rule is applied on every sliding window of duration 1 hour."
+                },
+                "countThr": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "Count of vehicle threshold for alert"
+                },
+                "greaterThanThr": {
+                  "type": "boolean",
+                  "description": "If true, alert fires on count > threshold, else it fires on below thr"
+                }
+              },
+              "required": [
+                "windowSize",
+                "countThr",
+                "greaterThanThr"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "LprAlertConditionRuleEventAggrForPost": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprAlertConditionRuleEventAggr"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "eventFilter": {
+              "$ref": "#/$defs/EventFilter"
+            }
+          },
+          "required": [
+            "name",
+            "type",
+            "configuration"
+          ]
+        }
+      ]
+    },
+    "LprAlertConditionRuleHotlist": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprAlertConditionRuleBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "A rule of type `lprRuleHotlist` triggers an alert when either:\n 1. A specific license plate is detected.\n 2. A license plate from a vehicle list is detected.\n",
+              "enum": [
+                "lprRuleHotlist"
+              ]
+            },
+            "configuration": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/LprRuleCfgHotlistByPlate"
+                },
+                {
+                  "$ref": "#/$defs/LprRuleCfgHotlistByList"
+                },
+                {
+                  "$ref": "#/$defs/LprRuleCfgHotlistByAnyPlateExcept"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "LprAlertConditionRuleHotlistForPost": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprAlertConditionRuleHotlist"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "eventFilter": {
+              "$ref": "#/$defs/EventFilter"
+            }
+          },
+          "required": [
+            "name",
+            "type",
+            "configuration"
+          ]
+        }
+      ]
+    },
+    "LprAlertConditionRuleOverstay": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprAlertConditionRuleBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "A rule of type `lprRuleOverstay` triggers an alert when a vehicle that was seen entering has not exited by the next occurrence of a configured daily clock time (`alertTime`). For example, with `alertTime` set to `02:00`: a car entering at 11 PM will have its alert scheduled for 2 AM the following morning and the alert will fire at that time if the car has not exited by then.",
+              "enum": [
+                "lprRuleOverstay"
+              ]
+            },
+            "configuration": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/LprRuleCfgOverstayByPlate"
+                },
+                {
+                  "$ref": "#/$defs/LprRuleCfgOverstayByList"
+                },
+                {
+                  "$ref": "#/$defs/LprRuleCfgOverstayByAnyPlateExcept"
+                },
+                {
+                  "$ref": "#/$defs/LprRuleCfgOverstayByAllPlates"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "LprAlertConditionRuleOverstayForPost": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprAlertConditionRuleOverstay"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "eventFilter": {
+              "$ref": "#/$defs/EventFilter"
+            }
+          },
+          "required": [
+            "name",
+            "type",
+            "configuration"
+          ]
+        }
+      ]
+    },
+    "LprAlertConditionRuleUnlisted": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprAlertConditionRuleBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "A rule of type `lprRuleUnlisted` triggers an alert when a license plate is detected that does not appear in the configured vehicle list.",
+              "enum": [
+                "lprRuleUnlisted"
+              ]
+            },
+            "configuration": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/LprRuleCfgUnlistedByList"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "LprAlertConditionRuleUnlistedForPost": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprAlertConditionRuleUnlisted"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "eventFilter": {
+              "$ref": "#/$defs/EventFilter"
+            }
+          },
+          "required": [
+            "name",
+            "type",
+            "configuration"
+          ]
+        }
+      ]
+    },
+    "LprAlertConditionRuleUntaggedForGet": {
+      "allOf": [
+        {
+          "type": "object",
+          "description": "Encompasses all the user specified properties of a rule used to generate alerts.",
+          "required": [
+            "type",
+            "name",
+            "configuration"
+          ],
+          "oneOf": [
+            {
+              "$ref": "#/$defs/LprAlertConditionRuleAccessControlForPost"
+            },
+            {
+              "$ref": "#/$defs/LprAlertConditionRuleEventAggrForPost"
+            },
+            {
+              "$ref": "#/$defs/LprAlertConditionRuleWatchForPost"
+            },
+            {
+              "$ref": "#/$defs/LprAlertConditionRuleHotlistForPost"
+            },
+            {
+              "$ref": "#/$defs/LprAlertConditionRuleUnlistedForPost"
+            },
+            {
+              "$ref": "#/$defs/LprAlertConditionRuleWrongDirectionForPost"
+            },
+            {
+              "$ref": "#/$defs/LprAlertConditionRuleOverstayForPost"
+            }
+          ]
+        }
+      ]
+    },
+    "LprAlertConditionRuleWatch": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprAlertConditionRuleBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "Rule of type `lprRuleWatch` raises an alert if a vehicle is seen once and is not seen again within the specified time interval.",
+              "enum": [
+                "lprRuleWatch"
+              ]
+            },
+            "configuration": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/LprRuleCfgWatchByPlate"
+                },
+                {
+                  "$ref": "#/$defs/LprRuleCfgWatchByList"
+                },
+                {
+                  "$ref": "#/$defs/LprRuleCfgWatchByAnyPlateExcept"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "LprAlertConditionRuleWatchForPost": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprAlertConditionRuleWatch"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "eventFilter": {
+              "$ref": "#/$defs/EventFilter"
+            }
+          },
+          "required": [
+            "name",
+            "type",
+            "configuration"
+          ]
+        }
+      ]
+    },
+    "LprAlertConditionRuleWrongDirection": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprAlertConditionRuleBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "description": "A rule of type `lprRuleWrongDirection` triggers an alert when a vehicle is detected traveling in the wrong direction.",
+              "enum": [
+                "lprRuleWrongDirection"
+              ]
+            },
+            "configuration": {
+              "type": "object",
+              "properties": {
+                "filterType": {
+                  "type": "string",
+                  "enum": [
+                    "allPlates"
+                  ]
+                }
+              },
+              "required": [
+                "filterType"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "LprAlertConditionRuleWrongDirectionForPost": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprAlertConditionRuleWrongDirection"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "eventFilter": {
+              "$ref": "#/$defs/EventFilter"
+            }
+          },
+          "required": [
+            "name",
+            "type",
+            "configuration"
+          ]
+        }
+      ]
+    },
+    "LprRuleCfgAccessControlBase": {
+      "type": "object",
+      "description": "Configuration parameters for access control Rule Behavior",
+      "properties": {
+        "barrierOpen": {
+          "type": "boolean",
+          "description": "A flag that indicates whether to open boom barrier / vending gate, if any associated. This rule property may be interpreted by any LPR algorithm that runs for the cameras/locations/account to which this rule applies."
+        },
+        "filterType": {
+          "type": "string",
+          "description": "Enumerates available filter types. The brief synopsis of the filters is as follows:\n  * plate: rule is applied to one or more plate(s)\n  * vehicleList: rule is applied to one or more vehicle list(s)\n  * anyPlateExcept: rule to be applied to all plates, except ones which are exempted in the optionally provided vehicle list",
+          "enum": [
+            "plate",
+            "vehicleList",
+            "anyPlateExcept"
+          ]
+        }
+      },
+      "required": [
+        "filterType",
+        "barrierOpen"
+      ]
+    },
+    "LprRuleCfgAccessControlByAnyPlateExcept": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprRuleCfgAccessControlBase"
+        },
+        {
+          "$ref": "#/$defs/RuleMapAnyPlateExcept"
+        }
+      ]
+    },
+    "LprRuleCfgAccessControlByList": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprRuleCfgAccessControlBase"
+        },
+        {
+          "$ref": "#/$defs/RuleMapList"
+        }
+      ]
+    },
+    "LprRuleCfgAccessControlByPlate": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprRuleCfgAccessControlBase"
+        },
+        {
+          "$ref": "#/$defs/RuleMapPlate"
+        }
+      ]
+    },
+    "LprRuleCfgHotlistBase": {
+      "type": "object",
+      "description": "Configuration parameters for the Vehicle hotlist rule",
+      "properties": {
+        "filterType": {
+          "type": "string",
+          "description": "Enumerates available filter types. The brief synopsis of the maps as follows:\n  * plate: rule should be applied to one or more plate(s)\n  * vehicleList: rule to be applied to one or more vehicle list(s)\n  * anyPlateExcept: rule to be applied to all plates, except ones which are exempted in the optionally provided vehicle list  ",
+          "enum": [
+            "plate",
+            "vehicleList",
+            "anyPlateExcept"
+          ]
+        }
+      },
+      "required": [
+        "filterType"
+      ]
+    },
+    "LprRuleCfgHotlistByAnyPlateExcept": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprRuleCfgHotlistBase"
+        },
+        {
+          "$ref": "#/$defs/RuleMapAnyPlateExcept"
+        }
+      ]
+    },
+    "LprRuleCfgHotlistByList": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprRuleCfgHotlistBase"
+        },
+        {
+          "$ref": "#/$defs/RuleMapList"
+        }
+      ]
+    },
+    "LprRuleCfgHotlistByPlate": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprRuleCfgHotlistBase"
+        },
+        {
+          "$ref": "#/$defs/RuleMapPlate"
+        }
+      ]
+    },
+    "LprRuleCfgOverstayBase": {
+      "type": "object",
+      "description": "Configuration parameters for the Overstay rule",
+      "properties": {
+        "alertTime": {
+          "type": "string",
+          "description": "Daily clock time in 24-hour \"HH:MM\" format. When a vehicle entry is detected, an alert is scheduled for the next occurrence of this time. If the vehicle has not exited by then, the alert fires. \n"
+        },
+        "filterType": {
+          "type": "string",
+          "description": "Enumerates available filter types:\n  * plate: rule should be applied to a specific plate\n  * vehicleList: rule to be applied to a specific vehicle list\n  * anyPlateExcept: rule to be applied to all plates, except ones exempted in the provided vehicle list\n  * allPlates: rule to be applied to all plates",
+          "enum": [
+            "plate",
+            "vehicleList",
+            "anyPlateExcept",
+            "allPlates"
+          ]
+        }
+      },
+      "required": [
+        "alertTime",
+        "filterType"
+      ]
+    },
+    "LprRuleCfgOverstayByAllPlates": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprRuleCfgOverstayBase"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "filterType": {
+              "type": "string",
+              "enum": [
+                "allPlates"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "LprRuleCfgOverstayByAnyPlateExcept": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprRuleCfgOverstayBase"
+        },
+        {
+          "$ref": "#/$defs/RuleMapAnyPlateExcept"
+        }
+      ]
+    },
+    "LprRuleCfgOverstayByList": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprRuleCfgOverstayBase"
+        },
+        {
+          "$ref": "#/$defs/RuleMapList"
+        }
+      ]
+    },
+    "LprRuleCfgOverstayByPlate": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprRuleCfgOverstayBase"
+        },
+        {
+          "$ref": "#/$defs/RuleMapPlate"
+        }
+      ]
+    },
+    "LprRuleCfgUnlistedBase": {
+      "type": "object",
+      "description": "Configuration parameters for the Unlisted vehicle rule",
+      "properties": {
+        "filterType": {
+          "type": "string",
+          "description": "Specify the filter type for the rule, currently only vehicleList is supported:\n  * vehicleList: rule to be applied to one or more vehicle list(s)",
+          "enum": [
+            "vehicleList"
+          ]
+        }
+      },
+      "required": [
+        "filterType"
+      ]
+    },
+    "LprRuleCfgUnlistedByList": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprRuleCfgUnlistedBase"
+        },
+        {
+          "$ref": "#/$defs/RuleMapList"
+        }
+      ]
+    },
+    "LprRuleCfgWatchBase": {
+      "type": "object",
+      "description": "Configuration parameters for the Vehicle Watch rule",
+      "properties": {
+        "durationThresh": {
+          "type": "string",
+          "description": "Time threshold within which the same vehicle (same license plate) must be seen again.\nAcceptable range: between 5 minutes (5m) and 24 hours (24h).\n"
+        },
+        "originActors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "Specifies the attributes of an actor from where the first occurrence of the vehicle should happen for the rule to initiate. The below actors should be part of resource filter defined for the rule and should not be part of destinationActors.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The id of the thing that caused the event This can be camera or location ID."
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "camera",
+                  "location"
+                ],
+                "default": "camera",
+                "description": "Type of actor that caused the event."
+              }
+            },
+            "required": [
+              "type"
+            ]
+          }
+        },
+        "destinationActors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "Specifies the attributes of an actor from where the second occurrence of the vehicle should happen to affect the rule. The below actors should be part of resource filter defined for the rule and should not be part of originActors.",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The id of the thing that caused the event This can be camera or location ID."
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "camera",
+                  "location"
+                ],
+                "default": "camera",
+                "description": "Type of actor that caused the event."
+              }
+            },
+            "required": [
+              "type"
+            ]
+          }
+        },
+        "filterType": {
+          "type": "string",
+          "description": "Enumerates available filter types. The brief synopsis of the maps as follows:\n  * plate: rule should be applied to one or more plate(s)\n  * vehicleList: rule to be applied to one or more vehicle list(s)\n  * anyPlateExcept: rule to be applied to all plates, except ones which are exempted in the optionally provided vehicle list",
+          "enum": [
+            "plate",
+            "vehicleList",
+            "anyPlateExcept"
+          ]
+        }
+      },
+      "required": [
+        "originActors",
+        "destinationActors",
+        "durationThresh",
+        "filterType"
+      ]
+    },
+    "LprRuleCfgWatchByAnyPlateExcept": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprRuleCfgWatchBase"
+        },
+        {
+          "$ref": "#/$defs/RuleMapAnyPlateExcept"
+        }
+      ]
+    },
+    "LprRuleCfgWatchByList": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprRuleCfgWatchBase"
+        },
+        {
+          "$ref": "#/$defs/RuleMapList"
+        }
+      ]
+    },
+    "LprRuleCfgWatchByPlate": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/LprRuleCfgWatchBase"
+        },
+        {
+          "$ref": "#/$defs/RuleMapPlate"
+        }
+      ]
+    },
+    "Priority": {
+      "type": "integer",
+      "description": "Defines the priority of the alert",
+      "format": "int32",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "ResourceFilter": {
+      "type": "object",
+      "description": "List of actors against which filtering to happen (camera/location/account)",
+      "properties": {
+        "actors": {
+          "type": "array",
+          "description": "List of the actors for which events are checked.",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/ActorFilter"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "RuleMapAnyPlateExcept": {
+      "type": "object",
+      "required": [
+        "exemptionVehicleListIds"
+      ],
+      "properties": {
+        "filterType": {
+          "type": "string",
+          "enum": [
+            "anyPlateExcept"
+          ]
+        },
+        "exemptionVehicleListIds": {
+          "type": "array",
+          "maxItems": 1,
+          "description": "Enumerates the IDs of all Vehicle Lists that are used for exemption of vehicles from the rule.\n",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "RuleMapList": {
+      "type": "object",
+      "properties": {
+        "filterType": {
+          "type": "string",
+          "enum": [
+            "vehicleList"
+          ]
+        },
+        "vehicleListIds": {
+          "type": "array",
+          "maxItems": 1,
+          "description": "Enumerates the IDs of all Vehicle Lists that are under the purview of this rule.\n",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "vehicleListIds"
+      ]
+    },
+    "RuleMapPlate": {
+      "type": "object",
+      "properties": {
+        "filterType": {
+          "type": "string",
+          "enum": [
+            "plate"
+          ]
+        },
+        "plates": {
+          "type": "array",
+          "maxItems": 1,
+          "description": "Specific license plates on which the rule fires. This can be used to map specific plates to a rule, without the need to add them to a vehicle list.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "plates"
+      ]
+    },
+    "WeeklyIntervalSchedule": {
+      "type": "object",
+      "description": "It signifies a week long alert schedule. This schedule is effective according to actor's (user/camera/account) timezone. It allows setting different times for different days.\n",
+      "properties": {
+        "sunday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "monday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "tuesday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "wednesday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "thursday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "friday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "saturday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        }
+      }
+    },
+    "WeeklyIntervalScheduleAllRequired": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/WeeklyIntervalSchedule"
+        },
+        {
+          "type": "object",
+          "required": [
+            "sunday",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday"
+          ]
+        }
+      ]
+    }
+  }
+}
