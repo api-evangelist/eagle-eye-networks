@@ -1,0 +1,284 @@
+openapi: 3.2.0
+info:
+  title: ACCOUNT SETTINGS Client Settings API
+  version: 3.0.0
+  description: Settings required to let a client successfully use the API.
+servers:
+- url: https://{BaseUrl}/api/v3.0
+  description: Eagle Eye Networks API Server
+  variables:
+    BaseUrl:
+      default: api.cxxx.eagleeyenetworks.com
+      description: HTTPS Base url to use for all API calls, retrieved from https://api.eagleeyenetworks.com/api/v3.0/clientSettings
+security:
+- bearerAuth: []
+tags:
+- name: Client Settings
+  description: Settings required to let a client successfully use the API.
+paths:
+  /clientSettings:
+    get:
+      operationId: getClientSettings
+      description: Retrieves settings required to let the client successfully use the API.
+      tags:
+      - Client Settings
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiClientSettings'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: Get client settings
+      x-summary-source: derived
+components:
+  schemas:
+    ErrorInfoExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - errorInfo
+        reason:
+          description: 'The reason for the error. This is a constant value that identifies the proximate cause of the
+
+            error. Error reasons are unique within a particular domain of errors.
+
+            '
+          type: string
+          enum:
+          - unauthenticated
+          - unexpectedArgument
+          - missingRequiredArgument
+          - wrongArgumentValue
+          - invalidPermission
+          - wrongEdition
+          - wrongAccountType
+          - resourceNotFound
+          - endpointNotFound
+          - methodNotSupported
+          - unexpectedError
+          - acceptNotSupported
+          - alreadyExists
+          - foreignKeyConflict
+          - childDevicesExist
+          - contentNotSupported
+          - deadlineExpired
+          - tooManyRequests
+          - deviceUnavailable
+          - serviceUnavailable
+          - invalidJSON
+          - resourceLocked
+          - notSupportedOnBridge
+          - outOfRetention
+          - deviceIdentificationFailed
+          - credentialValidationFailed
+          - credentialSetupFailed
+          - localUrlValidationFailed
+          - hwRegistrationFailed
+          - failedAddingCameraAfterValidation
+          - neverConnected
+          - reconnectFailed
+          - unsupportedModel
+          - purged
+          - userBlocked
+          - userTemporarilyBlocked
+          - quotaExceeded
+          - alreadyValidated
+          - reAuthenticationRequired
+          - badGateway
+        domain:
+          description: 'Logical grouping to which the "reason" belongs
+
+            '
+          type: string
+        metadata:
+          $ref: '#/components/schemas/ExceptionMetadata'
+    ExceptionMetadata:
+      properties:
+        path:
+          description: Path of the request
+          type: string
+        method:
+          description: Method of the request
+          type: string
+    ApiV3Error:
+      type: object
+      properties:
+        code:
+          description: HTTP code defined in EEN Standard Code Values
+          type: integer
+        status:
+          description: A string enum describing the code
+          type: string
+          enum:
+          - cancelled
+          - unknown
+          - invalidArgument
+          - deadlineExceeded
+          - notFound
+          - conflict
+          - permissionDenied
+          - resourceExhausted
+          - failedPrecondition
+          - aborted
+          - outOfRange
+          - unimplemented
+          - internal
+          - unavailable
+          - dataLoss
+          - unauthenticated
+          - mediaTypeNotSupported
+          - acceptNotSupported
+          - methodNotSupported
+          - tooManyRequests
+          - badGateway
+        message:
+          description: Developer friendly human readable error message in English
+          type: string
+        details:
+          description: An array of extensible objects that define error information
+          type: array
+          items:
+            $ref: '#/components/schemas/ExceptionDetail'
+      required:
+      - code
+      - status
+      - message
+      - details
+    ResourceInfoExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - resourceInfo
+        resource:
+          description: Referenced resource type, eg "cameras", "bridges", or "locations".
+          type: string
+        ids:
+          type: array
+          description: Identities of resources
+          items:
+            type: string
+    ExceptionDetail:
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/ErrorInfoExceptionDetail'
+      - $ref: '#/components/schemas/BadRequestExceptionDetail'
+      - $ref: '#/components/schemas/ResourceInfoExceptionDetail'
+      discriminator:
+        propertyName: type
+        mapping:
+          errorInfo: '#/components/schemas/ErrorInfoExceptionDetail'
+          badRequest: '#/components/schemas/BadRequestExceptionDetail'
+          resourceInfo: '#/components/schemas/ResourceInfoExceptionDetail'
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - errorInfo
+          - badRequest
+          - resourceInfo
+      required:
+      - type
+    BadRequestExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - badRequest
+        argumentViolations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArgumentViolation'
+    ApiClientSettings:
+      type: object
+      properties:
+        httpsBaseUrl:
+          $ref: '#/components/schemas/ApiHttpsBaseUrl'
+    ApiHttpsBaseUrl:
+      type: object
+      description: 'Represents base URL to use to do REST API calls over https. This includes the host and port information.
+
+        '
+      properties:
+        hostname:
+          type: string
+          description: 'Host to connect to do REST API calls
+
+            '
+          example: api.c000.eagleeyenetworks.com
+        port:
+          type: integer
+          example: 443
+      required:
+      - hostname
+      - port
+    ArgumentViolation:
+      properties:
+        argumentName:
+          type: string
+          description: Name of the argument
+        description:
+          type: string
+          description: Description of the violation
+  responses:
+    internalServerError:
+      description: Something went wrong in the server. Please try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          example:
+            code: 500
+            status: internal
+            message: An internal error has occurred. Please try again later.
+            details:
+            - type: errorInfo
+              reason: unexpectedError
+              domain: apiv3
+              metadata:
+                path: /api/v3.0/<resource>
+    unauthorized:
+      description: You are not authenticated. Please authenticate and try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          example:
+            code: 401
+            status: unauthenticated
+            message: The client caller does not have a valid authentication credential
+            details:
+            - type: errorInfo
+              reason: unauthenticated
+              domain: apiv3
+              metadata:
+                path: /api/v3.0/<resource>
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-provenance:
+  method: searched
+  source: https://developer.eagleeyenetworks.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.eagleeyenetworks.com/reference/getauthsettings.md
+  - https://developer.eagleeyenetworks.com/reference/getclientsettings.md
+  - https://developer.eagleeyenetworks.com/reference/updateauthsettings.md
+  merge:
+    pages: 3
+    deduped: 35
+    conflicts_kept_first: 0

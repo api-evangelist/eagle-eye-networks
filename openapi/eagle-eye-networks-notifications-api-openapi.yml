@@ -1,0 +1,756 @@
+openapi: 3.2.0
+info:
+  title: EVENTS Notifications API
+  version: 3.0.0
+  description: Notifications
+servers:
+- url: https://{BaseUrl}/api/v3.0
+  description: Eagle Eye Networks API Server
+  variables:
+    BaseUrl:
+      default: api.cxxx.eagleeyenetworks.com
+      description: HTTPS Base url to use for all API calls, retrieved from https://api.eagleeyenetworks.com/api/v3.0/clientSettings
+security:
+- bearerAuth: []
+tags:
+- name: Notifications
+  description: Notifications
+paths:
+  /notifications:
+    get:
+      tags:
+      - Notifications
+      operationId: listNotifications
+      description: Search and sort notifications by alertId, alertType, actorId, actorType, actorAccountId, category, and read. V1 notifications can be requested with includeV1Notifications.
+      parameters:
+      - $ref: '#/components/parameters/acceptLanguage1'
+      - $ref: '#/components/parameters/language'
+      - $ref: '#/components/parameters/timestamp__lte2'
+      - $ref: '#/components/parameters/timestamp__gte2'
+      - $ref: '#/components/parameters/alertId'
+      - $ref: '#/components/parameters/alertType'
+      - $ref: '#/components/parameters/actorId'
+      - $ref: '#/components/parameters/actorType'
+      - $ref: '#/components/parameters/actorAccountId'
+      - $ref: '#/components/parameters/category'
+      - $ref: '#/components/parameters/userId'
+      - $ref: '#/components/parameters/read'
+      - $ref: '#/components/parameters/status'
+      - $ref: '#/components/parameters/includeV1Notifications'
+      - $ref: '#/components/parameters/sort2'
+      - $ref: '#/components/parameters/pageToken'
+      - $ref: '#/components/parameters/pageSizeCassandra'
+      responses:
+        '200':
+          description: Notification results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notifications'
+        '400':
+          $ref: '#/components/responses/validationError'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: List notifications
+      x-summary-source: derived
+  /notifications/{id}:
+    get:
+      tags:
+      - Notifications
+      operationId: getNotification
+      description: Get a notification
+      parameters:
+      - $ref: '#/components/parameters/id1'
+      responses:
+        '200':
+          description: Notification result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+        '400':
+          $ref: '#/components/responses/validationError'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/resourceNotFound'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: Get notification
+      x-summary-source: derived
+    patch:
+      tags:
+      - Notifications
+      operationId: updateNotification
+      description: Update if a notification is read
+      parameters:
+      - $ref: '#/components/parameters/id1'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNotification'
+        description: Update if a notification is read
+      responses:
+        '204':
+          description: The notification has been successfully updated.
+        '400':
+          $ref: '#/components/responses/validationError'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/resourceNotFound'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: Update notification
+      x-summary-source: derived
+components:
+  schemas:
+    ErrorInfoExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - errorInfo
+        reason:
+          description: 'The reason for the error. This is a constant value that identifies the proximate cause of the
+
+            error. Error reasons are unique within a particular domain of errors.
+
+            '
+          type: string
+          enum:
+          - unauthenticated
+          - unexpectedArgument
+          - missingRequiredArgument
+          - wrongArgumentValue
+          - invalidPermission
+          - wrongEdition
+          - wrongAccountType
+          - resourceNotFound
+          - endpointNotFound
+          - methodNotSupported
+          - unexpectedError
+          - acceptNotSupported
+          - alreadyExists
+          - foreignKeyConflict
+          - childDevicesExist
+          - contentNotSupported
+          - deadlineExpired
+          - tooManyRequests
+          - deviceUnavailable
+          - serviceUnavailable
+          - invalidJSON
+          - resourceLocked
+          - notSupportedOnBridge
+          - outOfRetention
+          - deviceIdentificationFailed
+          - credentialValidationFailed
+          - credentialSetupFailed
+          - localUrlValidationFailed
+          - hwRegistrationFailed
+          - failedAddingCameraAfterValidation
+          - neverConnected
+          - reconnectFailed
+          - unsupportedModel
+          - purged
+          - userBlocked
+          - userTemporarilyBlocked
+          - quotaExceeded
+          - alreadyValidated
+          - reAuthenticationRequired
+          - badGateway
+        domain:
+          description: 'Logical grouping to which the "reason" belongs
+
+            '
+          type: string
+        metadata:
+          $ref: '#/components/schemas/ExceptionMetadata'
+    ExceptionDetail:
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/ErrorInfoExceptionDetail'
+      - $ref: '#/components/schemas/BadRequestExceptionDetail'
+      - $ref: '#/components/schemas/ResourceInfoExceptionDetail'
+      discriminator:
+        propertyName: type
+        mapping:
+          errorInfo: '#/components/schemas/ErrorInfoExceptionDetail'
+          badRequest: '#/components/schemas/BadRequestExceptionDetail'
+          resourceInfo: '#/components/schemas/ResourceInfoExceptionDetail'
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - errorInfo
+          - badRequest
+          - resourceInfo
+      required:
+      - type
+    userId:
+      type: string
+      example: ca0de584
+    alertId:
+      type:
+      - string
+      - 'null'
+      format: uuid
+      example: 16cf0993-9705-406f-a17b-92fbe6836247
+    category1:
+      type: string
+      enum:
+      - health
+      - video
+      - operational
+      - audit
+      - job
+      - security
+      - sharing
+    Notifications:
+      allOf:
+      - $ref: '#/components/schemas/PaginatedResponseNoTotalSize'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/components/schemas/Notification'
+    ApiV3Error:
+      type: object
+      properties:
+        code:
+          description: HTTP code defined in EEN Standard Code Values
+          type: integer
+        status:
+          description: A string enum describing the code
+          type: string
+          enum:
+          - cancelled
+          - unknown
+          - invalidArgument
+          - deadlineExceeded
+          - notFound
+          - conflict
+          - permissionDenied
+          - resourceExhausted
+          - failedPrecondition
+          - aborted
+          - outOfRange
+          - unimplemented
+          - internal
+          - unavailable
+          - dataLoss
+          - unauthenticated
+          - mediaTypeNotSupported
+          - acceptNotSupported
+          - methodNotSupported
+          - tooManyRequests
+          - badGateway
+        message:
+          description: Developer friendly human readable error message in English
+          type: string
+        details:
+          description: An array of extensible objects that define error information
+          type: array
+          items:
+            $ref: '#/components/schemas/ExceptionDetail'
+      required:
+      - code
+      - status
+      - message
+      - details
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        timestamp:
+          type: string
+          format: date-time
+          example: '2021-04-22T00:00:00.000+00:00'
+        createTimestamp:
+          type: string
+          format: date-time
+          example: '2021-04-22T00:00:00.000+00:00'
+        sentTimestamp:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2021-04-22T00:00:00.000+00:00'
+        alertId:
+          $ref: '#/components/schemas/alertId'
+        alertType:
+          type: string
+          example: lineCrossing
+        actorId:
+          type: string
+          example: d22d1939-2e14-434b-8185-d324be6cf363
+        actorName:
+          type: string
+          example: Front Door
+        actorType:
+          type: string
+          example: device
+        actorAccountId:
+          type: string
+          example: '00011557'
+        userId:
+          $ref: '#/components/schemas/userId'
+        accountId:
+          $ref: '#/components/schemas/accountId'
+        read:
+          type: boolean
+        status:
+          type: string
+          example: sent
+          enum:
+          - pending
+          - sent
+          - outsideUsersSchedule
+          - notificationsDisabled
+          - noNotificationActions
+          - sendingFailed
+          - throttled
+          - unableToGetSettings
+        category:
+          $ref: '#/components/schemas/category1'
+        description:
+          type: string
+          example: Line crossing detected on "Front Door"
+        notificationActions:
+          type: array
+          items:
+            type: string
+          default: []
+          example:
+          - email
+          - push
+          - webapp
+          - gui
+          - sms
+        dataSchemas:
+          type: array
+          items:
+            type: string
+          default: []
+        data:
+          type: object
+          default: {}
+    BadRequestExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - badRequest
+        argumentViolations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArgumentViolation'
+    language:
+      description: Source data set is api/v3.0/languages
+      type: string
+      example: en-US
+    PaginatedResponseNoTotalSize:
+      type: object
+      description: 'Used to wrap results for a paginated response, containing information on how to retrieve further pages.
+
+        '
+      properties:
+        nextPageToken:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: 'Token to retrieve the next page. The value of this token is passed into the field pageToken. This value can be null if there is no next page.
+
+            '
+        prevPageToken:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: 'Token to retrieve the previous page. The value of this token is passed into the field pageToken. This value can be null of there is no previous page.
+
+            '
+        results:
+          type: array
+          readOnly: true
+          description: The result set from a collection API call.
+          items:
+            type: object
+      required:
+      - nextPageToken
+      - prevPageToken
+      - results
+    ResourceInfoExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - resourceInfo
+        resource:
+          description: Referenced resource type, eg "cameras", "bridges", or "locations".
+          type: string
+        ids:
+          type: array
+          description: Identities of resources
+          items:
+            type: string
+    accountId:
+      type: string
+      example: '00011557'
+    ArgumentViolation:
+      properties:
+        argumentName:
+          type: string
+          description: Name of the argument
+        description:
+          type: string
+          description: Description of the violation
+    ExceptionMetadata:
+      properties:
+        path:
+          description: Path of the request
+          type: string
+        method:
+          description: Method of the request
+          type: string
+    UpdateNotification:
+      type: object
+      properties:
+        read:
+          type: boolean
+          example: true
+  parameters:
+    timestamp__gte2:
+      in: query
+      name: timestamp__gte
+      description: Filter by timestamp__gte
+      required: false
+      schema:
+        type: string
+        format: date-time
+    status:
+      in: query
+      name: status
+      description: Filter by status
+      required: false
+      schema:
+        type: string
+        enum:
+        - pending
+        - bounced
+        - dropped
+        - deferred
+        - delivered
+        - sent
+        - outsideUsersSchedule
+        - notificationsDisabled
+        - noNotificationActions
+        - sendingFailed
+        - throttled
+        - unableToGetSettings
+    language:
+      description: Language query overrides Accept-Language header
+      in: query
+      name: language
+      required: false
+      schema:
+        $ref: '#/components/schemas/language'
+    actorType:
+      in: query
+      name: actorType
+      description: Filter by actorType
+      required: false
+      schema:
+        type: string
+    actorAccountId:
+      in: query
+      name: actorAccountId
+      description: Filter by actorAccountId
+      required: false
+      schema:
+        type: string
+    timestamp__lte2:
+      in: query
+      name: timestamp__lte
+      description: Filter by timestamp__lte
+      required: false
+      schema:
+        type: string
+        format: date-time
+    alertId:
+      in: query
+      name: alertId
+      description: Filter by alertId
+      required: false
+      schema:
+        $ref: '#/components/schemas/alertId'
+    id1:
+      in: path
+      name: id
+      description: Notification id
+      required: true
+      schema:
+        type: string
+      example: 4109d54b-4e62-41a4-92fa-cac6c1ff0183
+    alertType:
+      in: query
+      name: alertType
+      description: Filter by alertType
+      required: false
+      schema:
+        type: string
+    includeV1Notifications:
+      in: query
+      name: includeV1Notifications
+      description: When set to true, includes v1 notifications in the response along with current notifications.
+      required: false
+      schema:
+        type: boolean
+      example: true
+    read:
+      in: query
+      name: read
+      description: Filter by read
+      required: false
+      schema:
+        type: boolean
+    pageSizeCassandra:
+      in: query
+      name: pageSize
+      description: 'The number of entries to return per page for cassandra. The maximum range of valid page sizes is documented with minimum and  maximum values, but the range might be further limited dynamically based on the requested information, account, and system status. Values outside of the (dynamic) allowed range will not result in an error, but will be clamped to the nearest limit. Thus, logic to detect the last page should not be based on comparing the requested size with the received size, but on the existence of a `nextPageToken` value.
+
+        '
+      example: 100
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 100
+    category:
+      in: query
+      name: category
+      description: Filter by category
+      required: false
+      schema:
+        $ref: '#/components/schemas/category1'
+      example: audit
+    sort2:
+      in: query
+      name: sort
+      description: Sort by timestamp
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - +timestamp
+          - -timestamp
+        default:
+        - -timestamp
+      example:
+      - +timestamp
+    acceptLanguage1:
+      in: header
+      name: Accept-Language
+      required: false
+      schema:
+        $ref: '#/components/schemas/language'
+    actorId:
+      in: query
+      name: actorId
+      description: Filter by actorId
+      required: false
+      schema:
+        type: string
+    userId:
+      in: query
+      name: userId
+      description: Filter by userId
+      required: false
+      schema:
+        $ref: '#/components/schemas/userId'
+    pageToken:
+      in: query
+      name: pageToken
+      description: 'Token string value that references a page for pagination. This value is received when retrieving the first page in the `nextPageToken` and `prevPageToken` fields.
+
+        When a pageToken is provided, the backend remembers search parameters from the original request, so search  parameters that affect the result set or order are optional and will be ignored if provided. Representation  parameters like `include` should still be applied.
+
+        '
+      example: b2Zmc2V0PTEwJmxpbWl0PTEw
+      required: false
+      schema:
+        type: string
+  responses:
+    resourceNotFound:
+      description: Referenced resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          examples:
+            endpointNotFound:
+              value:
+                code: 404
+                status: notFound
+                message: The API endpoint was not found
+                details:
+                - type: errorInfo
+                  reason: endpointNotFound
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            resourceNotFound:
+              value:
+                code: 404
+                status: notFound
+                message: The resource was not found
+                details:
+                - type: errorInfo
+                  reason: resourceNotFound
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+                - type: resourceInfo
+                  resource: <resource>
+                  ids:
+                  - <ids>
+    internalServerError:
+      description: Something went wrong in the server. Please try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          example:
+            code: 500
+            status: internal
+            message: An internal error has occurred. Please try again later.
+            details:
+            - type: errorInfo
+              reason: unexpectedError
+              domain: apiv3
+              metadata:
+                path: /api/v3.0/<resource>
+    unauthorized:
+      description: You are not authenticated. Please authenticate and try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          example:
+            code: 401
+            status: unauthenticated
+            message: The client caller does not have a valid authentication credential
+            details:
+            - type: errorInfo
+              reason: unauthenticated
+              domain: apiv3
+              metadata:
+                path: /api/v3.0/<resource>
+    validationError:
+      description: The supplied object is invalid. Error detail will contain the validation error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          examples:
+            unexpectedArgument:
+              value:
+                code: 400
+                status: invalidArgument
+                message: 'Unexpected argument: name'
+                details:
+                - type: errorInfo
+                  reason: unexpectedArgument
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            missingRequiredArgument:
+              value:
+                code: 400
+                status: invalidArgument
+                message: 'Missing required arguments: name, id'
+                details:
+                - type: errorInfo
+                  reason: missingRequiredArgument
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            badRequestInvalidJSON:
+              value:
+                code: 400
+                status: invalidArgument
+                message: Invalid JSON
+                details:
+                - type: errorInfo
+                  reason: invalidJSON
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            badRequestInvalidArgument:
+              value:
+                code: 400
+                status: invalidArgument
+                message: 'Invalid Argument: Argument name is too long'
+                details:
+                - type: errorInfo
+                  reason: wrongArgumentValue
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+                - type: badRequest
+                  argumentViolations:
+                  - argumentName: name
+                    description: Name is too long
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-provenance:
+  method: searched
+  source: https://developer.eagleeyenetworks.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.eagleeyenetworks.com/reference/createevent.md
+  - https://developer.eagleeyenetworks.com/reference/createeventsubscription.md
+  - https://developer.eagleeyenetworks.com/reference/createeventsubscriptionfilter.md
+  - https://developer.eagleeyenetworks.com/reference/deleteeventsubscription.md
+  - https://developer.eagleeyenetworks.com/reference/deleteeventsubscriptionfilter.md
+  - https://developer.eagleeyenetworks.com/reference/getalert.md
+  - https://developer.eagleeyenetworks.com/reference/geteventbyid.md
+  - https://developer.eagleeyenetworks.com/reference/geteventmetrics.md
+  - https://developer.eagleeyenetworks.com/reference/geteventsubscription.md
+  - https://developer.eagleeyenetworks.com/reference/geteventsubscriptionfilter.md
+  - https://developer.eagleeyenetworks.com/reference/getnotification.md
+  - https://developer.eagleeyenetworks.com/reference/listalerts.md
+  - https://developer.eagleeyenetworks.com/reference/listalerttypes.md
+  - https://developer.eagleeyenetworks.com/reference/listevents.md
+  - https://developer.eagleeyenetworks.com/reference/listeventsfieldvalues.md
+  - https://developer.eagleeyenetworks.com/reference/listeventsubscriptionfilters.md
+  - https://developer.eagleeyenetworks.com/reference/listeventsubscriptions.md
+  - https://developer.eagleeyenetworks.com/reference/listeventtypes.md
+  - https://developer.eagleeyenetworks.com/reference/listnotifications.md
+  - https://developer.eagleeyenetworks.com/reference/listrecenteventsbytype.md
+  - https://developer.eagleeyenetworks.com/reference/updatenotification.md
+  merge:
+    pages: 21
+    deduped: 793
+    conflicts_kept_first: 0

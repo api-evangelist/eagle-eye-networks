@@ -1,4 +1,9 @@
-openapi: 3.0.0
+openapi: 3.2.0
+info:
+  description: Contract Vault API
+  version: 1.0.0
+  title: Contract Vault API
+  x-een-teamId: '300'
 servers:
 - url: https://{BaseUrl}/api/v3.0
   description: Eagle Eye Networks API Server
@@ -6,13 +11,11 @@ servers:
     BaseUrl:
       default: api.cxxx.eagleeyenetworks.com
       description: HTTPS Base url to use for all API calls, retrieved from https://api.eagleeyenetworks.com/api/v3.0/clientSettings
-info:
-  description: Contract Vault API
-  version: 1.0.0
-  title: Contract Vault API
-  x-een-teamId: '300'
 security:
 - bearerAuth: []
+tags:
+- name: Contract Vault
+  description: API for managing contract vault records and reports.
 paths:
   /contracts:
     get:
@@ -44,11 +47,9 @@ paths:
       - $ref: '#/components/parameters/extStockNumber__in'
       - in: query
         name: pageToken
-        description: 'Token string value that references a page for pagination. This value is received when retrieving the first page in the `nextPageToken`
-          and `prevPageToken` fields.
+        description: 'Token string value that references a page for pagination. This value is received when retrieving the first page in the `nextPageToken` and `prevPageToken` fields.
 
-          When a pageToken is provided, the backend remembers search parameters from the original request, so search  parameters that affect the
-          result set or order are optional and will be ignored if provided. Representation  parameters like `include` should still be applied.
+          When a pageToken is provided, the backend remembers search parameters from the original request, so search  parameters that affect the result set or order are optional and will be ignored if provided. Representation  parameters like `include` should still be applied.
 
           '
         example: b2Zmc2V0PTEwJmxpbWl0PTEw
@@ -57,10 +58,7 @@ paths:
           type: string
       - in: query
         name: pageSize
-        description: 'The number of entries to return per page. The maximum range of valid page sizes is documented with minimum and  maximum
-          values, but the range might be further limited dynamically based on the requested information, account, and system status. Values outside
-          of the (dynamic) allowed range will not result in an error, but will be clamped to the nearest limit. Thus, logic to detect the last
-          page should not be based on comparing the requested size with the received size, but on the existence of a `nextPageToken` value.
+        description: 'The number of entries to return per page. The maximum range of valid page sizes is documented with minimum and  maximum values, but the range might be further limited dynamically based on the requested information, account, and system status. Values outside of the (dynamic) allowed range will not result in an error, but will be clamped to the nearest limit. Thus, logic to detect the last page should not be based on comparing the requested size with the received size, but on the existence of a `nextPageToken` value.
 
           '
         example: 100
@@ -812,6 +810,8 @@ paths:
                   domain: apiv3
                   metadata:
                     path: /api/v3.0/<resource>
+      summary: List contract vault records
+      x-summary-source: derived
   /contracts/{id}:
     get:
       operationId: getContractVaultRecord
@@ -1026,60 +1026,16 @@ paths:
         '500':
           $ref: '#/paths/~1contracts/get/responses/500'
           x-miro: ../common/error.yaml#/components/responses/internalServerError
+      summary: Get contract vault record
+      x-summary-source: derived
 components:
   parameters:
-    startTimestamp__lte:
-      in: query
-      name: startTimestamp__lte
-      description: Filter to get only records that have a `startTimestamp` value that is less than or equal to the given value. If endTimestamp__lte
-        is not provided, this parameter is required.
-      schema:
-        type: string
-        format: date-time
-    startTimestamp__gte:
-      in: query
-      name: startTimestamp__gte
-      description: Filter to get only records that have a `startTimestamp` value that is more than or equal to the given value.
-      schema:
-        type: string
-        format: date-time
-    endTimestamp__lte:
-      in: query
-      name: endTimestamp__lte
-      description: Filter to get only records that have an `endTimestamp` value that is less than or equal to the given value. If startTimestamp__lte
-        is not provided, this parameter is required.
-      schema:
-        type: string
-        format: date-time
-    endTimestamp__gte:
-      in: query
-      name: endTimestamp__gte
-      description: Filter to get only records that have an `endTimestamp` value that is more than or equal to the given value.
-      schema:
-        type: string
-        format: date-time
-    id__in:
-      name: id__in
+    managerFirstName__contains:
+      name: managerFirstName__contains
       in: query
       schema:
         type: string
-      description: 'Filter to get only records that have an ID that equals one of the given parameter values.
-
-        '
-    layoutId:
-      name: layoutId
-      in: query
-      schema:
-        type: string
-      description: Filter records by a specific layout ID.
-    agentFirstName__in:
-      name: agentFirstName__in
-      in: query
-      schema:
-        type: array
-        items:
-          type: string
-      description: 'Filter to return records where the agent''s first name matches any of the provided values. The lookup is exact but case-insensitive.
+      description: 'Filter to return records where the manager''s first name contains the provided substring. The lookup is exact but case-insensitive.
 
         '
     agentFirstName__contains:
@@ -1090,14 +1046,14 @@ components:
       description: 'Filter to return records where the agent''s first name contains the provided substring. The lookup is exact but case-insensitive.
 
         '
-    agentLastName__in:
-      name: agentLastName__in
+    managerFirstName__in:
+      name: managerFirstName__in
       in: query
       schema:
         type: array
         items:
           type: string
-      description: 'Filter to return records where the agent''s last name matches any of the provided values. The lookup is exact but case-insensitive.
+      description: 'Filter to return records where the manager''s first name matches any of the provided values. The lookup is exact but case-insensitive.
 
         '
     agentLastName__contains:
@@ -1106,6 +1062,71 @@ components:
       schema:
         type: string
       description: 'Filter to return records where the agent''s last name contains the provided substring. The lookup is exact but case-insensitive.
+
+        '
+    layoutId:
+      name: layoutId
+      in: query
+      schema:
+        type: string
+      description: Filter records by a specific layout ID.
+    startTimestamp__lte:
+      in: query
+      name: startTimestamp__lte
+      description: Filter to get only records that have a `startTimestamp` value that is less than or equal to the given value. If endTimestamp__lte is not provided, this parameter is required.
+      schema:
+        type: string
+        format: date-time
+    extStockNumber__in:
+      name: stockNumber__in
+      in: query
+      schema:
+        type: string
+      description: 'Filter to return records where the stock number matches any of the provided values. The number must be an exact match.
+
+        '
+    customerFirstName__contains:
+      name: customerFirstName__contains
+      in: query
+      schema:
+        type: string
+      description: 'Filter to return records where the customer''s first name contains the provided substring. This can be used to find either the primary or secondary customer associated with the contract. The lookup is exact but case-insensitive.
+
+        '
+    agentFirstName__in:
+      name: agentFirstName__in
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      description: 'Filter to return records where the agent''s first name matches any of the provided values. The lookup is exact but case-insensitive.
+
+        '
+    managerLastName__contains:
+      name: managerLastName__contains
+      in: query
+      schema:
+        type: string
+      description: 'Filter to return records where the manager''s last name contains the provided substring. The lookup is exact but case-insensitive.
+
+        '
+    id__in:
+      name: id__in
+      in: query
+      schema:
+        type: string
+      description: 'Filter to get only records that have an ID that equals one of the given parameter values.
+
+        '
+    customerFirstName__in:
+      name: customerFirstName__in
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      description: 'Filter to return records where the customer''s first name matches any of the provided values. This can be used to find either the primary or secondary customer associated with the contract. The lookup is exact but case-insensitive.
 
         '
     agentEmail__in:
@@ -1119,32 +1140,38 @@ components:
       description: 'Filter records where the agent''s email address matches any of the provided values. The lookup is exact but case-insensitive.
 
         '
-    agentEmail__contains:
-      name: agentEmail__contains
+    endTimestamp__gte:
       in: query
+      name: endTimestamp__gte
+      description: Filter to get only records that have an `endTimestamp` value that is more than or equal to the given value.
       schema:
         type: string
-      description: 'Filter records where the agent''s email address contains the provided substring. The lookup is exact but case-insensitive.
-
-        '
-    managerFirstName__in:
-      name: managerFirstName__in
+        format: date-time
+    agentLastName__in:
+      name: agentLastName__in
       in: query
       schema:
         type: array
         items:
           type: string
-      description: 'Filter to return records where the manager''s first name matches any of the provided values. The lookup is exact but case-insensitive.
+      description: 'Filter to return records where the agent''s last name matches any of the provided values. The lookup is exact but case-insensitive.
 
         '
-    managerFirstName__contains:
-      name: managerFirstName__contains
+    customerLastName__contains:
+      name: customerLastName__contains
       in: query
       schema:
         type: string
-      description: 'Filter to return records where the manager''s first name contains the provided substring. The lookup is exact but case-insensitive.
+      description: 'Filter to return records where the customer''s last name contains the provided substring. This can be used to find either the primary or secondary customer associated with the contract. The lookup is exact but case-insensitive.
 
         '
+    startTimestamp__gte:
+      in: query
+      name: startTimestamp__gte
+      description: Filter to get only records that have a `startTimestamp` value that is more than or equal to the given value.
+      schema:
+        type: string
+        format: date-time
     managerLastName__in:
       name: managerLastName__in
       in: query
@@ -1153,34 +1180,13 @@ components:
       description: 'Filter to return records where the manager''s last name matches any of the provided values. The lookup is exact but case-insensitive.
 
         '
-    managerLastName__contains:
-      name: managerLastName__contains
+    endTimestamp__lte:
       in: query
+      name: endTimestamp__lte
+      description: Filter to get only records that have an `endTimestamp` value that is less than or equal to the given value. If startTimestamp__lte is not provided, this parameter is required.
       schema:
         type: string
-      description: 'Filter to return records where the manager''s last name contains the provided substring. The lookup is exact but case-insensitive.
-
-        '
-    customerFirstName__in:
-      name: customerFirstName__in
-      in: query
-      schema:
-        type: array
-        items:
-          type: string
-      description: 'Filter to return records where the customer''s first name matches any of the provided values. This can be used to find either
-        the primary or secondary customer associated with the contract. The lookup is exact but case-insensitive.
-
-        '
-    customerFirstName__contains:
-      name: customerFirstName__contains
-      in: query
-      schema:
-        type: string
-      description: 'Filter to return records where the customer''s first name contains the provided substring. This can be used to find either
-        the primary or secondary customer associated with the contract. The lookup is exact but case-insensitive.
-
-        '
+        format: date-time
     customerLastName__in:
       name: customerLastName__in
       in: query
@@ -1188,25 +1194,15 @@ components:
         type: array
         items:
           type: string
-      description: 'Filter to return records where the customer''s last name matches any of the provided values. This can be used to find either
-        the primary or secondary customer associated with the contract. The lookup is exact but case-insensitive.
+      description: 'Filter to return records where the customer''s last name matches any of the provided values. This can be used to find either the primary or secondary customer associated with the contract. The lookup is exact but case-insensitive.
 
         '
-    customerLastName__contains:
-      name: customerLastName__contains
+    agentEmail__contains:
+      name: agentEmail__contains
       in: query
       schema:
         type: string
-      description: 'Filter to return records where the customer''s last name contains the provided substring. This can be used to find either
-        the primary or secondary customer associated with the contract. The lookup is exact but case-insensitive.
-
-        '
-    extStockNumber__in:
-      name: stockNumber__in
-      in: query
-      schema:
-        type: string
-      description: 'Filter to return records where the stock number matches any of the provided values. The number must be an exact match.
+      description: 'Filter records where the agent''s email address contains the provided substring. The lookup is exact but case-insensitive.
 
         '
   schemas:
@@ -1331,19 +1327,19 @@ components:
           '
         properties:
           nextPageToken:
-            type: string
+            type:
+            - string
+            - 'null'
             readOnly: true
-            nullable: true
-            description: 'Token to retrieve the next page. The value of this token is passed into the field pageToken.  This value can be null
-              if there is no next page.
+            description: 'Token to retrieve the next page. The value of this token is passed into the field pageToken.  This value can be null if there is no next page.
 
               '
           prevPageToken:
-            type: string
+            type:
+            - string
+            - 'null'
             readOnly: true
-            nullable: true
-            description: 'Token to retrieve the previous page. The value of this token is passed into the field pageToken.  This value can be
-              null of there is no previous page.
+            description: 'Token to retrieve the previous page. The value of this token is passed into the field pageToken.  This value can be null of there is no previous page.
 
               '
           results:
@@ -1362,36 +1358,17 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/ContractRecord'
-    BadRequestExceptionDetail:
-      type: object
-      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
-        the shape is unknown and is NOT a claim about the API.
-      x-ae-placeholder: true
-    ErrorInfoExceptionDetail:
-      type: object
-      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
-        the shape is unknown and is NOT a claim about the API.
-      x-ae-placeholder: true
-    ResourceInfoExceptionDetail:
-      type: object
-      description: Referenced by this document but never defined in it. API Evangelist added this empty placeholder so the document resolves;
-        the shape is unknown and is NOT a claim about the API.
-      x-ae-placeholder: true
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-tags:
-- name: Contract Vault
-  description: API for managing contract vault records and reports.
 x-provenance:
   method: searched
   source: https://developer.eagleeyenetworks.com/reference
   harvested: '2026-10-14'
   tool: harvest-readme-openapi.py
-  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components
-    merged by API title, nothing authored.
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
   assembled_from:
   - https://developer.eagleeyenetworks.com/reference/getcontractvaultrecord.md
   - https://developer.eagleeyenetworks.com/reference/listcontractvaultrecords.md

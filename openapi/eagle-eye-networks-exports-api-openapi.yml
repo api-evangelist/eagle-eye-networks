@@ -1,0 +1,786 @@
+openapi: 3.2.0
+info:
+  title: MEDIA Exports API
+  version: 3.0.0
+  description: Retrieve and manage recording exports.
+servers:
+- url: https://{BaseUrl}/api/v3.0
+  description: Eagle Eye Networks API Server
+  variables:
+    BaseUrl:
+      default: api.cxxx.eagleeyenetworks.com
+      description: HTTPS Base url to use for all API calls, retrieved from https://api.eagleeyenetworks.com/api/v3.0/clientSettings
+security:
+- bearerAuth: []
+tags:
+- name: Exports
+  description: Retrieve and manage recording exports.
+paths:
+  /exports:
+    post:
+      operationId: createExportJob
+      description: Creates and starts a new video export job
+      tags:
+      - Exports
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/BundleExportDetails'
+              - $ref: '#/components/schemas/TimeLapseExportDetails'
+              - $ref: '#/components/schemas/VideoExportDetails'
+              - $ref: '#/components/schemas/VideoSummaryExportDetails'
+              discriminator:
+                propertyName: type
+                mapping:
+                  bundle: '#/components/schemas/BundleExportDetails'
+                  timeLapse: '#/components/schemas/TimeLapseExportDetails'
+                  video: '#/components/schemas/VideoExportDetails'
+                  videoSummary: '#/components/schemas/VideoSummaryExportDetails'
+            examples:
+              bundle:
+                summary: Bundle
+                value:
+                  deviceId: 10058b7a
+                  type: bundle
+                  period:
+                    startTimestamp: '2022-11-07T16:14:52.048Z'
+                    endTimestamp: '2022-11-07T19:00:00.000Z'
+                  osd:
+                    timeZone: Americas/Chicago
+                  info:
+                    name: sun_going_under_on_the_7th
+                    directory: /exports
+                    notes: Looks great!
+                    tags:
+                    - great
+                    - sun
+                  playbackMultiplier: 2
+              timeLapse:
+                summary: TimeLapse
+                value:
+                  deviceId: 10058b7a
+                  type: timeLapse
+                  period:
+                    startTimestamp: '2022-11-07T16:14:52.048Z'
+                    endTimestamp: '2022-11-07T19:00:00.000Z'
+                  osd:
+                    timeZone: Americas/Chicago
+                  info:
+                    name: sun_going_under_on_the_7th
+                    directory: /exports
+                    notes: Looks great!
+                    tags:
+                    - great
+                    - sun
+                  playbackMultiplier: 10
+              video:
+                summary: Video
+                value:
+                  deviceId: 10058b7a
+                  type: video
+                  period:
+                    startTimestamp: '2022-11-07T16:14:52.048Z'
+                    endTimestamp: '2022-11-07T19:00:00.000Z'
+                  osd:
+                    timeZone: Americas/Chicago
+                  info:
+                    name: sun_going_under_on_the_7th
+                    directory: /exports
+                    notes: Looks great!
+                    tags:
+                    - great
+                    - sun
+              videoSummary:
+                summary: Video Summary
+                value:
+                  deviceId: 10058b7a
+                  type: videoSummary
+                  period:
+                    startTimestamp: '2022-11-07T08:00:00.000Z'
+                    endTimestamp: '2022-11-07T17:00:00.000Z'
+                  maxDurationSeconds: 300
+                  eventTypes:
+                  - een.motionDetectionEvent.v1
+                  - een.personDetectionEvent.v1
+                  osd:
+                    timeZone: Americas/Chicago
+                  info:
+                    name: daily_motion_summary
+                    directory: /summaries
+                    notes: Motion and person events summary
+                    tags:
+                    - summary
+                    - daily
+                    - motion
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiCreateExportResponse'
+        '400':
+          $ref: '#/components/responses/validationError'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/resourceNotFound'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: Create export job
+      x-summary-source: derived
+  /exports/{jobId}:copy:
+    post:
+      operationId: retryExport
+      description: 'Start the export again with minor changes of some of the original parameters, which are specified in the body of the api.
+
+        Fields that are not given will be kept the same as the original job.
+
+        Failed intervals are tried again, adding a suffix to the names of the generated mp4''s to indicate they are created by a retry.'
+      tags:
+      - Exports
+      parameters:
+      - $ref: '#/components/parameters/jobId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiCopyExportBody'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiCreateExportResponse'
+        '400':
+          $ref: '#/components/responses/validationError'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/resourceNotFound'
+        '415':
+          $ref: '#/components/responses/unsupportedMediaType'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: Retry export
+      x-summary-source: derived
+components:
+  schemas:
+    ErrorInfoExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - errorInfo
+        reason:
+          description: 'The reason for the error. This is a constant value that identifies the proximate cause of the
+
+            error. Error reasons are unique within a particular domain of errors.
+
+            '
+          type: string
+          enum:
+          - unauthenticated
+          - unexpectedArgument
+          - missingRequiredArgument
+          - wrongArgumentValue
+          - invalidPermission
+          - wrongEdition
+          - wrongAccountType
+          - resourceNotFound
+          - endpointNotFound
+          - methodNotSupported
+          - unexpectedError
+          - acceptNotSupported
+          - alreadyExists
+          - foreignKeyConflict
+          - childDevicesExist
+          - contentNotSupported
+          - deadlineExpired
+          - tooManyRequests
+          - deviceUnavailable
+          - serviceUnavailable
+          - invalidJSON
+          - resourceLocked
+          - notSupportedOnBridge
+          - outOfRetention
+          - deviceIdentificationFailed
+          - credentialValidationFailed
+          - credentialSetupFailed
+          - localUrlValidationFailed
+          - hwRegistrationFailed
+          - failedAddingCameraAfterValidation
+          - neverConnected
+          - reconnectFailed
+          - unsupportedModel
+          - purged
+          - userBlocked
+          - userTemporarilyBlocked
+          - quotaExceeded
+          - alreadyValidated
+          - reAuthenticationRequired
+          - badGateway
+        domain:
+          description: 'Logical grouping to which the "reason" belongs
+
+            '
+          type: string
+        metadata:
+          $ref: '#/components/schemas/ExceptionMetadata'
+    skipSyncToCloud:
+      type: boolean
+      description: 'If true: the job will not try to sync any data to the cloud, instead the export will only contain the data that is currently in the cloud.
+
+        The missing parts can be found in the field: `detailedState.intervals.missingIntervals`.
+
+        '
+    BundleExportDetails:
+      allOf:
+      - $ref: '#/components/schemas/ApiExportDetails'
+      - properties:
+          type:
+            type: string
+            enum:
+            - bundle
+          playbackMultiplier:
+            $ref: '#/components/schemas/playbackMultiplier'
+        required:
+        - playbackMultiplier
+    ExceptionDetail:
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/ErrorInfoExceptionDetail'
+      - $ref: '#/components/schemas/BadRequestExceptionDetail'
+      - $ref: '#/components/schemas/ResourceInfoExceptionDetail'
+      discriminator:
+        propertyName: type
+        mapping:
+          errorInfo: '#/components/schemas/ErrorInfoExceptionDetail'
+          badRequest: '#/components/schemas/BadRequestExceptionDetail'
+          resourceInfo: '#/components/schemas/ResourceInfoExceptionDetail'
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - errorInfo
+          - badRequest
+          - resourceInfo
+      required:
+      - type
+    startTimestamp:
+      description: Where to start the export.
+      type: string
+      format: date-time
+      example: '2023-03-19T09:08:07.542Z'
+    ApiCreateExportResponse:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: cd66d697-5ce2-4b70-abc6-4b70b9361537
+          description: ID of the export job. This should be used with the jobs api to keep track of the state of the export job.
+    ApiV3Error:
+      type: object
+      properties:
+        code:
+          description: HTTP code defined in EEN Standard Code Values
+          type: integer
+        status:
+          description: A string enum describing the code
+          type: string
+          enum:
+          - cancelled
+          - unknown
+          - invalidArgument
+          - deadlineExceeded
+          - notFound
+          - conflict
+          - permissionDenied
+          - resourceExhausted
+          - failedPrecondition
+          - aborted
+          - outOfRange
+          - unimplemented
+          - internal
+          - unavailable
+          - dataLoss
+          - unauthenticated
+          - mediaTypeNotSupported
+          - acceptNotSupported
+          - methodNotSupported
+          - tooManyRequests
+          - badGateway
+        message:
+          description: Developer friendly human readable error message in English
+          type: string
+        details:
+          description: An array of extensible objects that define error information
+          type: array
+          items:
+            $ref: '#/components/schemas/ExceptionDetail'
+      required:
+      - code
+      - status
+      - message
+      - details
+    BadRequestExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - badRequest
+        argumentViolations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArgumentViolation'
+    VideoSummaryExportDetails:
+      allOf:
+      - $ref: '#/components/schemas/ApiExportDetails'
+      - properties:
+          type:
+            type: string
+            enum:
+            - videoSummary
+          maxDurationSeconds:
+            type: integer
+            description: 'Maximum duration of the summary video in seconds.
+
+              The system will prioritize and select events to fit within this duration.
+
+              Recommended presets: 30, 60, 120, 300, 600 seconds.
+
+              '
+            minimum: 30
+            maximum: 600
+            example: 300
+          eventTypes:
+            type: array
+            description: 'List of event type IDs to include in the summary. Must specify at least one event type.
+
+              Available event types should be retrieved from the /events endpoint schema.
+
+              Examples: "een.motionDetectionEvent.v1", "een.personDetectionEvent.v1", "een.lineCrossingEvent.v1"
+
+              '
+            items:
+              type: string
+              example: een.motionDetectionEvent.v1
+            minItems: 1
+        required:
+        - maxDurationSeconds
+        - eventTypes
+    endTimestamp:
+      description: Where to stop the export.
+      type: string
+      format: date-time
+      example: '2023-03-20T09:08:07.542Z'
+    ApiExportDetails:
+      type: object
+      required:
+      - deviceId
+      - period
+      - type
+      - info
+      properties:
+        deviceId:
+          description: The ID of the device
+          type: string
+          example: 10058b7a
+        type:
+          description: 'Type of export to make. Should be one of: video, timeLapse, bundle, or videoSummary.
+
+            Where:
+
+            * video: Export the full video interval(s) between the given times to mp4.
+
+            * timeLapse: Export the preview video as a time lapse video to mp4.
+
+            * bundle: combination of video and timeLapse.
+
+            * videoSummary: Export a condensed video from preview images (max 3 per event) around selected events (motion, person detection, etc.).
+
+            '
+          type: string
+        autoDelete:
+          type: boolean
+          default: false
+          description: 'If true the export is placed into the read-only "downloads" folder of archive, and will be removed after 2 weeks.
+
+            Else the export is placed in archive with the end user having full control over it.
+
+            '
+        skipSyncToCloud:
+          allOf:
+          - $ref: '#/components/schemas/skipSyncToCloud'
+          - default: false
+        period:
+          type: object
+          description: 'Period for which to make the export.
+
+            For video, timeLapse, and bundle exports: the duration can''t exceed 8 hours.
+
+            For videoSummary exports: the duration can span up to the camera''s retention period.
+
+            If `endTimestamp` is not given, the current time will be used.
+
+            '
+          required:
+          - startTimestamp
+          properties:
+            startTimestamp:
+              $ref: '#/components/schemas/startTimestamp'
+            endTimestamp:
+              $ref: '#/components/schemas/endTimestamp'
+        osd:
+          type: object
+          description: If included the timestamp of each frame is super imposed in the export.
+          required:
+          - timeZone
+          properties:
+            timeZone:
+              type: string
+              description: Timezone used to render the timestamps
+              example: Americas/Chicago
+        info:
+          type: object
+          required:
+          - name
+          - directory
+          properties:
+            name:
+              type: string
+              minLength: 1
+              maxLength: 64
+              pattern: '[^\/]*'
+              description: Name of the export.
+            directory:
+              type: string
+              maxLength: 256
+              description: Destination path in archive to be used to save the generated files into.
+            notes:
+              type: string
+              maxLength: 1024
+              description: The description that is added to the file/folder in archive
+            tags:
+              type: array
+              items:
+                type: string
+                maxLength: 32
+    ResourceInfoExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - resourceInfo
+        resource:
+          description: Referenced resource type, eg "cameras", "bridges", or "locations".
+          type: string
+        ids:
+          type: array
+          description: Identities of resources
+          items:
+            type: string
+    TimeLapseExportDetails:
+      allOf:
+      - $ref: '#/components/schemas/ApiExportDetails'
+      - properties:
+          type:
+            type: string
+            enum:
+            - timeLapse
+          playbackMultiplier:
+            $ref: '#/components/schemas/playbackMultiplier'
+        required:
+        - playbackMultiplier
+    ApiCopyExportBody:
+      type: object
+      required:
+      - retryStrategy
+      properties:
+        retryStrategy:
+          type: string
+          enum:
+          - full
+          - failedIntervalsFully
+          - minimal
+          description: 'Strategy to use to decide what to export
+
+            * full: export all files just as the original export
+
+            * failedIntervalsFully: for each file that had a failed interval, retry the whole file
+
+            * minimal: only retry the parts that failed
+
+            '
+    ArgumentViolation:
+      properties:
+        argumentName:
+          type: string
+          description: Name of the argument
+        description:
+          type: string
+          description: Description of the violation
+    VideoExportDetails:
+      allOf:
+      - $ref: '#/components/schemas/ApiExportDetails'
+      - properties:
+          type:
+            type: string
+            enum:
+            - video
+    ExceptionMetadata:
+      properties:
+        path:
+          description: Path of the request
+          type: string
+        method:
+          description: Method of the request
+          type: string
+    playbackMultiplier:
+      type: integer
+      description: Playback multiplier used to create the time lapse video
+      minimum: 1
+      maximum: 48
+  responses:
+    forbidden:
+      description: You have no permission to access the specified resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          examples:
+            invalidPermission:
+              value:
+                code: 403
+                status: permissionDenied
+                message: The client caller does not have permission for the specified operation
+                details:
+                - type: errorInfo
+                  reason: invalidPermission
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            wrongEdition:
+              value:
+                code: 403
+                status: permissionDenied
+                message: This feature is not enabled for the account
+                details:
+                - type: errorInfo
+                  reason: wrongEdition
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/locations
+            wrongAccountType:
+              value:
+                code: 403
+                status: permissionDenied
+                message: This feature is only available for end users
+                details:
+                - type: errorInfo
+                  reason: wrongAccountType
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/locations
+    resourceNotFound:
+      description: Referenced resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          examples:
+            endpointNotFound:
+              value:
+                code: 404
+                status: notFound
+                message: The API endpoint was not found
+                details:
+                - type: errorInfo
+                  reason: endpointNotFound
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            resourceNotFound:
+              value:
+                code: 404
+                status: notFound
+                message: The resource was not found
+                details:
+                - type: errorInfo
+                  reason: resourceNotFound
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+                - type: resourceInfo
+                  resource: <resource>
+                  ids:
+                  - <ids>
+    unsupportedMediaType:
+      description: Content type of request body not supported.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          example:
+            code: 415
+            status: mediaTypeNotSupported
+            message: 'Unsupported content type: `text/plain`, should be one of: `application/json`'
+            details:
+            - type: errorInfo
+              reason: contentNotSupported
+              domain: apiv3
+              metadata:
+                path: /api/v3.0/<resource>
+    internalServerError:
+      description: Something went wrong in the server. Please try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          example:
+            code: 500
+            status: internal
+            message: An internal error has occurred. Please try again later.
+            details:
+            - type: errorInfo
+              reason: unexpectedError
+              domain: apiv3
+              metadata:
+                path: /api/v3.0/<resource>
+    unauthorized:
+      description: You are not authenticated. Please authenticate and try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          example:
+            code: 401
+            status: unauthenticated
+            message: The client caller does not have a valid authentication credential
+            details:
+            - type: errorInfo
+              reason: unauthenticated
+              domain: apiv3
+              metadata:
+                path: /api/v3.0/<resource>
+    validationError:
+      description: The supplied object is invalid. Error detail will contain the validation error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          examples:
+            unexpectedArgument:
+              value:
+                code: 400
+                status: invalidArgument
+                message: 'Unexpected argument: name'
+                details:
+                - type: errorInfo
+                  reason: unexpectedArgument
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            missingRequiredArgument:
+              value:
+                code: 400
+                status: invalidArgument
+                message: 'Missing required arguments: name, id'
+                details:
+                - type: errorInfo
+                  reason: missingRequiredArgument
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            badRequestInvalidJSON:
+              value:
+                code: 400
+                status: invalidArgument
+                message: Invalid JSON
+                details:
+                - type: errorInfo
+                  reason: invalidJSON
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            badRequestInvalidArgument:
+              value:
+                code: 400
+                status: invalidArgument
+                message: 'Invalid Argument: Argument name is too long'
+                details:
+                - type: errorInfo
+                  reason: wrongArgumentValue
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+                - type: badRequest
+                  argumentViolations:
+                  - argumentName: name
+                    description: Name is too long
+  parameters:
+    jobId:
+      in: path
+      name: jobId
+      description: ID of the export job.
+      schema:
+        type: string
+        format: uuid
+      required: true
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-provenance:
+  method: searched
+  source: https://developer.eagleeyenetworks.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.eagleeyenetworks.com/reference/addfile.md
+  - https://developer.eagleeyenetworks.com/reference/createexportjob.md
+  - https://developer.eagleeyenetworks.com/reference/deletealltrashfiles.md
+  - https://developer.eagleeyenetworks.com/reference/deletefile.md
+  - https://developer.eagleeyenetworks.com/reference/deletejob.md
+  - https://developer.eagleeyenetworks.com/reference/deletetrashfile.md
+  - https://developer.eagleeyenetworks.com/reference/downloaddownload.md
+  - https://developer.eagleeyenetworks.com/reference/downloadfile.md
+  - https://developer.eagleeyenetworks.com/reference/getdownload.md
+  - https://developer.eagleeyenetworks.com/reference/getdownloads.md
+  - https://developer.eagleeyenetworks.com/reference/getfile.md
+  - https://developer.eagleeyenetworks.com/reference/getfiles.md
+  - https://developer.eagleeyenetworks.com/reference/getjob.md
+  - https://developer.eagleeyenetworks.com/reference/getliveimage.md
+  - https://developer.eagleeyenetworks.com/reference/getmediasession.md
+  - https://developer.eagleeyenetworks.com/reference/getrecordedimage.md
+  - https://developer.eagleeyenetworks.com/reference/gettrash.md
+  - https://developer.eagleeyenetworks.com/reference/gettrashfile.md
+  - https://developer.eagleeyenetworks.com/reference/listfeeds.md
+  - https://developer.eagleeyenetworks.com/reference/listjobs.md
+  - https://developer.eagleeyenetworks.com/reference/listmedia.md
+  - https://developer.eagleeyenetworks.com/reference/restoretrashfile.md
+  - https://developer.eagleeyenetworks.com/reference/retryexport.md
+  - https://developer.eagleeyenetworks.com/reference/updatedownload.md
+  - https://developer.eagleeyenetworks.com/reference/updatefile.md
+  merge:
+    pages: 25
+    deduped: 479
+    conflicts_kept_first: 0

@@ -1,0 +1,1051 @@
+openapi: 3.2.0
+info:
+  title: EVENTS Event Subscriptions API
+  version: 3.0.0
+  description: Manage subscriptions to receive events when they happen.
+servers:
+- url: https://{BaseUrl}/api/v3.0
+  description: Eagle Eye Networks API Server
+  variables:
+    BaseUrl:
+      default: api.cxxx.eagleeyenetworks.com
+      description: HTTPS Base url to use for all API calls, retrieved from https://api.eagleeyenetworks.com/api/v3.0/clientSettings
+security:
+- bearerAuth: []
+tags:
+- name: Event Subscriptions
+  description: Manage subscriptions to receive events when they happen.
+paths:
+  /eventSubscriptions:
+    get:
+      operationId: listEventSubscriptions
+      description: Gets all visible event subscriptions defined for the current account.
+      tags:
+      - Event Subscriptions
+      parameters:
+      - $ref: '#/components/parameters/pageToken'
+      - $ref: '#/components/parameters/pageSize'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiPaginatedEventSubscriptionsResponse'
+        '400':
+          $ref: '#/components/responses/validationError'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: List event subscriptions
+      x-summary-source: derived
+    post:
+      operationId: createEventSubscription
+      description: 'Creates a new event subscription. You have the option to create a
+
+        temporary subscription using server-sent events or a persistent
+
+        subscription using webhooks.
+
+
+        If you choose a temporary subscription, it will be automatically
+
+        deleted if it no clients are subscribed to it for the duration
+
+        specified in `timeToLiveSeconds`.
+
+
+        If you opt for a persistent subscription, it will remain active as
+
+        long as you respond to the webhook messages sent to your provided URL
+
+        with a `200 OK` status. If we are unable to deliver events to your webhook
+
+        continuously for 90 days, the subscription will be disabled.'
+      tags:
+      - Event Subscriptions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventSubscriptionCreate'
+      responses:
+        '201':
+          description: EventSubscription created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventSubscription'
+        '400':
+          $ref: '#/components/responses/validationError'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/resourceNotFound'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: Create event subscription
+      x-summary-source: derived
+  /eventSubscriptions/{eventSubscriptionId}:
+    parameters:
+    - $ref: '#/components/parameters/eventSubscriptionId'
+    get:
+      operationId: getEventSubscription
+      description: This endpoint allows you to retrieve a specific event subscription.
+      tags:
+      - Event Subscriptions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventSubscription'
+        '400':
+          $ref: '#/components/responses/validationError'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/resourceNotFound'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: Get event subscription
+      x-summary-source: derived
+    delete:
+      operationId: deleteEventSubscription
+      description: Deletes a specific event subscription.
+      tags:
+      - Event Subscriptions
+      responses:
+        '204':
+          description: EventSubscription deleted
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/resourceNotFound'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: Delete event subscription
+      x-summary-source: derived
+  /eventSubscriptions/{eventSubscriptionId}/filters:
+    parameters:
+    - $ref: '#/components/parameters/eventSubscriptionId'
+    get:
+      operationId: listEventSubscriptionFilters
+      description: Gets all event subscription filters defined for the given event subscription.
+      tags:
+      - Event Subscriptions
+      parameters:
+      - $ref: '#/components/parameters/pageToken'
+      - $ref: '#/components/parameters/pageSize'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiPaginatedFiltersResponse'
+        '400':
+          $ref: '#/components/responses/validationError'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/resourceNotFound'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: List event subscription filters
+      x-summary-source: derived
+    post:
+      operationId: createEventSubscriptionFilter
+      description: Creates an event subscription filter for a given event subscription.
+      tags:
+      - Event Subscriptions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FilterCreate'
+      responses:
+        '201':
+          description: Filter created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Filter'
+        '400':
+          $ref: '#/components/responses/validationError'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/resourceNotFound'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: Create event subscription filter
+      x-summary-source: derived
+  /eventSubscriptions/{eventSubscriptionId}/filters/{filterId}:
+    parameters:
+    - $ref: '#/components/parameters/eventSubscriptionId'
+    - $ref: '#/components/parameters/filterId'
+    get:
+      operationId: getEventSubscriptionFilter
+      description: Gets info about a specific filter of a given event subscription ID.
+      tags:
+      - Event Subscriptions
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Filter'
+        '400':
+          $ref: '#/components/responses/validationError'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/resourceNotFound'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: Get event subscription filter
+      x-summary-source: derived
+    delete:
+      operationId: deleteEventSubscriptionFilter
+      description: Deletes a filter based on the given ID.
+      tags:
+      - Event Subscriptions
+      responses:
+        '204':
+          description: Filter deleted
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/resourceNotFound'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: Delete event subscription filter
+      x-summary-source: derived
+components:
+  schemas:
+    DslCondition:
+      type: object
+      description: 'A leaf filter condition that compares a single event data field against a value.
+
+        '
+      required:
+      - field
+      - op
+      - value
+      properties:
+        field:
+          type: string
+          description: 'Event data field path in the format `schema.vN.fieldName` (e.g. `een.lprDetection.v1.plate`). The special virtual field `eventType` can be used to filter by event type.
+
+            '
+          example: een.lprDetection.v1.plate
+        op:
+          type: string
+          description: 'Comparison operator. Range operators (`gt`, `gte`, `lt`, `lte`) require numeric or date fields. `in` and `notIn` expect the value to be an array.
+
+            '
+          enum:
+          - exact
+          - ne
+          - in
+          - notIn
+          - gt
+          - gte
+          - lt
+          - lte
+        value:
+          description: 'The value to compare against. Must match the field type (string, number, boolean). For `in` and `notIn`, provide an array of values.
+
+            '
+          oneOf:
+          - type: string
+          - type: number
+          - type: boolean
+          - type: array
+            items:
+              oneOf:
+              - type: string
+              - type: number
+              - type: boolean
+    ErrorInfoExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - errorInfo
+        reason:
+          description: 'The reason for the error. This is a constant value that identifies the proximate cause of the
+
+            error. Error reasons are unique within a particular domain of errors.
+
+            '
+          type: string
+          enum:
+          - unauthenticated
+          - unexpectedArgument
+          - missingRequiredArgument
+          - wrongArgumentValue
+          - invalidPermission
+          - wrongEdition
+          - wrongAccountType
+          - resourceNotFound
+          - endpointNotFound
+          - methodNotSupported
+          - unexpectedError
+          - acceptNotSupported
+          - alreadyExists
+          - foreignKeyConflict
+          - childDevicesExist
+          - contentNotSupported
+          - deadlineExpired
+          - tooManyRequests
+          - deviceUnavailable
+          - serviceUnavailable
+          - invalidJSON
+          - resourceLocked
+          - notSupportedOnBridge
+          - outOfRetention
+          - deviceIdentificationFailed
+          - credentialValidationFailed
+          - credentialSetupFailed
+          - localUrlValidationFailed
+          - hwRegistrationFailed
+          - failedAddingCameraAfterValidation
+          - neverConnected
+          - reconnectFailed
+          - unsupportedModel
+          - purged
+          - userBlocked
+          - userTemporarilyBlocked
+          - quotaExceeded
+          - alreadyValidated
+          - reAuthenticationRequired
+          - badGateway
+        domain:
+          description: 'Logical grouping to which the "reason" belongs
+
+            '
+          type: string
+        metadata:
+          $ref: '#/components/schemas/ExceptionMetadata'
+    FilterCreate:
+      type: object
+      properties:
+        actors:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          example:
+          - camera:100d4c41
+          - camera:100f12c1
+          - camera:*
+          description: 'List of actors for which events should be delivered to this event subscription. Actors must be specified in the format `actorType:actorId`.
+
+            Wildcard Support: Use `<actorType>:*` to match all actors of a specific type (e.g., `camera:*` matches all cameras). Only full wildcards (`<actorType>:*`) are supported. Partial wildcards like `camera:123*` are not allowed. Only admin users can use wildcard actors.
+
+            '
+        types:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/EventTypeFilter'
+          description: List of event types of which events should be delivered to this event subscription.
+        data:
+          $ref: '#/components/schemas/DslFilter'
+      required:
+      - actors
+      - types
+    EventTypeFilter:
+      type: object
+      properties:
+        id:
+          type: string
+          example: een.deviceCloudStatusUpdateEvent.v1
+          description: 'Only events with this specific event type should be delivered to the event subscription. `GET /eventTypes`
+
+            can be used to get a list of all supported event types.
+
+            '
+      required:
+      - type
+    ExceptionDetail:
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/ErrorInfoExceptionDetail'
+      - $ref: '#/components/schemas/BadRequestExceptionDetail'
+      - $ref: '#/components/schemas/ResourceInfoExceptionDetail'
+      discriminator:
+        propertyName: type
+        mapping:
+          errorInfo: '#/components/schemas/ErrorInfoExceptionDetail'
+          badRequest: '#/components/schemas/BadRequestExceptionDetail'
+          resourceInfo: '#/components/schemas/ResourceInfoExceptionDetail'
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - errorInfo
+          - badRequest
+          - resourceInfo
+      required:
+      - type
+    ServerSentEventsDeliveryConfig:
+      allOf:
+      - $ref: '#/components/schemas/ServerSentEventsDeliveryConfigCreate'
+      - properties:
+          sseUrl:
+            type: string
+            format: url
+            readOnly: true
+            example: https://api.c013.eagleeyenetworks.com/sse/v3.0/eventSubscriptions/f3d6f55d5ba546168758a309508f4419
+            description: 'URL to be used to connect to the subscription using the server sent events protocol. Although it might look like
+
+              the logic used to generate the URLs is easily implementable client-side, it could change at any point in
+
+              time, so clients should always use this value instead of trying to generate it themselves.
+
+              '
+        required:
+        - type
+        - sseUrl
+    DeliveryConfig:
+      description: Describes how the event subscription should deliver events to the client.
+      oneOf:
+      - $ref: '#/components/schemas/ServerSentEventsDeliveryConfig'
+      - $ref: '#/components/schemas/WebhookDeliveryConfig'
+      discriminator:
+        propertyName: type
+        mapping:
+          serverSentEvents.v1: '#/components/schemas/ServerSentEventsDeliveryConfig'
+          webhook.v1: '#/components/schemas/WebhookDeliveryConfig'
+    WebhookDeliveryConfigCreate:
+      allOf:
+      - $ref: '#/components/schemas/BaseDeliveryConfig'
+      - type: object
+        properties:
+          type:
+            type: string
+            enum:
+            - webhook.v1
+          webhookUrl:
+            type: string
+            writeOnly: true
+            format: url
+            description: 'The HTTPS URL provided by the client where the webhook events will
+
+              be sent. The client must ensure that this endpoint is configured to
+
+              accept HTTPS requests and respond to an initial HTTP GET validation
+
+              request.
+
+
+              During creation, a GET request will be sent to this URL with a
+
+              one-time validation token as a query parameter
+
+              (`?token={validation_token}`).
+
+
+              The endpoint must respond with a `200 OK` status and return the
+
+              validation token in plain text format. The subscription will be
+
+              created only if this validation succeeds.
+
+
+              As events occur, the server will send HTTP POST requests to this URL
+
+              containing the event data in JSON format. The endpoint must respond
+
+              to each POST request with a `200 OK` status to acknowledge successful
+
+              receipt of the event.
+
+
+              If the endpoint fails to respond correctly after a configured number
+
+              of consecutive delivery attempts for a given event, delivery of that
+
+              event will be stopped to prevent further retries.
+
+
+              If we are unable to deliver events to the webhook continuously
+
+              for 90 days, the subscription will be disabled.
+
+              '
+          technicalContactEmail:
+            type: string
+            format: email
+            description: 'The email address of the technical contact responsible for managing and troubleshooting the webhook. This contact
+
+              should be capable of addressing technical issues.
+
+              '
+          technicalContactName:
+            type: string
+            description: The name associated with the technical contact email.
+        required:
+        - type
+        - webhookUrl
+        - technicalContactEmail
+        - technicalContactName
+    EventSubscriptionConfig:
+      type: object
+      readOnly: true
+      properties:
+        lifeCycle:
+          type: string
+          enum:
+          - temporary
+          - persistent
+          example: temporary
+          description: "Supported subscription lifecycles:\n * `temporary`: The event subscription is created by `POST /eventSubscriptions` and removed when\n    `DELETE /eventSubscriptions/{subscriptionId}` for that subscription is called, or no client uses the\n    subscription for the time defined in `timeToLiveSeconds`. This lifeCycle is only supported for\n    the delivery type serverSentEvents.v1.\n * `persistent`: The event subscription is created by `POST /eventSubscriptions` and remains active indefinitely.\n    It is not automatically removed based on usage or time. It must be explicitly deleted by calling\n    `DELETE /eventSubscriptions/{subscriptionId}`. This lifeCycle is only supported for\n    the delivery type webhook.v1.\n"
+        timeToLiveSeconds:
+          type: integer
+          example: 900
+          description: 'Defines the amount of time after which a `temporary` lifecycle subscription is automatically deleted if it
+
+            is not being used. The determination of "usage" depends on the delivery type. For the `serverSentEvents.v1`
+
+            type a subscription is marked as "in use" if a client is connected to the SSE url. For a subscription of
+
+            lifeCycle type `persistent`, there is no time to live.
+
+            '
+    WebhookDeliveryConfig:
+      allOf:
+      - $ref: '#/components/schemas/BaseDeliveryConfig'
+      - type: object
+        properties:
+          type:
+            type: string
+            enum:
+            - webhook.v1
+          webhookUrl:
+            type: string
+            writeOnly: true
+            format: url
+            description: 'The HTTPS URL provided by the client where the webhook events will
+
+              be sent. The client must ensure that this endpoint is configured to
+
+              accept HTTPS requests and respond to an initial HTTP GET validation
+
+              request.
+
+
+              During creation, a GET request will be sent to this URL with a
+
+              one-time validation token as a query parameter
+
+              (`?token={validation_token}`).
+
+
+              The endpoint must respond with a `200 OK` status and return the
+
+              validation token in plain text format. The subscription will be
+
+              created only if this validation succeeds.
+
+
+              As events occur, the server will send HTTP POST requests to this URL
+
+              containing the event data in JSON format. The endpoint must respond
+
+              to each POST request with a `200 OK` status to acknowledge successful
+
+              receipt of the event.
+
+
+              If the endpoint fails to respond correctly after a configured number
+
+              of consecutive delivery attempts for a given event, delivery of that
+
+              event will be stopped to prevent further retries.
+
+
+              If we are unable to deliver events to the webhook continuously
+
+              for 90 days, the subscription will be disabled.
+
+              '
+          secret:
+            type: string
+            description: Base64 encoded secret used to sign each event sent via webhook by hashing the event with SHA-256 algorithm.
+      required:
+      - type
+      - webhookUrl
+      - secret
+    ServerSentEventsDeliveryConfigCreate:
+      allOf:
+      - $ref: '#/components/schemas/BaseDeliveryConfig'
+      - type: object
+        properties:
+          type:
+            type: string
+            enum:
+            - serverSentEvents.v1
+    EventSubscriptionCreate:
+      type: object
+      properties:
+        deliveryConfig:
+          $ref: '#/components/schemas/DeliveryConfigCreate'
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterCreate'
+          description: 'A list of filters that determine which events will be delivered to the
+
+            subscriber. Only events that match all of the conditions within a single
+
+            filter will be delivered.
+
+            '
+      required:
+      - deliveryConfig
+      - filters
+    ApiPaginatedFiltersResponse:
+      allOf:
+      - $ref: '#/components/schemas/PaginatedResponseWithSize'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/components/schemas/Filter'
+    ApiV3Error:
+      type: object
+      properties:
+        code:
+          description: HTTP code defined in EEN Standard Code Values
+          type: integer
+        status:
+          description: A string enum describing the code
+          type: string
+          enum:
+          - cancelled
+          - unknown
+          - invalidArgument
+          - deadlineExceeded
+          - notFound
+          - conflict
+          - permissionDenied
+          - resourceExhausted
+          - failedPrecondition
+          - aborted
+          - outOfRange
+          - unimplemented
+          - internal
+          - unavailable
+          - dataLoss
+          - unauthenticated
+          - mediaTypeNotSupported
+          - acceptNotSupported
+          - methodNotSupported
+          - tooManyRequests
+          - badGateway
+        message:
+          description: Developer friendly human readable error message in English
+          type: string
+        details:
+          description: An array of extensible objects that define error information
+          type: array
+          items:
+            $ref: '#/components/schemas/ExceptionDetail'
+      required:
+      - code
+      - status
+      - message
+      - details
+    BaseDeliveryConfig:
+      type: object
+      properties:
+        type:
+          type: string
+          description: "The type of delivery used by this subscription. New values will be added to this enum when new protocols are supported.\n* `serverSentEvents.v1`: The client should set-up an HTTP(S) connection to a given URL to receive events\n  using the [Server-sent events](https://en.wikipedia.org/wiki/Server-sent_events) protocol. Currently only\n  one client can be connected at a time to a event subscription.\n\n* `webhook.v1`: The client provides a URL to which events are pushed via HTTP POST requests when they occur.\n   This delivery type uses the [Webhook](https://en.wikipedia.org/wiki/Webhook) method, where the server\n   pushes the event data formatted as JSON directly to the client’s endpoint. Webhooks are suited for scenarios\n   where the client system is capable of receiving incoming HTTP requests, allowing for real-time data delivery\n   without the need for the client to maintain a persistent connection.\n"
+      required:
+      - type
+    BadRequestExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - badRequest
+        argumentViolations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArgumentViolation'
+    PaginatedResponseNoTotalSize:
+      type: object
+      description: 'Used to wrap results for a paginated response, containing information on how to retrieve further pages.
+
+        '
+      properties:
+        nextPageToken:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: 'Token to retrieve the next page. The value of this token is passed into the field pageToken. This value can be null if there is no next page.
+
+            '
+        prevPageToken:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: 'Token to retrieve the previous page. The value of this token is passed into the field pageToken. This value can be null of there is no previous page.
+
+            '
+        results:
+          type: array
+          readOnly: true
+          description: The result set from a collection API call.
+          items:
+            type: object
+      required:
+      - nextPageToken
+      - prevPageToken
+      - results
+    ApiPaginatedEventSubscriptionsResponse:
+      allOf:
+      - $ref: '#/components/schemas/PaginatedResponseWithSize'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/components/schemas/EventSubscription'
+    PaginatedResponseWithSize:
+      description: "Used to wrap results for a paginated response, containing information on how to retrieve further pages and  the total number of results.  \n"
+      allOf:
+      - $ref: '#/components/schemas/PaginatedResponseNoTotalSize'
+      - properties:
+          totalSize:
+            type: integer
+            readOnly: true
+            description: 'Size of the total result set.
+
+              '
+        required:
+        - totalSize
+    ResourceInfoExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - resourceInfo
+        resource:
+          description: Referenced resource type, eg "cameras", "bridges", or "locations".
+          type: string
+        ids:
+          type: array
+          description: Identities of resources
+          items:
+            type: string
+    DslFilter:
+      type: object
+      description: 'Optional DSL filter for data-level event filtering. When provided, only events whose payload matches all specified conditions are delivered to the subscription. An empty object `{}` matches all events (no filtering applied). Boolean combination keys determine how conditions are evaluated: `and` requires ALL to match, `or` requires ANY to match, `not` requires NONE to match. Arrays may contain leaf conditions or nested DslFilter objects for recursive composition.
+
+        '
+      properties:
+        and:
+          type: array
+          description: All conditions must match. Each element is a condition or nested filter.
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/DslCondition'
+            - $ref: '#/components/schemas/DslFilter'
+        or:
+          type: array
+          description: At least one condition must match. Each element is a condition or nested filter.
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/DslCondition'
+            - $ref: '#/components/schemas/DslFilter'
+        not:
+          type: array
+          description: None of the conditions must match. Each element is a condition or nested filter.
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/DslCondition'
+            - $ref: '#/components/schemas/DslFilter'
+      example:
+        and:
+        - field: een.lprDetection.v1.plate
+          op: exact
+          value: ABC123
+        - field: een.lprDetection.v1.plateConfidence
+          op: gte
+          value: 0.9
+        not:
+        - field: een.lprDetection.v1.plateRegion
+          op: in
+          value:
+          - EU-DE
+          - EU-FR
+    DeliveryConfigCreate:
+      description: Describes how the event subscription should deliver events to the client.
+      oneOf:
+      - $ref: '#/components/schemas/ServerSentEventsDeliveryConfigCreate'
+      - $ref: '#/components/schemas/WebhookDeliveryConfigCreate'
+      discriminator:
+        propertyName: type
+        mapping:
+          serverSentEvents.v1: '#/components/schemas/ServerSentEventsDeliveryConfigCreate'
+          webhook.v1: '#/components/schemas/WebhookDeliveryConfigCreate'
+    ArgumentViolation:
+      properties:
+        argumentName:
+          type: string
+          description: Name of the argument
+        description:
+          type: string
+          description: Description of the violation
+    EventSubscription:
+      type: object
+      properties:
+        id:
+          type: string
+          example: f3d6f55d5ba546168758a309508f4419
+          readOnly: true
+          description: Unique identifier of the subscriptionId.
+        subscriptionConfig:
+          $ref: '#/components/schemas/EventSubscriptionConfig'
+        deliveryConfig:
+          $ref: '#/components/schemas/DeliveryConfig'
+      required:
+      - id
+      - deliveryConfig
+    ExceptionMetadata:
+      properties:
+        path:
+          description: Path of the request
+          type: string
+        method:
+          description: Method of the request
+          type: string
+    Filter:
+      allOf:
+      - properties:
+          id:
+            type: string
+            example: '1231'
+            readOnly: true
+            description: 'Identifier of the filter within the event subscription. Only guaranteed to be unique in the parent event subscription.
+
+              '
+        required:
+        - id
+        - actors
+        - types
+      - $ref: '#/components/schemas/FilterCreate'
+  parameters:
+    eventSubscriptionId:
+      in: path
+      required: true
+      name: eventSubscriptionId
+      description: Event Subscription ID
+      schema:
+        type: string
+    pageSize:
+      in: query
+      name: pageSize
+      description: 'The number of entries to return per page. The maximum range of valid page sizes is documented with minimum and  maximum values, but the range might be further limited dynamically based on the requested information, account, and system status. Values outside of the (dynamic) allowed range will not result in an error, but will be clamped to the nearest limit. Thus, logic to detect the last page should not be based on comparing the requested size with the received size, but on the existence of a `nextPageToken` value.
+
+        '
+      example: 100
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 500
+        default: 100
+    filterId:
+      in: path
+      required: true
+      name: filterId
+      description: Event Subscription Filter ID
+      schema:
+        type: string
+    pageToken:
+      in: query
+      name: pageToken
+      description: 'Token string value that references a page for pagination. This value is received when retrieving the first page in the `nextPageToken` and `prevPageToken` fields.
+
+        When a pageToken is provided, the backend remembers search parameters from the original request, so search  parameters that affect the result set or order are optional and will be ignored if provided. Representation  parameters like `include` should still be applied.
+
+        '
+      example: b2Zmc2V0PTEwJmxpbWl0PTEw
+      required: false
+      schema:
+        type: string
+  responses:
+    resourceNotFound:
+      description: Referenced resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          examples:
+            endpointNotFound:
+              value:
+                code: 404
+                status: notFound
+                message: The API endpoint was not found
+                details:
+                - type: errorInfo
+                  reason: endpointNotFound
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            resourceNotFound:
+              value:
+                code: 404
+                status: notFound
+                message: The resource was not found
+                details:
+                - type: errorInfo
+                  reason: resourceNotFound
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+                - type: resourceInfo
+                  resource: <resource>
+                  ids:
+                  - <ids>
+    internalServerError:
+      description: Something went wrong in the server. Please try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          example:
+            code: 500
+            status: internal
+            message: An internal error has occurred. Please try again later.
+            details:
+            - type: errorInfo
+              reason: unexpectedError
+              domain: apiv3
+              metadata:
+                path: /api/v3.0/<resource>
+    unauthorized:
+      description: You are not authenticated. Please authenticate and try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          example:
+            code: 401
+            status: unauthenticated
+            message: The client caller does not have a valid authentication credential
+            details:
+            - type: errorInfo
+              reason: unauthenticated
+              domain: apiv3
+              metadata:
+                path: /api/v3.0/<resource>
+    validationError:
+      description: The supplied object is invalid. Error detail will contain the validation error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          examples:
+            unexpectedArgument:
+              value:
+                code: 400
+                status: invalidArgument
+                message: 'Unexpected argument: name'
+                details:
+                - type: errorInfo
+                  reason: unexpectedArgument
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            missingRequiredArgument:
+              value:
+                code: 400
+                status: invalidArgument
+                message: 'Missing required arguments: name, id'
+                details:
+                - type: errorInfo
+                  reason: missingRequiredArgument
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            badRequestInvalidJSON:
+              value:
+                code: 400
+                status: invalidArgument
+                message: Invalid JSON
+                details:
+                - type: errorInfo
+                  reason: invalidJSON
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            badRequestInvalidArgument:
+              value:
+                code: 400
+                status: invalidArgument
+                message: 'Invalid Argument: Argument name is too long'
+                details:
+                - type: errorInfo
+                  reason: wrongArgumentValue
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+                - type: badRequest
+                  argumentViolations:
+                  - argumentName: name
+                    description: Name is too long
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-provenance:
+  method: searched
+  source: https://developer.eagleeyenetworks.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.eagleeyenetworks.com/reference/createevent.md
+  - https://developer.eagleeyenetworks.com/reference/createeventsubscription.md
+  - https://developer.eagleeyenetworks.com/reference/createeventsubscriptionfilter.md
+  - https://developer.eagleeyenetworks.com/reference/deleteeventsubscription.md
+  - https://developer.eagleeyenetworks.com/reference/deleteeventsubscriptionfilter.md
+  - https://developer.eagleeyenetworks.com/reference/getalert.md
+  - https://developer.eagleeyenetworks.com/reference/geteventbyid.md
+  - https://developer.eagleeyenetworks.com/reference/geteventmetrics.md
+  - https://developer.eagleeyenetworks.com/reference/geteventsubscription.md
+  - https://developer.eagleeyenetworks.com/reference/geteventsubscriptionfilter.md
+  - https://developer.eagleeyenetworks.com/reference/getnotification.md
+  - https://developer.eagleeyenetworks.com/reference/listalerts.md
+  - https://developer.eagleeyenetworks.com/reference/listalerttypes.md
+  - https://developer.eagleeyenetworks.com/reference/listevents.md
+  - https://developer.eagleeyenetworks.com/reference/listeventsfieldvalues.md
+  - https://developer.eagleeyenetworks.com/reference/listeventsubscriptionfilters.md
+  - https://developer.eagleeyenetworks.com/reference/listeventsubscriptions.md
+  - https://developer.eagleeyenetworks.com/reference/listeventtypes.md
+  - https://developer.eagleeyenetworks.com/reference/listnotifications.md
+  - https://developer.eagleeyenetworks.com/reference/listrecenteventsbytype.md
+  - https://developer.eagleeyenetworks.com/reference/updatenotification.md
+  merge:
+    pages: 21
+    deduped: 793
+    conflicts_kept_first: 0

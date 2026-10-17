@@ -1,0 +1,608 @@
+openapi: 3.2.0
+info:
+  title: Available Devices API
+  version: 3.0.0
+  description: Automatically discovered devices that can be added to the account.
+servers:
+- url: https://{BaseUrl}/api/v3.0
+  description: Eagle Eye Networks API Server
+  variables:
+    BaseUrl:
+      default: api.cxxx.eagleeyenetworks.com
+      description: HTTPS Base url to use for all API calls, retrieved from https://api.eagleeyenetworks.com/api/v3.0/clientSettings
+security:
+- bearerAuth: []
+tags:
+- name: Available Devices
+  description: Automatically discovered devices that can be added to the account.
+paths:
+  /availableDevices:
+    get:
+      operationId: listAvailableDevices
+      tags:
+      - Available Devices
+      description: 'This endpoint returns a list of all devices found by the bridges in the account that have not yet been added. Devices of a certain type will not be reported in the response if the user does not have permission to add them. Since adding specific device types requires calling a device-type-specific API, it is recommended to filter on the devices supported by the cameras, rather than retrieving "all" types.
+
+        It is important to note that after using the pageSize parameter, the "totalSize" in the response represents the total number of available devices, not the number of devices resulting from the query string.'
+      parameters:
+      - $ref: '#/components/parameters/deviceType__in'
+      - $ref: '#/components/parameters/state__in'
+      - $ref: '#/components/parameters/bridgeId__in2'
+      - $ref: '#/components/parameters/pageToken'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/include4'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiPaginatedAvailableDeviceResponse'
+        '400':
+          $ref: '#/components/responses/validationError'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: List available devices
+      x-summary-source: derived
+components:
+  schemas:
+    ErrorInfoExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - errorInfo
+        reason:
+          description: 'The reason for the error. This is a constant value that identifies the proximate cause of the
+
+            error. Error reasons are unique within a particular domain of errors.
+
+            '
+          type: string
+          enum:
+          - unauthenticated
+          - unexpectedArgument
+          - missingRequiredArgument
+          - wrongArgumentValue
+          - invalidPermission
+          - wrongEdition
+          - wrongAccountType
+          - resourceNotFound
+          - endpointNotFound
+          - methodNotSupported
+          - unexpectedError
+          - acceptNotSupported
+          - alreadyExists
+          - foreignKeyConflict
+          - childDevicesExist
+          - contentNotSupported
+          - deadlineExpired
+          - tooManyRequests
+          - deviceUnavailable
+          - serviceUnavailable
+          - invalidJSON
+          - resourceLocked
+          - notSupportedOnBridge
+          - outOfRetention
+          - deviceIdentificationFailed
+          - credentialValidationFailed
+          - credentialSetupFailed
+          - localUrlValidationFailed
+          - hwRegistrationFailed
+          - failedAddingCameraAfterValidation
+          - neverConnected
+          - reconnectFailed
+          - unsupportedModel
+          - purged
+          - userBlocked
+          - userTemporarilyBlocked
+          - quotaExceeded
+          - alreadyValidated
+          - reAuthenticationRequired
+          - badGateway
+        domain:
+          description: 'Logical grouping to which the "reason" belongs
+
+            '
+          type: string
+        metadata:
+          $ref: '#/components/schemas/ExceptionMetadata'
+    IpAddress2:
+      type: string
+      pattern: ^(?:25[0-5]|2[0-4]\d|[0-1]?\d{1,2})(?:\.(?:25[0-5]|2[0-4]\d|[0-1]?\d{1,2})){3}$
+      example: 10.143.55.140
+    ExceptionDetail:
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/ErrorInfoExceptionDetail'
+      - $ref: '#/components/schemas/BadRequestExceptionDetail'
+      - $ref: '#/components/schemas/ResourceInfoExceptionDetail'
+      discriminator:
+        propertyName: type
+        mapping:
+          errorInfo: '#/components/schemas/ErrorInfoExceptionDetail'
+          badRequest: '#/components/schemas/BadRequestExceptionDetail'
+          resourceInfo: '#/components/schemas/ResourceInfoExceptionDetail'
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - errorInfo
+          - badRequest
+          - resourceInfo
+      required:
+      - type
+    ApiPaginatedAvailableDeviceResponse:
+      allOf:
+      - $ref: '#/components/schemas/PaginatedResponseWithSize'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/components/schemas/ApiAvailableDevice'
+    ApiV3Error:
+      type: object
+      properties:
+        code:
+          description: HTTP code defined in EEN Standard Code Values
+          type: integer
+        status:
+          description: A string enum describing the code
+          type: string
+          enum:
+          - cancelled
+          - unknown
+          - invalidArgument
+          - deadlineExceeded
+          - notFound
+          - conflict
+          - permissionDenied
+          - resourceExhausted
+          - failedPrecondition
+          - aborted
+          - outOfRange
+          - unimplemented
+          - internal
+          - unavailable
+          - dataLoss
+          - unauthenticated
+          - mediaTypeNotSupported
+          - acceptNotSupported
+          - methodNotSupported
+          - tooManyRequests
+          - badGateway
+        message:
+          description: Developer friendly human readable error message in English
+          type: string
+        details:
+          description: An array of extensible objects that define error information
+          type: array
+          items:
+            $ref: '#/components/schemas/ExceptionDetail'
+      required:
+      - code
+      - status
+      - message
+      - details
+    BadRequestExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - badRequest
+        argumentViolations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArgumentViolation'
+    PaginatedResponseNoTotalSize:
+      type: object
+      description: 'Used to wrap results for a paginated response, containing information on how to retrieve further pages.
+
+        '
+      properties:
+        nextPageToken:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: 'Token to retrieve the next page. The value of this token is passed into the field pageToken. This value can be null if there is no next page.
+
+            '
+        prevPageToken:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+          description: 'Token to retrieve the previous page. The value of this token is passed into the field pageToken. This value can be null of there is no previous page.
+
+            '
+        results:
+          type: array
+          readOnly: true
+          description: The result set from a collection API call.
+          items:
+            type: object
+      required:
+      - nextPageToken
+      - prevPageToken
+      - results
+    Guid4:
+      type: string
+      example: ddfa5b34-5d04-431e-8287-110fe87edf71
+    ApiAvailableDevice:
+      description: 'Represents a device found that is available to be added to the account. Note: Schema might change for new device types, so make sure any parsing code that has strict requirements only tries to parse device types it has been written for and doesn''t try to parse everything.
+
+        '
+      type: object
+      properties:
+        deviceType:
+          $ref: '#/components/schemas/DeviceType1'
+        guid:
+          $ref: '#/components/schemas/Guid4'
+        state:
+          type: string
+          enum:
+          - addable
+          - notSupported
+          - inOtherAccount
+          - unknown
+          default: unknown
+          description: "Indicates if and how a device can be added. *As there might be future reasons why devices cannot be added clients should be written in such a way that they can handle new values to be added. In case a client doesn't understand the state, it should handle it as it handles the \"unknown\" state, which should be to still show the device, but tell the user to contact support to help. add the device.\nThe states:\n  * `addable`: Camera can be added and should work.\n  * `notSupported`: Indicates if the device can really be added, or if it is unsupported, due to for example an\nuntested firmware version or unexpected responses from the device. Unsupported devices are reported to help users debug why they cannot add a device. The users should contact support if they wish to add the device to their account.\n  * `inOtherAccount`: Indicates if the device has already been added to a different account, and it is thus not\npossible to add it to the current account. The user should contact support to resolve this issue.\n  * `unknown`: Indicates the camera is in a state that means it is visible, but cannot be added due to some\nissue. This state cane be transient, so users should be told to try again a few minutes later. If it is still in this state, users should contact support to help resolve the issue.\n"
+        unknownCredentials:
+          type: boolean
+          description: 'No working credentials are known for this camera, and thus the device will not work directly after adding. The user can either supply credentials while adding the device, change them after adding, or reset the device and thus its credentials.
+
+            '
+        visibleByBridges:
+          type: array
+          items:
+            $ref: '#/components/schemas/BridgeId4'
+        make:
+          description: The manufacturer or brand of the camera.
+          type:
+          - string
+          - 'null'
+        model:
+          description: The model of the camera.
+          type:
+          - string
+          - 'null'
+        firmwareVersion:
+          type:
+          - string
+          - 'null'
+          example: v20211019_542_3022
+        ipAddress:
+          allOf:
+          - $ref: '#/components/schemas/IpAddress2'
+          - description: The IP address that is used to communicate to the device.
+        otherIpAddress:
+          description: Other known IP addresses of the device.
+          type: array
+          items:
+            $ref: '#/components/schemas/IpAddress2'
+        visibleByBridgesDetailed:
+          type: array
+          x-jsoninclude-nonnull-annotation: true
+          items:
+            $ref: '#/components/schemas/Bridge'
+      required:
+      - deviceType
+      - guid
+      - state
+      - unknownCredentials
+      - visibleByBridges
+    PaginatedResponseWithSize:
+      description: "Used to wrap results for a paginated response, containing information on how to retrieve further pages and  the total number of results.  \n"
+      allOf:
+      - $ref: '#/components/schemas/PaginatedResponseNoTotalSize'
+      - properties:
+          totalSize:
+            type: integer
+            readOnly: true
+            description: 'Size of the total result set.
+
+              '
+        required:
+        - totalSize
+    ResourceInfoExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - resourceInfo
+        resource:
+          description: Referenced resource type, eg "cameras", "bridges", or "locations".
+          type: string
+        ids:
+          type: array
+          description: Identities of resources
+          items:
+            type: string
+    ArgumentViolation:
+      properties:
+        argumentName:
+          type: string
+          description: Name of the argument
+        description:
+          type: string
+          description: Description of the violation
+    Bridge:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/BridgeId4'
+        name:
+          type: string
+          description: Name of the bridge.
+          example: Bridge Name
+    ExceptionMetadata:
+      properties:
+        path:
+          description: Path of the request
+          type: string
+        method:
+          description: Method of the request
+          type: string
+    BridgeId4:
+      type: string
+      pattern: ^(?:0[xX])?[0-9a-fA-F]{8}$
+      example: 1000f60d
+      description: 'Unique ID of an EEN bridge.
+
+        '
+    DeviceType1:
+      type: string
+      enum:
+      - camera
+      - speaker
+      - display
+      - multiCamera
+  parameters:
+    pageSize:
+      in: query
+      name: pageSize
+      description: 'The number of entries to return per page. The maximum range of valid page sizes is documented with minimum and  maximum values, but the range might be further limited dynamically based on the requested information, account, and system status. Values outside of the (dynamic) allowed range will not result in an error, but will be clamped to the nearest limit. Thus, logic to detect the last page should not be based on comparing the requested size with the received size, but on the existence of a `nextPageToken` value.
+
+        '
+      example: 100
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 500
+        default: 100
+    include4:
+      in: query
+      name: include
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - visibleByBridgesDetailed
+    state__in:
+      in: query
+      name: state__in
+      description: 'List of different device states. If provided, the response will only contain devices with provided states.
+
+        '
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - addable
+          - notSupported
+          - inOtherAccount
+          - unknown
+    deviceType__in:
+      in: query
+      name: deviceType__in
+      required: true
+      description: 'List of device types that are supported by the client. Required as new device types might be added at any time, which might need client (parser) changes before they are supported.
+
+        '
+      style: form
+      explode: false
+      schema:
+        type: array
+        minItems: 1
+        items:
+          type: string
+          enum:
+          - camera
+          - speaker
+          - display
+          - multiCamera
+    bridgeId__in2:
+      in: query
+      name: bridgeId__in
+      description: Filter to get the available devices whose bridge id is on the provided list. The lookup is exact and case insensitive
+      schema:
+        type: array
+        items:
+          type: string
+    pageToken:
+      in: query
+      name: pageToken
+      description: 'Token string value that references a page for pagination. This value is received when retrieving the first page in the `nextPageToken` and `prevPageToken` fields.
+
+        When a pageToken is provided, the backend remembers search parameters from the original request, so search  parameters that affect the result set or order are optional and will be ignored if provided. Representation  parameters like `include` should still be applied.
+
+        '
+      example: b2Zmc2V0PTEwJmxpbWl0PTEw
+      required: false
+      schema:
+        type: string
+  responses:
+    internalServerError:
+      description: Something went wrong in the server. Please try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          example:
+            code: 500
+            status: internal
+            message: An internal error has occurred. Please try again later.
+            details:
+            - type: errorInfo
+              reason: unexpectedError
+              domain: apiv3
+              metadata:
+                path: /api/v3.0/<resource>
+    unauthorized:
+      description: You are not authenticated. Please authenticate and try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          example:
+            code: 401
+            status: unauthenticated
+            message: The client caller does not have a valid authentication credential
+            details:
+            - type: errorInfo
+              reason: unauthenticated
+              domain: apiv3
+              metadata:
+                path: /api/v3.0/<resource>
+    validationError:
+      description: The supplied object is invalid. Error detail will contain the validation error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          examples:
+            unexpectedArgument:
+              value:
+                code: 400
+                status: invalidArgument
+                message: 'Unexpected argument: name'
+                details:
+                - type: errorInfo
+                  reason: unexpectedArgument
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            missingRequiredArgument:
+              value:
+                code: 400
+                status: invalidArgument
+                message: 'Missing required arguments: name, id'
+                details:
+                - type: errorInfo
+                  reason: missingRequiredArgument
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            badRequestInvalidJSON:
+              value:
+                code: 400
+                status: invalidArgument
+                message: Invalid JSON
+                details:
+                - type: errorInfo
+                  reason: invalidJSON
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            badRequestInvalidArgument:
+              value:
+                code: 400
+                status: invalidArgument
+                message: 'Invalid Argument: Argument name is too long'
+                details:
+                - type: errorInfo
+                  reason: wrongArgumentValue
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+                - type: badRequest
+                  argumentViolations:
+                  - argumentName: name
+                    description: Name is too long
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-provenance:
+  method: searched
+  source: https://developer.eagleeyenetworks.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.eagleeyenetworks.com/reference/addcamera.md
+  - https://developer.eagleeyenetworks.com/reference/addmulticamera.md
+  - https://developer.eagleeyenetworks.com/reference/addspeaker.md
+  - https://developer.eagleeyenetworks.com/reference/createbridge.md
+  - https://developer.eagleeyenetworks.com/reference/deletebridge.md
+  - https://developer.eagleeyenetworks.com/reference/deletecamera.md
+  - https://developer.eagleeyenetworks.com/reference/deletecameratunnel.md
+  - https://developer.eagleeyenetworks.com/reference/deletemulticamera.md
+  - https://developer.eagleeyenetworks.com/reference/deletespeaker.md
+  - https://developer.eagleeyenetworks.com/reference/getbridge.md
+  - https://developer.eagleeyenetworks.com/reference/getbridgemetrics.md
+  - https://developer.eagleeyenetworks.com/reference/getbridgesettings.md
+  - https://developer.eagleeyenetworks.com/reference/getcamera.md
+  - https://developer.eagleeyenetworks.com/reference/getcamerametrics.md
+  - https://developer.eagleeyenetworks.com/reference/getcamerasettings.md
+  - https://developer.eagleeyenetworks.com/reference/getcurrentposition.md
+  - https://developer.eagleeyenetworks.com/reference/getmulticamera.md
+  - https://developer.eagleeyenetworks.com/reference/getmulticamerachannels.md
+  - https://developer.eagleeyenetworks.com/reference/getport.md
+  - https://developer.eagleeyenetworks.com/reference/getport1.md
+  - https://developer.eagleeyenetworks.com/reference/getportrecorder.md
+  - https://developer.eagleeyenetworks.com/reference/getportrecorders.md
+  - https://developer.eagleeyenetworks.com/reference/getports.md
+  - https://developer.eagleeyenetworks.com/reference/getports1.md
+  - https://developer.eagleeyenetworks.com/reference/getptzsettings.md
+  - https://developer.eagleeyenetworks.com/reference/getspeaker.md
+  - https://developer.eagleeyenetworks.com/reference/getspeakersettings.md
+  - https://developer.eagleeyenetworks.com/reference/getswitch.md
+  - https://developer.eagleeyenetworks.com/reference/listavailabledevices.md
+  - https://developer.eagleeyenetworks.com/reference/listbridges.md
+  - https://developer.eagleeyenetworks.com/reference/listcameras.md
+  - https://developer.eagleeyenetworks.com/reference/listmulticameras.md
+  - https://developer.eagleeyenetworks.com/reference/listspeakers.md
+  - https://developer.eagleeyenetworks.com/reference/listswitches.md
+  - https://developer.eagleeyenetworks.com/reference/moveto.md
+  - https://developer.eagleeyenetworks.com/reference/putcameratunnel.md
+  - https://developer.eagleeyenetworks.com/reference/swapbridge.md
+  - https://developer.eagleeyenetworks.com/reference/swapcamera.md
+  - https://developer.eagleeyenetworks.com/reference/switchaction.md
+  - https://developer.eagleeyenetworks.com/reference/updateallports.md
+  - https://developer.eagleeyenetworks.com/reference/updatebridge.md
+  - https://developer.eagleeyenetworks.com/reference/updatebridgesettings.md
+  - https://developer.eagleeyenetworks.com/reference/updatebulkbridges.md
+  - https://developer.eagleeyenetworks.com/reference/updatebulkcameras.md
+  - https://developer.eagleeyenetworks.com/reference/updatecamera.md
+  - https://developer.eagleeyenetworks.com/reference/updatecamerasettings.md
+  - https://developer.eagleeyenetworks.com/reference/updatemulticamera.md
+  - https://developer.eagleeyenetworks.com/reference/updateport.md
+  - https://developer.eagleeyenetworks.com/reference/updateport1.md
+  - https://developer.eagleeyenetworks.com/reference/updateport2.md
+  - https://developer.eagleeyenetworks.com/reference/updateport3.md
+  - https://developer.eagleeyenetworks.com/reference/updateportrecorder.md
+  - https://developer.eagleeyenetworks.com/reference/updateptzsettings.md
+  - https://developer.eagleeyenetworks.com/reference/updatespeaker.md
+  - https://developer.eagleeyenetworks.com/reference/updatespeakersettings.md
+  - https://developer.eagleeyenetworks.com/reference/updateswitch.md
+  merge:
+    pages: 56
+    deduped: 1179
+    conflicts_kept_first: 0

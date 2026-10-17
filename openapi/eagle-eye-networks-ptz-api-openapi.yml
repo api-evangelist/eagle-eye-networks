@@ -1,0 +1,780 @@
+openapi: 3.2.0
+info:
+  title: DEVICES PTZ API
+  version: 3.0.0
+  description: Retrieve and control the camera using pan tilt and zoom controls.
+servers:
+- url: https://{BaseUrl}/api/v3.0
+  description: Eagle Eye Networks API Server
+  variables:
+    BaseUrl:
+      default: api.cxxx.eagleeyenetworks.com
+      description: HTTPS Base url to use for all API calls, retrieved from https://api.eagleeyenetworks.com/api/v3.0/clientSettings
+security:
+- bearerAuth: []
+tags:
+- name: PTZ
+  description: Retrieve and control the camera using pan tilt and zoom controls.
+paths:
+  /cameras/{cameraId}/ptz/position:
+    parameters:
+    - $ref: '#/components/parameters/cameraId1'
+    get:
+      operationId: getCurrentPosition
+      description: This endpoint returns the current position of the camera. The response includes the pan, tilt, and zoom values of the camera. If the camera does not support pan or tilt or zoom, the corresponding value will not be present in the response.
+      tags:
+      - PTZ
+      responses:
+        '200':
+          description: Current PTZ position of camera.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiPtzPosition'
+        '400':
+          $ref: '#/components/responses/validationError'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/resourceNotFound'
+        '409':
+          $ref: '#/components/responses/conflict'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: Get current position
+      x-summary-source: derived
+    put:
+      operationId: moveTo
+      description: This endpoint moves the camera to a specific position, in a specific direction, or to a specific center point on the screen. The endpoint accepts a move object that can be either a position move, a direction move or a center move.
+      tags:
+      - PTZ
+      requestBody:
+        description: 'Describes where to move the camera to, this could be either a directional, center or position move object. For a position move it is possible to only specify the zoom or the pan and tilt you want to move. It is of course also possible to give all 3 coordinates.
+
+          '
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiPtzMove'
+            examples:
+              Direction:
+                value:
+                  moveType: direction
+                  direction:
+                  - up
+                  stepSize: large
+              Position:
+                value:
+                  moveType: position
+                  x: 0.12345
+                  y: -0.98765
+                  z: 0.45678
+              Center:
+                value:
+                  moveType: centerOn
+                  relativeX: 0.3148
+                  relativeY: 0.732
+      responses:
+        '204':
+          description: Camera moved to given position.
+        '400':
+          $ref: '#/components/responses/validationError'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/resourceNotFound'
+        '409':
+          $ref: '#/components/responses/conflict'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: Move to
+      x-summary-source: derived
+  /cameras/{cameraId}/ptz/settings:
+    parameters:
+    - $ref: '#/components/parameters/cameraId2'
+    get:
+      operationId: getPtzSettings
+      description: Retrieves the PTZ settings for the given camera.
+      tags:
+      - PTZ
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PtzSettingsGet'
+        '400':
+          $ref: '#/components/responses/validationError'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '404':
+          $ref: '#/components/responses/resourceNotFound'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: Get ptz settings
+      x-summary-source: derived
+    patch:
+      operationId: updatePtzSettings
+      description: Updates the PTZ settings for the given camera.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PtzSettings'
+      tags:
+      - PTZ
+      responses:
+        '204':
+          description: Camera Updated
+        '400':
+          $ref: '#/components/responses/validationError'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/resourceNotFound'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: Update ptz settings
+      x-summary-source: derived
+components:
+  schemas:
+    ErrorInfoExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - errorInfo
+        reason:
+          description: 'The reason for the error. This is a constant value that identifies the proximate cause of the
+
+            error. Error reasons are unique within a particular domain of errors.
+
+            '
+          type: string
+          enum:
+          - unauthenticated
+          - unexpectedArgument
+          - missingRequiredArgument
+          - wrongArgumentValue
+          - invalidPermission
+          - wrongEdition
+          - wrongAccountType
+          - resourceNotFound
+          - endpointNotFound
+          - methodNotSupported
+          - unexpectedError
+          - acceptNotSupported
+          - alreadyExists
+          - foreignKeyConflict
+          - childDevicesExist
+          - contentNotSupported
+          - deadlineExpired
+          - tooManyRequests
+          - deviceUnavailable
+          - serviceUnavailable
+          - invalidJSON
+          - resourceLocked
+          - notSupportedOnBridge
+          - outOfRetention
+          - deviceIdentificationFailed
+          - credentialValidationFailed
+          - credentialSetupFailed
+          - localUrlValidationFailed
+          - hwRegistrationFailed
+          - failedAddingCameraAfterValidation
+          - neverConnected
+          - reconnectFailed
+          - unsupportedModel
+          - purged
+          - userBlocked
+          - userTemporarilyBlocked
+          - quotaExceeded
+          - alreadyValidated
+          - reAuthenticationRequired
+          - badGateway
+        domain:
+          description: 'Logical grouping to which the "reason" belongs
+
+            '
+          type: string
+        metadata:
+          $ref: '#/components/schemas/ExceptionMetadata'
+    ExceptionDetail:
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/ErrorInfoExceptionDetail'
+      - $ref: '#/components/schemas/BadRequestExceptionDetail'
+      - $ref: '#/components/schemas/ResourceInfoExceptionDetail'
+      discriminator:
+        propertyName: type
+        mapping:
+          errorInfo: '#/components/schemas/ErrorInfoExceptionDetail'
+          badRequest: '#/components/schemas/BadRequestExceptionDetail'
+          resourceInfo: '#/components/schemas/ResourceInfoExceptionDetail'
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - errorInfo
+          - badRequest
+          - resourceInfo
+      required:
+      - type
+    MoveType:
+      type: string
+      enum:
+      - position
+      - centerOn
+      - direction
+    PtzSettings:
+      type: object
+      properties:
+        presets:
+          type: array
+          maxItems: 30
+          description: Saved positions. Order of this array will be used by the tour mode.
+          items:
+            $ref: '#/components/schemas/PtzPreset'
+        homePreset:
+          type:
+          - string
+          - 'null'
+          example: Preset 1
+          description: Name of the default preset to which the camera will return if set to homeReturn after the specified auto start delay.
+        mode:
+          type: string
+          enum:
+          - homeReturn
+          - tour
+          - manualOnly
+          description: "The following modes are available:\n  * `manualOnly`: The PTZ camera will only move when issued a direct command by the user.\n  * `homeReturn`: After a specified amount of time without receiving a command,\nthe PTZ camera will navigate back to the home preset position.  If none is set, this will be the factory default position.\n  * `tour`: After the specified auto start delay, the PTZ camera will tour through all\npresets in the order specified by the user. It will continue doing so until interrupted and will resume after the aforementioned auto start delay.\n"
+        autoStartDelay:
+          type: integer
+          minimum: 5
+          description: The time in seconds after which the PTZ camera should resume Touring or return to Home when idling.
+    ApiV3Error:
+      type: object
+      properties:
+        code:
+          description: HTTP code defined in EEN Standard Code Values
+          type: integer
+        status:
+          description: A string enum describing the code
+          type: string
+          enum:
+          - cancelled
+          - unknown
+          - invalidArgument
+          - deadlineExceeded
+          - notFound
+          - conflict
+          - permissionDenied
+          - resourceExhausted
+          - failedPrecondition
+          - aborted
+          - outOfRange
+          - unimplemented
+          - internal
+          - unavailable
+          - dataLoss
+          - unauthenticated
+          - mediaTypeNotSupported
+          - acceptNotSupported
+          - methodNotSupported
+          - tooManyRequests
+          - badGateway
+        message:
+          description: Developer friendly human readable error message in English
+          type: string
+        details:
+          description: An array of extensible objects that define error information
+          type: array
+          items:
+            $ref: '#/components/schemas/ExceptionDetail'
+      required:
+      - code
+      - status
+      - message
+      - details
+    ApiPtzCenterOnMove:
+      description: Move the center of the camera to the indicated(clicked) point within the shown image. The point is encoded as the relative x and y based on the width and height of the shown image on a scale from 0 to 1, where the (0,0) coordinate is top left and (1,1) is bottom right.
+      properties:
+        moveType:
+          type: string
+          enum:
+          - centerOn
+        relativeX:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 1
+          description: Relative x coordinate.
+        relativeY:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 1
+          description: Relative y coordinate.
+      required:
+      - relativeX
+      - relativeY
+    BadRequestExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - badRequest
+        argumentViolations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArgumentViolation'
+    ApiPtzPosition:
+      description: The ptz coordinates of the camera in a space defined as pan:(-1,1), tilt:(-1,1), zoom:(0,1).
+      type: object
+      properties:
+        x:
+          type: number
+          format: double
+          description: Pan coordinate given as value between -1(max left) and 1(max right).
+          minimum: -1
+          maximum: 1
+        y:
+          type: number
+          format: double
+          description: Tilt coordinate given as value between -1(max down) and 1(max up).
+          minimum: -1
+          maximum: 1
+        z:
+          type: number
+          format: double
+          description: Zoom coordinate given as value between 0(fully zoomed out) and 1(fully zoomed in).
+          minimum: 0
+          maximum: 1
+      minProperties: 1
+    ResourceInfoExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - resourceInfo
+        resource:
+          description: Referenced resource type, eg "cameras", "bridges", or "locations".
+          type: string
+        ids:
+          type: array
+          description: Identities of resources
+          items:
+            type: string
+    ApiPtzPositionMove:
+      description: Moves the camera to a ptz coordinate in a space defined as pan:(-1,1), tilt:(-1,1), zoom:(0,1). This move is normally used for moving to presets. It is not only possible to give the full x,y,z coordinates here, you can also either give only x,y or give only z.
+      allOf:
+      - $ref: '#/components/schemas/ApiPtzPosition'
+      - properties:
+          moveType:
+            type: string
+            enum:
+            - position
+    ArgumentViolation:
+      properties:
+        argumentName:
+          type: string
+          description: Name of the argument
+        description:
+          type: string
+          description: Description of the violation
+    ApiPtzMove:
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/ApiPtzCenterOnMove'
+      - $ref: '#/components/schemas/ApiPtzDirectionMove'
+      - $ref: '#/components/schemas/ApiPtzPositionMove'
+      discriminator:
+        propertyName: moveType
+        mapping:
+          centerOn: '#/components/schemas/ApiPtzCenterOnMove'
+          direction: '#/components/schemas/ApiPtzDirectionMove'
+          position: '#/components/schemas/ApiPtzPositionMove'
+      properties:
+        moveType:
+          $ref: '#/components/schemas/MoveType'
+      required:
+      - moveType
+    ApiPtzDirectionMove:
+      description: Move the camera in the given direction.
+      properties:
+        moveType:
+          type: string
+          enum:
+          - direction
+        direction:
+          description: The direction to move in.
+          type: array
+          minItems: 1
+          maxItems: 3
+          items:
+            type: string
+            enum:
+            - up
+            - down
+            - left
+            - right
+            - in
+            - out
+        stepSize:
+          description: How much we will move, if no stepSize is given then `medium` stepsize is taken.
+          type: string
+          enum:
+          - small
+          - medium
+          - large
+          default: medium
+      required:
+      - direction
+    ExceptionMetadata:
+      properties:
+        path:
+          description: Path of the request
+          type: string
+        method:
+          description: Method of the request
+          type: string
+    PtzPreset:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Preset 1
+        position:
+          $ref: '#/components/schemas/ApiPtzPosition'
+        timeAtPreset:
+          type: integer
+          minimum: 5
+          description: Specifies the number of seconds to remain at a preset when in tour mode.
+      required:
+      - name
+      - position
+      - timeAtPreset
+    PtzSettingsGet:
+      allOf:
+      - $ref: '#/components/schemas/PtzSettings'
+      required:
+      - presets
+      - homePreset
+      - mode
+      - autoStartDelay
+  responses:
+    forbidden:
+      description: You have no permission to access the specified resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          examples:
+            invalidPermission:
+              value:
+                code: 403
+                status: permissionDenied
+                message: The client caller does not have permission for the specified operation
+                details:
+                - type: errorInfo
+                  reason: invalidPermission
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            wrongEdition:
+              value:
+                code: 403
+                status: permissionDenied
+                message: This feature is not enabled for the account
+                details:
+                - type: errorInfo
+                  reason: wrongEdition
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/locations
+            wrongAccountType:
+              value:
+                code: 403
+                status: permissionDenied
+                message: This feature is only available for end users
+                details:
+                - type: errorInfo
+                  reason: wrongAccountType
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/locations
+    resourceNotFound:
+      description: Referenced resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          examples:
+            endpointNotFound:
+              value:
+                code: 404
+                status: notFound
+                message: The API endpoint was not found
+                details:
+                - type: errorInfo
+                  reason: endpointNotFound
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            resourceNotFound:
+              value:
+                code: 404
+                status: notFound
+                message: The resource was not found
+                details:
+                - type: errorInfo
+                  reason: resourceNotFound
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+                - type: resourceInfo
+                  resource: <resource>
+                  ids:
+                  - <ids>
+    conflict:
+      description: There was a conflict while trying to perform your request. See error details for more information.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          examples:
+            alreadyExists:
+              value:
+                code: 409
+                status: conflict
+                message: The resource already exists
+                details:
+                - type: errorInfo
+                  reason: alreadyExists
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            foreignKeyConflict:
+              value:
+                code: 409
+                status: conflict
+                message: The resource cannot be deleted as other resources link to it. Please remove the links or delete the other resources first before deleting this resource.
+                details:
+                - type: errorInfo
+                  reason: foreignKeyConflict
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            childDevicesExist:
+              value:
+                code: 409
+                status: conflict
+                message: This device can not be deleted before all attached cameras have been deleted. Please delete all cameras and then delete this device.
+                details:
+                - type: errorInfo
+                  reason: childDevicesExist
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            deviceUnavailable:
+              value:
+                code: 409
+                status: conflict
+                message: Device is not available.
+                details:
+                - type: errorInfo
+                  reason: deviceUnavailable
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+    internalServerError:
+      description: Something went wrong in the server. Please try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          example:
+            code: 500
+            status: internal
+            message: An internal error has occurred. Please try again later.
+            details:
+            - type: errorInfo
+              reason: unexpectedError
+              domain: apiv3
+              metadata:
+                path: /api/v3.0/<resource>
+    unauthorized:
+      description: You are not authenticated. Please authenticate and try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          example:
+            code: 401
+            status: unauthenticated
+            message: The client caller does not have a valid authentication credential
+            details:
+            - type: errorInfo
+              reason: unauthenticated
+              domain: apiv3
+              metadata:
+                path: /api/v3.0/<resource>
+    validationError:
+      description: The supplied object is invalid. Error detail will contain the validation error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          examples:
+            unexpectedArgument:
+              value:
+                code: 400
+                status: invalidArgument
+                message: 'Unexpected argument: name'
+                details:
+                - type: errorInfo
+                  reason: unexpectedArgument
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            missingRequiredArgument:
+              value:
+                code: 400
+                status: invalidArgument
+                message: 'Missing required arguments: name, id'
+                details:
+                - type: errorInfo
+                  reason: missingRequiredArgument
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            badRequestInvalidJSON:
+              value:
+                code: 400
+                status: invalidArgument
+                message: Invalid JSON
+                details:
+                - type: errorInfo
+                  reason: invalidJSON
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            badRequestInvalidArgument:
+              value:
+                code: 400
+                status: invalidArgument
+                message: 'Invalid Argument: Argument name is too long'
+                details:
+                - type: errorInfo
+                  reason: wrongArgumentValue
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+                - type: badRequest
+                  argumentViolations:
+                  - argumentName: name
+                    description: Name is too long
+  parameters:
+    cameraId2:
+      name: cameraId
+      in: path
+      required: true
+      description: ID of camera we want to operate on.
+      schema:
+        type: string
+        pattern: ^[0-9a-f]{8}$
+        example: abcdef01
+    cameraId1:
+      name: cameraId
+      in: path
+      required: true
+      description: ID of camera we want to operate on.
+      schema:
+        type: string
+        pattern: ^[0-9a-f]{8}$
+        example: abcdef01
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-provenance:
+  method: searched
+  source: https://developer.eagleeyenetworks.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.eagleeyenetworks.com/reference/addcamera.md
+  - https://developer.eagleeyenetworks.com/reference/addmulticamera.md
+  - https://developer.eagleeyenetworks.com/reference/addspeaker.md
+  - https://developer.eagleeyenetworks.com/reference/createbridge.md
+  - https://developer.eagleeyenetworks.com/reference/deletebridge.md
+  - https://developer.eagleeyenetworks.com/reference/deletecamera.md
+  - https://developer.eagleeyenetworks.com/reference/deletecameratunnel.md
+  - https://developer.eagleeyenetworks.com/reference/deletemulticamera.md
+  - https://developer.eagleeyenetworks.com/reference/deletespeaker.md
+  - https://developer.eagleeyenetworks.com/reference/getbridge.md
+  - https://developer.eagleeyenetworks.com/reference/getbridgemetrics.md
+  - https://developer.eagleeyenetworks.com/reference/getbridgesettings.md
+  - https://developer.eagleeyenetworks.com/reference/getcamera.md
+  - https://developer.eagleeyenetworks.com/reference/getcamerametrics.md
+  - https://developer.eagleeyenetworks.com/reference/getcamerasettings.md
+  - https://developer.eagleeyenetworks.com/reference/getcurrentposition.md
+  - https://developer.eagleeyenetworks.com/reference/getmulticamera.md
+  - https://developer.eagleeyenetworks.com/reference/getmulticamerachannels.md
+  - https://developer.eagleeyenetworks.com/reference/getport.md
+  - https://developer.eagleeyenetworks.com/reference/getport1.md
+  - https://developer.eagleeyenetworks.com/reference/getportrecorder.md
+  - https://developer.eagleeyenetworks.com/reference/getportrecorders.md
+  - https://developer.eagleeyenetworks.com/reference/getports.md
+  - https://developer.eagleeyenetworks.com/reference/getports1.md
+  - https://developer.eagleeyenetworks.com/reference/getptzsettings.md
+  - https://developer.eagleeyenetworks.com/reference/getspeaker.md
+  - https://developer.eagleeyenetworks.com/reference/getspeakersettings.md
+  - https://developer.eagleeyenetworks.com/reference/getswitch.md
+  - https://developer.eagleeyenetworks.com/reference/listavailabledevices.md
+  - https://developer.eagleeyenetworks.com/reference/listbridges.md
+  - https://developer.eagleeyenetworks.com/reference/listcameras.md
+  - https://developer.eagleeyenetworks.com/reference/listmulticameras.md
+  - https://developer.eagleeyenetworks.com/reference/listspeakers.md
+  - https://developer.eagleeyenetworks.com/reference/listswitches.md
+  - https://developer.eagleeyenetworks.com/reference/moveto.md
+  - https://developer.eagleeyenetworks.com/reference/putcameratunnel.md
+  - https://developer.eagleeyenetworks.com/reference/swapbridge.md
+  - https://developer.eagleeyenetworks.com/reference/swapcamera.md
+  - https://developer.eagleeyenetworks.com/reference/switchaction.md
+  - https://developer.eagleeyenetworks.com/reference/updateallports.md
+  - https://developer.eagleeyenetworks.com/reference/updatebridge.md
+  - https://developer.eagleeyenetworks.com/reference/updatebridgesettings.md
+  - https://developer.eagleeyenetworks.com/reference/updatebulkbridges.md
+  - https://developer.eagleeyenetworks.com/reference/updatebulkcameras.md
+  - https://developer.eagleeyenetworks.com/reference/updatecamera.md
+  - https://developer.eagleeyenetworks.com/reference/updatecamerasettings.md
+  - https://developer.eagleeyenetworks.com/reference/updatemulticamera.md
+  - https://developer.eagleeyenetworks.com/reference/updateport.md
+  - https://developer.eagleeyenetworks.com/reference/updateport1.md
+  - https://developer.eagleeyenetworks.com/reference/updateport2.md
+  - https://developer.eagleeyenetworks.com/reference/updateport3.md
+  - https://developer.eagleeyenetworks.com/reference/updateportrecorder.md
+  - https://developer.eagleeyenetworks.com/reference/updateptzsettings.md
+  - https://developer.eagleeyenetworks.com/reference/updatespeaker.md
+  - https://developer.eagleeyenetworks.com/reference/updatespeakersettings.md
+  - https://developer.eagleeyenetworks.com/reference/updateswitch.md
+  merge:
+    pages: 56
+    deduped: 1179
+    conflicts_kept_first: 0

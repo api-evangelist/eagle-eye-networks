@@ -1,0 +1,562 @@
+openapi: 3.2.0
+info:
+  title: EVENTS Event Metrics API
+  version: 3.0.0
+  description: Metrics specific to events
+servers:
+- url: https://{BaseUrl}/api/v3.0
+  description: Eagle Eye Networks API Server
+  variables:
+    BaseUrl:
+      default: api.cxxx.eagleeyenetworks.com
+      description: HTTPS Base url to use for all API calls, retrieved from https://api.eagleeyenetworks.com/api/v3.0/clientSettings
+security:
+- bearerAuth: []
+tags:
+- name: Event Metrics
+  description: Metrics specific to events
+paths:
+  /eventMetrics:
+    get:
+      description: Returns metrics data indicating the number of occurrences of a given event over time.
+      operationId: getEventMetrics
+      parameters:
+      - $ref: '#/components/parameters/actor1'
+      - $ref: '#/components/parameters/timestamp__lte'
+      - $ref: '#/components/parameters/timestamp__gte'
+      - $ref: '#/components/parameters/eventType'
+      - $ref: '#/components/parameters/aggregateByMinutes'
+      tags:
+      - Event Metrics
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventMetricQueryResponse'
+              examples:
+                normalEventMetrics:
+                  value:
+                  - eventType: een.motionDetectionEvent.v1
+                    actorId: 100d4c41
+                    actorType: camera
+                    target: count
+                    dataPoints:
+                    - - 1450754160000
+                      - 22
+                    - - 1450754220000
+                      - 12
+                directionalEventMetrics:
+                  value:
+                  - eventType: een.objectLineCrossEvent.v1
+                    actorId: 100d4c41
+                    actorType: camera
+                    target: count
+                    dataPoints:
+                    - - 1450754160000
+                      - 22
+                    - - 1450754220000
+                      - 12
+                    data.een.entryDirection.v1.direction: in
+                  - eventType: een.objectLineCrossEvent.v1
+                    actorId: 100d4c41
+                    actorType: camera
+                    target: count
+                    dataPoints:
+                    - - 1450754160000
+                      - 22
+                    - - 1450754220000
+                      - 12
+                    data.een.entryDirection.v1.direction: out
+        '400':
+          $ref: '#/components/responses/validationError'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '403':
+          $ref: '#/components/responses/forbidden'
+        '404':
+          $ref: '#/components/responses/resourceNotFound'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+      summary: Get event metrics
+      x-summary-source: derived
+components:
+  schemas:
+    ErrorInfoExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - errorInfo
+        reason:
+          description: 'The reason for the error. This is a constant value that identifies the proximate cause of the
+
+            error. Error reasons are unique within a particular domain of errors.
+
+            '
+          type: string
+          enum:
+          - unauthenticated
+          - unexpectedArgument
+          - missingRequiredArgument
+          - wrongArgumentValue
+          - invalidPermission
+          - wrongEdition
+          - wrongAccountType
+          - resourceNotFound
+          - endpointNotFound
+          - methodNotSupported
+          - unexpectedError
+          - acceptNotSupported
+          - alreadyExists
+          - foreignKeyConflict
+          - childDevicesExist
+          - contentNotSupported
+          - deadlineExpired
+          - tooManyRequests
+          - deviceUnavailable
+          - serviceUnavailable
+          - invalidJSON
+          - resourceLocked
+          - notSupportedOnBridge
+          - outOfRetention
+          - deviceIdentificationFailed
+          - credentialValidationFailed
+          - credentialSetupFailed
+          - localUrlValidationFailed
+          - hwRegistrationFailed
+          - failedAddingCameraAfterValidation
+          - neverConnected
+          - reconnectFailed
+          - unsupportedModel
+          - purged
+          - userBlocked
+          - userTemporarilyBlocked
+          - quotaExceeded
+          - alreadyValidated
+          - reAuthenticationRequired
+          - badGateway
+        domain:
+          description: 'Logical grouping to which the "reason" belongs
+
+            '
+          type: string
+        metadata:
+          $ref: '#/components/schemas/ExceptionMetadata'
+    ExceptionDetail:
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/ErrorInfoExceptionDetail'
+      - $ref: '#/components/schemas/BadRequestExceptionDetail'
+      - $ref: '#/components/schemas/ResourceInfoExceptionDetail'
+      discriminator:
+        propertyName: type
+        mapping:
+          errorInfo: '#/components/schemas/ErrorInfoExceptionDetail'
+          badRequest: '#/components/schemas/BadRequestExceptionDetail'
+          resourceInfo: '#/components/schemas/ResourceInfoExceptionDetail'
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - errorInfo
+          - badRequest
+          - resourceInfo
+      required:
+      - type
+    EventMetricQueryResponse:
+      type: array
+      items:
+        type: object
+        allOf:
+        - $ref: '#/components/schemas/MetricQuery'
+        description: A generic schema for all events emitted by the system.
+        required:
+        - eventType
+        - actorId
+        - actorType
+        - dataPoints
+        - target
+        properties:
+          eventType:
+            type: string
+            description: The event type for which the metrics was requested.
+          actorId:
+            type: string
+            description: Id of the thing that caused the event ie camera id, user id or account id.
+          actorType:
+            type: string
+            description: Type of actor that caused the event.
+            enum:
+            - bridge
+            - camera
+            - speaker
+            - account
+            - user
+            - layout
+            - job
+          target:
+            type: string
+            description: The type of the metric.
+            example: count
+        additionalProperties: true
+    ApiV3Error:
+      type: object
+      properties:
+        code:
+          description: HTTP code defined in EEN Standard Code Values
+          type: integer
+        status:
+          description: A string enum describing the code
+          type: string
+          enum:
+          - cancelled
+          - unknown
+          - invalidArgument
+          - deadlineExceeded
+          - notFound
+          - conflict
+          - permissionDenied
+          - resourceExhausted
+          - failedPrecondition
+          - aborted
+          - outOfRange
+          - unimplemented
+          - internal
+          - unavailable
+          - dataLoss
+          - unauthenticated
+          - mediaTypeNotSupported
+          - acceptNotSupported
+          - methodNotSupported
+          - tooManyRequests
+          - badGateway
+        message:
+          description: Developer friendly human readable error message in English
+          type: string
+        details:
+          description: An array of extensible objects that define error information
+          type: array
+          items:
+            $ref: '#/components/schemas/ExceptionDetail'
+      required:
+      - code
+      - status
+      - message
+      - details
+    MetricQuery:
+      type: object
+      required:
+      - target
+      - dataPoints
+      properties:
+        target:
+          type: string
+          example: bandwidth
+        dataPoints:
+          type: array
+          example:
+          - - 1557385723416
+            - 2.5
+          - - 1557385731634
+            - 3.5
+          items:
+            type: array
+            description: 'First value is unix timestamp in milliseconds. Second value is Metric value as a float.
+
+              '
+            minItems: 2
+            maxItems: 2
+            items:
+              type: number
+    BadRequestExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - badRequest
+        argumentViolations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArgumentViolation'
+    ResourceInfoExceptionDetail:
+      properties:
+        type:
+          description: A string enum describing the type of detail object.
+          type: string
+          enum:
+          - resourceInfo
+        resource:
+          description: Referenced resource type, eg "cameras", "bridges", or "locations".
+          type: string
+        ids:
+          type: array
+          description: Identities of resources
+          items:
+            type: string
+    ArgumentViolation:
+      properties:
+        argumentName:
+          type: string
+          description: Name of the argument
+        description:
+          type: string
+          description: Description of the violation
+    ExceptionMetadata:
+      properties:
+        path:
+          description: Path of the request
+          type: string
+        method:
+          description: Method of the request
+          type: string
+  responses:
+    forbidden:
+      description: You have no permission to access the specified resource.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          examples:
+            invalidPermission:
+              value:
+                code: 403
+                status: permissionDenied
+                message: The client caller does not have permission for the specified operation
+                details:
+                - type: errorInfo
+                  reason: invalidPermission
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            wrongEdition:
+              value:
+                code: 403
+                status: permissionDenied
+                message: This feature is not enabled for the account
+                details:
+                - type: errorInfo
+                  reason: wrongEdition
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/locations
+            wrongAccountType:
+              value:
+                code: 403
+                status: permissionDenied
+                message: This feature is only available for end users
+                details:
+                - type: errorInfo
+                  reason: wrongAccountType
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/locations
+    resourceNotFound:
+      description: Referenced resource could not be found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          examples:
+            endpointNotFound:
+              value:
+                code: 404
+                status: notFound
+                message: The API endpoint was not found
+                details:
+                - type: errorInfo
+                  reason: endpointNotFound
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            resourceNotFound:
+              value:
+                code: 404
+                status: notFound
+                message: The resource was not found
+                details:
+                - type: errorInfo
+                  reason: resourceNotFound
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+                - type: resourceInfo
+                  resource: <resource>
+                  ids:
+                  - <ids>
+    internalServerError:
+      description: Something went wrong in the server. Please try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          example:
+            code: 500
+            status: internal
+            message: An internal error has occurred. Please try again later.
+            details:
+            - type: errorInfo
+              reason: unexpectedError
+              domain: apiv3
+              metadata:
+                path: /api/v3.0/<resource>
+    unauthorized:
+      description: You are not authenticated. Please authenticate and try again.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          example:
+            code: 401
+            status: unauthenticated
+            message: The client caller does not have a valid authentication credential
+            details:
+            - type: errorInfo
+              reason: unauthenticated
+              domain: apiv3
+              metadata:
+                path: /api/v3.0/<resource>
+    validationError:
+      description: The supplied object is invalid. Error detail will contain the validation error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiV3Error'
+          examples:
+            unexpectedArgument:
+              value:
+                code: 400
+                status: invalidArgument
+                message: 'Unexpected argument: name'
+                details:
+                - type: errorInfo
+                  reason: unexpectedArgument
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            missingRequiredArgument:
+              value:
+                code: 400
+                status: invalidArgument
+                message: 'Missing required arguments: name, id'
+                details:
+                - type: errorInfo
+                  reason: missingRequiredArgument
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            badRequestInvalidJSON:
+              value:
+                code: 400
+                status: invalidArgument
+                message: Invalid JSON
+                details:
+                - type: errorInfo
+                  reason: invalidJSON
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+            badRequestInvalidArgument:
+              value:
+                code: 400
+                status: invalidArgument
+                message: 'Invalid Argument: Argument name is too long'
+                details:
+                - type: errorInfo
+                  reason: wrongArgumentValue
+                  domain: apiv3
+                  metadata:
+                    path: /api/v3.0/<resource>
+                - type: badRequest
+                  argumentViolations:
+                  - argumentName: name
+                    description: Name is too long
+  parameters:
+    timestamp__lte:
+      in: query
+      name: timestamp__lte
+      description: Maximum timestamp to list metrics. Defaults to now.
+      schema:
+        type: string
+        format: date-time
+        example: '2023-04-04T11:48:52.000Z'
+    eventType:
+      in: query
+      required: true
+      name: eventType
+      description: 'The type of event that will be counted. The set of all possible types can be found using the  [`/eventTypes`](https://developer.eagleeyenetworks.com/reference/listeventtypes) API. Only a single event type can be specified.
+
+        '
+      schema:
+        type: string
+        example: een.motionDetectionEvent.v1
+    timestamp__gte:
+      in: query
+      name: timestamp__gte
+      description: Minimum timestamp to list metrics. Defaults to 7 days ago.
+      schema:
+        type: string
+        format: date-time
+        example: '2023-04-04T09:38:37.372Z'
+    aggregateByMinutes:
+      in: query
+      name: aggregateByMinutes
+      description: 'The time interval, in minutes, for grouping the event metrics.  It specifies the granularity of the time buckets used for aggregating event metrics.  It defaults to 60 minutes (1 hour) if not specified.
+
+        '
+      schema:
+        type: integer
+        default: 60
+        minimum: 1
+        example: 30
+    actor1:
+      in: query
+      required: true
+      name: actor
+      description: 'The actor for which the metrics are to be retrieved. The actor type has to be prefixed along with actor id like `actorType:actorId`. For example, to get the metrics for camera with id 100d4c41, the actor that has to be used is `camera:100d4c41`.
+
+        '
+      schema:
+        type: string
+        example: camera:100d4c41
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+x-provenance:
+  method: searched
+  source: https://developer.eagleeyenetworks.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://developer.eagleeyenetworks.com/reference/createevent.md
+  - https://developer.eagleeyenetworks.com/reference/createeventsubscription.md
+  - https://developer.eagleeyenetworks.com/reference/createeventsubscriptionfilter.md
+  - https://developer.eagleeyenetworks.com/reference/deleteeventsubscription.md
+  - https://developer.eagleeyenetworks.com/reference/deleteeventsubscriptionfilter.md
+  - https://developer.eagleeyenetworks.com/reference/getalert.md
+  - https://developer.eagleeyenetworks.com/reference/geteventbyid.md
+  - https://developer.eagleeyenetworks.com/reference/geteventmetrics.md
+  - https://developer.eagleeyenetworks.com/reference/geteventsubscription.md
+  - https://developer.eagleeyenetworks.com/reference/geteventsubscriptionfilter.md
+  - https://developer.eagleeyenetworks.com/reference/getnotification.md
+  - https://developer.eagleeyenetworks.com/reference/listalerts.md
+  - https://developer.eagleeyenetworks.com/reference/listalerttypes.md
+  - https://developer.eagleeyenetworks.com/reference/listevents.md
+  - https://developer.eagleeyenetworks.com/reference/listeventsfieldvalues.md
+  - https://developer.eagleeyenetworks.com/reference/listeventsubscriptionfilters.md
+  - https://developer.eagleeyenetworks.com/reference/listeventsubscriptions.md
+  - https://developer.eagleeyenetworks.com/reference/listeventtypes.md
+  - https://developer.eagleeyenetworks.com/reference/listnotifications.md
+  - https://developer.eagleeyenetworks.com/reference/listrecenteventsbytype.md
+  - https://developer.eagleeyenetworks.com/reference/updatenotification.md
+  merge:
+    pages: 21
+    deduped: 793
+    conflicts_kept_first: 0
