@@ -243,6 +243,8 @@ apis:
   humanURL: https://developer.eagleeyenetworks.com/reference
   baseURL: https://api.eagleeyenetworks.com
   tags:
+  - Account
+  tags_raw:
   - Accounts
   properties:
   - type: OpenAPI
@@ -873,6 +875,8 @@ apis:
   humanURL: https://developer.eagleeyenetworks.com/reference
   baseURL: https://api.eagleeyenetworks.com
   tags:
+  - Application
+  tags_raw:
   - Applications
   properties:
   - type: OpenAPI
@@ -999,6 +1003,8 @@ apis:
   humanURL: https://developer.eagleeyenetworks.com/reference
   baseURL: https://api.eagleeyenetworks.com
   tags:
+  - Audit Logs
+  tags_raw:
   - Auditlog
   properties:
   - type: OpenAPI
@@ -1251,6 +1257,8 @@ apis:
   humanURL: https://developer.eagleeyenetworks.com/reference
   baseURL: https://api.eagleeyenetworks.com
   tags:
+  - Bridge
+  tags_raw:
   - Bridges
   properties:
   - type: OpenAPI
@@ -1377,6 +1385,8 @@ apis:
   humanURL: https://developer.eagleeyenetworks.com/reference
   baseURL: https://api.eagleeyenetworks.com
   tags:
+  - Camera
+  tags_raw:
   - Cameras
   properties:
   - type: OpenAPI
@@ -1503,6 +1513,8 @@ apis:
   humanURL: https://developer.eagleeyenetworks.com/reference
   baseURL: https://api.eagleeyenetworks.com
   tags:
+  - Client settings
+  tags_raw:
   - Client Settings
   properties:
   - type: OpenAPI
@@ -1629,6 +1641,8 @@ apis:
   humanURL: https://developer.eagleeyenetworks.com/reference
   baseURL: https://api.eagleeyenetworks.com
   tags:
+  - Device-Io
+  tags_raw:
   - Device I/O
   properties:
   - type: OpenAPI
@@ -2511,6 +2525,8 @@ apis:
   humanURL: https://developer.eagleeyenetworks.com/reference
   baseURL: https://api.eagleeyenetworks.com
   tags:
+  - Event
+  tags_raw:
   - Events
   properties:
   - type: OpenAPI
@@ -2637,6 +2653,8 @@ apis:
   humanURL: https://developer.eagleeyenetworks.com/reference
   baseURL: https://api.eagleeyenetworks.com
   tags:
+  - Export
+  tags_raw:
   - Exports
   properties:
   - type: OpenAPI
@@ -2763,6 +2781,8 @@ apis:
   humanURL: https://developer.eagleeyenetworks.com/reference
   baseURL: https://api.eagleeyenetworks.com
   tags:
+  - Feed
+  tags_raw:
   - Feeds
   properties:
   - type: OpenAPI
@@ -2889,6 +2909,8 @@ apis:
   humanURL: https://developer.eagleeyenetworks.com/reference
   baseURL: https://api.eagleeyenetworks.com
   tags:
+  - File
+  tags_raw:
   - Files
   properties:
   - type: OpenAPI
@@ -3267,6 +3289,8 @@ apis:
   humanURL: https://developer.eagleeyenetworks.com/reference
   baseURL: https://api.eagleeyenetworks.com
   tags:
+  - Job
+  tags_raw:
   - Jobs
   properties:
   - type: OpenAPI
@@ -3520,6 +3544,8 @@ apis:
   humanURL: https://developer.eagleeyenetworks.com/reference
   baseURL: https://api.eagleeyenetworks.com
   tags:
+  - Location
+  tags_raw:
   - Locations
   properties:
   - type: OpenAPI
@@ -4276,6 +4302,8 @@ apis:
   humanURL: https://developer.eagleeyenetworks.com/reference
   baseURL: https://api.eagleeyenetworks.com
   tags:
+  - Notification
+  tags_raw:
   - Notifications
   properties:
   - type: OpenAPI
@@ -5410,6 +5438,8 @@ apis:
   humanURL: https://developer.eagleeyenetworks.com/reference
   baseURL: https://api.eagleeyenetworks.com
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
