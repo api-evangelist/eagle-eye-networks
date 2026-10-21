@@ -12,6 +12,10 @@ checked:
 - https://monid.ai/tools/eagle-eye-networks
 - https://n8n.io/integrations/eagle-eye-networks/
 - https://zapier.com/apps/eagle-eye-networks/integrations
+- https://www.onvif.org/about/member-list/
+- https://www.onvif.org/conformant-products/
+- https://www.onvif.org/member-tools/wp-admin/admin-ajax.php?action=get_companies_list
+- https://www.onvif.org/member-tools?action=product_search
 summary: null
 marketplace_apps: []
 edges:
@@ -45,4 +49,49 @@ edges:
     detected: '2026-10-20'
   detected_by: sweep-compliance-assurance.py
   first_seen: '2026-10-20'
+- partner_name: ONVIF
+  partner: null
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://www.onvif.org/conformant-products/
+  category: video surveillance interface conformance
+  contract_reference:
+    register: ONVIF conformant products (onvif.org/conformant-products)
+    standard: ONVIF
+    spec_file: null
+    role: onvif-conformant-member
+    registered_name: Eagle Eye Networks, Inc
+    register_id: onvif-company-2999
+    matched_domain: een.com
+    matched_by: domain
+    detected_by: sweep-onvif-video-analytics.py
+    detected: '2026-10-21'
+    certified_products:
+    - product: ONVIF Profile S
+      lapsed: false
+      roles:
+      - client
+      newest_test: '2015-08-04'
+      products_listed: 13
+    products_sample:
+    - Eagle Eye Bridge 301
+    - Eagle Eye Bridge 302
+    - Eagle Eye Bridge 303
+    - Eagle Eye Bridge 310
+    - Eagle Eye Bridge 401
+    - Eagle Eye Bridge 403
+    - Eagle Eye Bridge 410
+    - Eagle Eye CMVR 320
+    - Eagle Eye CMVR 420
+    - Eagle Eye CMVR 520
+    signal_note: certified_products = one entry per ONVIF profile the company holds a conformant product for, never
+      per product; roles, counts and test dates are context. The register carries no expiry and drops withdrawn
+      products, so lapsed is false
+    register_country: United States
+  detected_by: sweep-onvif-video-analytics.py
+  first_seen: '2026-10-21'
+  partner_tier: contributing
 templates: []
